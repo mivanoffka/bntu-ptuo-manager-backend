@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run server",
+            "type": "shell",
+            "command": "${command:osPlatform}",
+            "args": [],
+            "windows": {
+                "command": "${workspaceFolder}\\.venv/Scripts\\python.exe ${workspaceFolder}source\\manage.py runserver"
+            },
+            "linux": {
+                "command": "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py runserver"
+            },
+            "osx": {
+                "command": "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py runserver"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
