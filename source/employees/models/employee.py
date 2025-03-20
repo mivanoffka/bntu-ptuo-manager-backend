@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
 from django.db import models
 
-from employees.models.parts import Gender
-from source.employees.models.parts import trade_union
-from source.employees.models.parts.trade_union import trade_union_position
+from .parts import Gender, EducationLevels, AcademicDegrees
+
 
 if TYPE_CHECKING:
     from django.db.models import Manager
@@ -17,6 +16,7 @@ if TYPE_CHECKING:
         Reward,
         Relative,
         Comment,
+        EducationalInstitution,
     )
 
 
@@ -52,11 +52,32 @@ class Employee(models.Model):
     if TYPE_CHECKING:
         trade_union_positions: Manager[TradeUnionPosition]
 
-    joinedAt = models.DateTimeField(null=True)
+    joined_at = models.DateTimeField(null=True)
     is_archived = models.BooleanField(default=False)
     archived_at = models.DateTimeField(null=True, blank=True)
     is_retired = models.BooleanField(default=False)
     retired_at = models.DateTimeField(null=True, blank=True)
+
+    # endregion
+
+    # region Education
+
+    if TYPE_CHECKING:
+        educational_institutions: Manager[EducationalInstitution]
+
+    education_level = models.IntegerField(
+        choices=EducationLevels.choices,
+        default=None,
+        null=True,
+        blank=True,
+    )
+
+    academic_degree = models.IntegerField(
+        choices=AcademicDegrees.choices,
+        default=None,
+        null=True,
+        blank=True,
+    )
 
     # endregion
 
