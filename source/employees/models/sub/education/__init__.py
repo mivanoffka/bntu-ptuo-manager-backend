@@ -1,3 +1,3 @@
-from .degrees import AcademicDegrees
+from .degrees import AcademicDegree
 from .institution import EducationalInstitution
-from .levels import EducationLevels
+from .level import EducationLevel

@@ -1,6 +1,6 @@
 from django.db import models
 
 
-class AcademicDegrees(models.IntegerChoices):
+class AcademicDegree(models.IntegerChoices):
     A = 0
     B = 1

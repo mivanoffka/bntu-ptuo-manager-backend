@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from django.db import models
 
-from .sub import Gender, EducationLevels, AcademicDegrees
+from .sub import Gender, EducationLevel, AcademicDegree
 
 
 if TYPE_CHECKING:
@@ -66,14 +66,14 @@ class Employee(models.Model):
         educational_institutions: Manager[EducationalInstitution]
 
     education_level = models.IntegerField(
-        choices=EducationLevels.choices,
+        choices=EducationLevel.choices,
         default=None,
         null=True,
         blank=True,
     )
 
     academic_degree = models.IntegerField(
-        choices=AcademicDegrees.choices,
+        choices=AcademicDegree.choices,
         default=None,
         null=True,
         blank=True,
