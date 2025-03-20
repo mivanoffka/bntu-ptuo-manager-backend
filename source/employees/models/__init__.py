@@ -1,5 +1,5 @@
 from .employee import Employee
-from .parts import (
+from .sub import (
     # region Common
     Name,
     Gender,

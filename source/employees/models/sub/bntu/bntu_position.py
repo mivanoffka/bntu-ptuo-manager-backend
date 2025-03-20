@@ -4,7 +4,7 @@ from django.db import models
 from source.employees.models import Employee
 
 if TYPE_CHECKING:
-    from source.employees.models.parts.bntu.bntu_department import BntuDepartment
+    from source.employees.models.sub.bntu.bntu_department import BntuDepartment
 
 
 class BntuPosition(models.Model):

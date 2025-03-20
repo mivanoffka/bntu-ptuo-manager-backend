@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
 from django.db import models
 
-from .parts import Gender, EducationLevels, AcademicDegrees
+from .sub import Gender, EducationLevels, AcademicDegrees
 
 
 if TYPE_CHECKING:
     from django.db.models import Manager
-    from .parts import (
+    from .sub import (
         Name,
         BntuPosition,
         PhoneNumber,

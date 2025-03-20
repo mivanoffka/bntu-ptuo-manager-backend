@@ -6,7 +6,7 @@ from source.employees.models import Employee
 
 if TYPE_CHECKING:
     from django.db.models import Manager
-    from source.employees.models.parts.bntu.bntu_position import BntuPosition
+    from source.employees.models.sub.bntu.bntu_position import BntuPosition
 
 
 class BntuDepartment(MPTTModel):
