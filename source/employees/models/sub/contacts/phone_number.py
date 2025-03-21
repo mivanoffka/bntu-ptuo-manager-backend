@@ -1,6 +1,6 @@
 from django.db import models
 
-from source.employees.models import Employee
+from ...employee import Employee
 from .phone_number_type import PhoneNumberType
 
 

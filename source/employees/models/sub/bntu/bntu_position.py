@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 from django.db import models
 
-from source.employees.models import Employee
+from employees.models import Employee
 
 if TYPE_CHECKING:
-    from source.employees.models.sub.bntu.bntu_department import BntuDepartment
+    from employees.models.sub.bntu.bntu_department import BntuDepartment
 
 
 class BntuPosition(models.Model):
@@ -18,8 +18,8 @@ class BntuPosition(models.Model):
     if TYPE_CHECKING:
         department: BntuDepartment
 
-    hiredAt = models.DateTimeField(null=True)
+    hiredAt = models.DateTimeField(null=True, blank=True)
     isDischarged = models.BooleanField(default=False)
     dischargedAt = models.DateTimeField(null=True, blank=True)
-    isDischargedVoluntarily = models.BooleanField(null=True)
+    isDischargedVoluntarily = models.BooleanField(null=True, blank=True)
     comment = models.TextField(null=True, blank=True, max_length=512)

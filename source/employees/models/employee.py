@@ -1,7 +1,11 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 from django.db import models
 
-from .sub import Gender, EducationLevel, AcademicDegree
+from .gender import Gender
+from .level import EducationLevel
+from .degrees import AcademicDegree
 
 
 if TYPE_CHECKING:
@@ -28,8 +32,8 @@ class Employee(models.Model):
 
     id = models.AutoField(primary_key=True)
 
-    birthdate = models.DateField()
-    birthplace = models.CharField(max_length=256)
+    birthdate = models.DateField(null=True, blank=True)
+    birthplace = models.CharField(max_length=256, null=True, blank=True)
 
     gender = models.IntegerField(
         choices=Gender.choices,
@@ -52,7 +56,7 @@ class Employee(models.Model):
     if TYPE_CHECKING:
         trade_union_positions: Manager[TradeUnionPosition]
 
-    joined_at = models.DateTimeField(null=True)
+    joined_at = models.DateTimeField(null=True, blank=True)
     is_archived = models.BooleanField(default=False)
     archived_at = models.DateTimeField(null=True, blank=True)
     is_retired = models.BooleanField(default=False)

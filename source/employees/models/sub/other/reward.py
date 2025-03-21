@@ -1,6 +1,6 @@
 from django.db import models
 
-from source.employees.models import Employee
+from ...employee import Employee
 
 
 class Reward(models.Model):

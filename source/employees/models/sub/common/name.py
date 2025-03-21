@@ -1,12 +1,13 @@
 from django.db import models
 
-from source.employees.models import Employee
+from ...employee import Employee
+from ....utils.timestamp import Timestamped
 
 
-class Name(models.Model):
+class Name(Timestamped):
     id = models.AutoField(primary_key=True)
 
-    employee = models.OneToOneField(
+    employee = models.ForeignKey(
         Employee, on_delete=models.CASCADE, related_name="names"
     )
 

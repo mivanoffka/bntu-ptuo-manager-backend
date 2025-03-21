@@ -2,20 +2,16 @@ from django.contrib import admin
 from .models import (
     Employee,
     Name,
-    Gender,
     BntuDepartment,
     BntuPosition,
     Address,
     PhoneNumber,
-    PhoneNumberType,
     Email,
     TradeUnionDepartment,
     TradeUnionPosition,
     WorkingGroup,
-    Comment,
     Reward,
     Relative,
-    RelativeType,
 )
 
 
@@ -47,6 +43,8 @@ def register():
     admin.site.register(Relative),
 
     # endregion
+
+    admin.site.register(Employee)
 
 
 register()

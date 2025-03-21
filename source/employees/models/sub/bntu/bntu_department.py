@@ -2,11 +2,12 @@ from typing import TYPE_CHECKING
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 
-from source.employees.models import Employee
+from ...employee import Employee
+
+from .bntu_position import BntuPosition
 
 if TYPE_CHECKING:
     from django.db.models import Manager
-    from source.employees.models.sub.bntu.bntu_position import BntuPosition
 
 
 class BntuDepartment(MPTTModel):

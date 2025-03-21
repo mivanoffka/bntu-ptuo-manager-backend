@@ -1,6 +1,6 @@
 from django.db import models
 
-from source.employees.models import Employee
+from ...employee import Employee
 
 
 class Comment(models.Model):
@@ -10,4 +10,4 @@ class Comment(models.Model):
         Employee, on_delete=models.CASCADE, related_name="comments"
     )
 
-    comment = models.TextField(null=True, blank=True, max_length=512)
+    comment = models.TextField(max_length=512)

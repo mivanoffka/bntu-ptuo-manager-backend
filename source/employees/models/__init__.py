@@ -2,7 +2,6 @@ from .employee import Employee
 from .sub import (
     # region Common
     Name,
-    Gender,
     # endregion
     # region BNTU
     BntuPosition,
