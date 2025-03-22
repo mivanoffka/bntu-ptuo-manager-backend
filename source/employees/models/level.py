@@ -1,7 +1,14 @@
+from typing import TYPE_CHECKING
 from django.db import models
 
+from ..utils import Enumerated
 
-class EducationLevel(models.IntegerChoices):
-    PRIMARY = 0
-    MIDDLE = 1
-    HIGH = 2
+
+if TYPE_CHECKING:
+    from django.db.models import Manager
+    from .employee import Employee
+
+
+class EducationLevel(Enumerated):
+    if TYPE_CHECKING:
+        employees = Manager[Employee]

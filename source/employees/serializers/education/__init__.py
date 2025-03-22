@@ -1,0 +1,1 @@
+from .educational_institution_serializer import EducationalInstitutionSerializer

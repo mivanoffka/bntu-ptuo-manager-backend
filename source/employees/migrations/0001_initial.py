@@ -10,168 +10,310 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='BntuPosition',
+            name="BntuPosition",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=64)),
-                ('hiredAt', models.DateTimeField(blank=True, null=True)),
-                ('isDischarged', models.BooleanField(default=False)),
-                ('dischargedAt', models.DateTimeField(blank=True, null=True)),
-                ('isDischargedVoluntarily', models.BooleanField(blank=True, null=True)),
-                ('comment', models.TextField(blank=True, max_length=512, null=True)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=64)),
+                ("hiredAt", models.DateTimeField(blank=True, null=True)),
+                ("isDischarged", models.BooleanField(default=False)),
+                ("dischargedAt", models.DateTimeField(blank=True, null=True)),
+                ("isDischargedVoluntarily", models.BooleanField(blank=True, null=True)),
+                ("comment", models.TextField(blank=True, max_length=512, null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Employee',
+            name="Employee",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('birthdate', models.DateField(blank=True, null=True)),
-                ('birthplace', models.CharField(blank=True, max_length=256, null=True)),
-                ('gender', models.IntegerField(blank=True, choices=[(0, 'Male'), (1, 'Female')], default=None, null=True)),
-                ('joined_at', models.DateTimeField(blank=True, null=True)),
-                ('is_archived', models.BooleanField(default=False)),
-                ('archived_at', models.DateTimeField(blank=True, null=True)),
-                ('is_retired', models.BooleanField(default=False)),
-                ('retired_at', models.DateTimeField(blank=True, null=True)),
-                ('education_level', models.IntegerField(blank=True, choices=[(0, 'Primary'), (1, 'Middle'), (2, 'High')], default=None, null=True)),
-                ('academic_degree', models.IntegerField(blank=True, choices=[(0, 'None'), (1, 'A'), (2, 'B')], default=None, null=True)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("birthdate", models.DateField(blank=True, null=True)),
+                ("birthplace", models.CharField(blank=True, max_length=256, null=True)),
+                (
+                    "gender",
+                    models.IntegerField(
+                        blank=True,
+                        choices=[(0, "Male"), (1, "Female")],
+                        default=None,
+                        null=True,
+                    ),
+                ),
+                ("joined_at", models.DateTimeField(blank=True, null=True)),
+                ("is_archived", models.BooleanField(default=False)),
+                ("archived_at", models.DateTimeField(blank=True, null=True)),
+                ("is_retired", models.BooleanField(default=False)),
+                ("retired_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "education_level",
+                    models.IntegerField(
+                        blank=True,
+                        choices=[(0, "Primary"), (1, "Middle"), (2, "High")],
+                        default=None,
+                        null=True,
+                    ),
+                ),
+                (
+                    "academic_degree",
+                    models.IntegerField(
+                        blank=True,
+                        choices=[(0, "None"), (1, "A"), (2, "B")],
+                        default=None,
+                        null=True,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='BntuDepartment',
+            name="BntuDepartment",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=256)),
-                ('lft', models.PositiveIntegerField(editable=False)),
-                ('rght', models.PositiveIntegerField(editable=False)),
-                ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),
-                ('level', models.PositiveIntegerField(editable=False)),
-                ('parent', mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='employees.bntudepartment')),
-                ('working_positions', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='department', to='employees.bntuposition')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=256)),
+                ("lft", models.PositiveIntegerField(editable=False)),
+                ("rght", models.PositiveIntegerField(editable=False)),
+                ("tree_id", models.PositiveIntegerField(db_index=True, editable=False)),
+                ("level", models.PositiveIntegerField(editable=False)),
+                (
+                    "parent",
+                    mptt.fields.TreeForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="children",
+                        to="employees.bntudepartment",
+                    ),
+                ),
+                (
+                    "working_positions",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="department",
+                        to="employees.bntuposition",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Email',
+            name="Email",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('value', models.CharField(max_length=128)),
-                ('comment', models.TextField(blank=True, max_length=512, null=True)),
-                ('employee', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='emails', to='employees.employee')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("value", models.CharField(max_length=128)),
+                ("comment", models.TextField(blank=True, max_length=512, null=True)),
+                (
+                    "employee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="emails",
+                        to="employees.employee",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='EducationalInstitution',
+            name="EducationalInstitution",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=64)),
-                ('employees', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='educational_institutions', to='employees.employee')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=64)),
+                (
+                    "employees",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="educational_institutions",
+                        to="employees.employee",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Comment',
+            name="Comment",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('comment', models.TextField(max_length=512)),
-                ('employee', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='employees.employee')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("comment", models.TextField(max_length=512)),
+                (
+                    "employee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="comments",
+                        to="employees.employee",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='bntuposition',
-            name='employee',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bntu_positions', to='employees.employee'),
+            model_name="bntuposition",
+            name="employee",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="bntu_positions",
+                to="employees.employee",
+            ),
         ),
         migrations.CreateModel(
-            name='Address',
+            name="Address",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('value', models.CharField(max_length=256)),
-                ('comment', models.TextField(blank=True, max_length=512, null=True)),
-                ('employee', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='addresses', to='employees.employee')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("value", models.CharField(max_length=256)),
+                ("comment", models.TextField(blank=True, max_length=512, null=True)),
+                (
+                    "employee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="addresses",
+                        to="employees.employee",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Name',
+            name="Name",
             fields=[
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('first_name', models.CharField(max_length=64)),
-                ('last_name', models.CharField(max_length=64)),
-                ('middle_name', models.CharField(max_length=64)),
-                ('createdAt', models.DateTimeField(auto_now_add=True)),
-                ('employee', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='names', to='employees.employee')),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("first_name", models.CharField(max_length=64)),
+                ("last_name", models.CharField(max_length=64)),
+                ("middle_name", models.CharField(max_length=64)),
+                ("createdAt", models.DateTimeField(auto_now_add=True)),
+                (
+                    "employee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="names",
+                        to="employees.employee",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='PhoneNumber',
+            name="PhoneNumber",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('type', models.IntegerField(blank=True, choices=[(0, 'Mobile'), (1, 'Home')], default=None, null=True)),
-                ('employee', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='phone_numbers', to='employees.employee')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "type",
+                    models.IntegerField(
+                        blank=True,
+                        choices=[(0, "Mobile"), (1, "Home")],
+                        default=None,
+                        null=True,
+                    ),
+                ),
+                (
+                    "employee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="phone_numbers",
+                        to="employees.employee",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Relative',
+            name="Relative",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('full_name', models.CharField(max_length=128)),
-                ('birthdate', models.DateField(null=True)),
-                ('comment', models.TextField(blank=True, max_length=512, null=True)),
-                ('type', models.IntegerField(choices=[(0, 'Native Child'), (1, 'Adopted Child')])),
-                ('employee', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='relatives', to='employees.employee')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("full_name", models.CharField(max_length=128)),
+                ("birthdate", models.DateField(null=True)),
+                ("comment", models.TextField(blank=True, max_length=512, null=True)),
+                (
+                    "type",
+                    models.IntegerField(
+                        choices=[(0, "Native Child"), (1, "Adopted Child")]
+                    ),
+                ),
+                (
+                    "employee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="relatives",
+                        to="employees.employee",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Reward',
+            name="Reward",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('value', models.CharField(max_length=128)),
-                ('comment', models.TextField(blank=True, max_length=512, null=True)),
-                ('employee', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='rewards', to='employees.employee')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("value", models.CharField(max_length=128)),
+                ("comment", models.TextField(blank=True, max_length=512, null=True)),
+                (
+                    "employee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="rewards",
+                        to="employees.employee",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='TradeUnionPosition',
+            name="TradeUnionPosition",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=64)),
-                ('joinedAt', models.DateTimeField(blank=True, null=True)),
-                ('leftAt', models.DateTimeField(blank=True, null=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='trade_union_positions', to='employees.employee')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=64)),
+                ("joinedAt", models.DateTimeField(blank=True, null=True)),
+                ("leftAt", models.DateTimeField(blank=True, null=True)),
+                (
+                    "employee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="trade_union_positions",
+                        to="employees.employee",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='TradeUnionDepartment',
+            name="TradeUnionDepartment",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=256)),
-                ('lft', models.PositiveIntegerField(editable=False)),
-                ('rght', models.PositiveIntegerField(editable=False)),
-                ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),
-                ('level', models.PositiveIntegerField(editable=False)),
-                ('parent', mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='employees.tradeuniondepartment')),
-                ('positions', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='department', to='employees.tradeunionposition')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=256)),
+                ("lft", models.PositiveIntegerField(editable=False)),
+                ("rght", models.PositiveIntegerField(editable=False)),
+                ("tree_id", models.PositiveIntegerField(db_index=True, editable=False)),
+                ("level", models.PositiveIntegerField(editable=False)),
+                (
+                    "parent",
+                    mptt.fields.TreeForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="children",
+                        to="employees.tradeuniondepartment",
+                    ),
+                ),
+                (
+                    "positions",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="department",
+                        to="employees.tradeunionposition",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='WorkingGroup',
+            name="WorkingGroup",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=64)),
-                ('positions', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='working_group', to='employees.tradeunionposition')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=64)),
+                (
+                    "positions",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="working_group",
+                        to="employees.tradeunionposition",
+                    ),
+                ),
             ],
         ),
     ]

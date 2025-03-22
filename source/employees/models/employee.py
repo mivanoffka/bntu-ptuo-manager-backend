@@ -10,18 +10,12 @@ from .degrees import AcademicDegree
 
 if TYPE_CHECKING:
     from django.db.models import Manager
-    from .sub import (
-        Name,
-        BntuPosition,
-        PhoneNumber,
-        Address,
-        Email,
-        TradeUnionPosition,
-        Reward,
-        Relative,
-        Comment,
-        EducationalInstitution,
-    )
+    from .common import Name
+    from .bntu import BntuPosition
+    from .contacts import PhoneNumber, Address, Email
+    from .trade_union import TradeUnionPosition
+    from .education import EducationalInstitution
+    from .other import Relative, Reward, Comment
 
 
 class Employee(models.Model):
@@ -32,15 +26,16 @@ class Employee(models.Model):
 
     id = models.AutoField(primary_key=True)
 
-    birthdate = models.DateField(null=True, blank=True)
-    birthplace = models.CharField(max_length=256, null=True, blank=True)
-
-    gender = models.IntegerField(
-        choices=Gender.choices,
-        default=None,
+    gender = models.ForeignKey(
+        Gender,
+        on_delete=models.CASCADE,
+        related_name="employees",
         null=True,
         blank=True,
     )
+
+    birthdate = models.DateField(null=True, blank=True)
+    birthplace = models.CharField(max_length=256, null=True, blank=True)
 
     # endregion
 
@@ -69,16 +64,17 @@ class Employee(models.Model):
     if TYPE_CHECKING:
         educational_institutions: Manager[EducationalInstitution]
 
-    education_level = models.IntegerField(
-        choices=EducationLevel.choices,
-        default=None,
+    education_level = models.ForeignKey(
+        EducationLevel,
+        on_delete=models.CASCADE,
+        related_name="employees",
         null=True,
         blank=True,
     )
-
-    academic_degree = models.IntegerField(
-        choices=AcademicDegree.choices,
-        default=None,
+    academic_degree = models.ForeignKey(
+        AcademicDegree,
+        on_delete=models.CASCADE,
+        related_name="employees",
         null=True,
         blank=True,
     )
@@ -92,7 +88,7 @@ class Employee(models.Model):
         addresses: Manager[Address]
         emails: Manager[Email]
 
-    # endregion
+    # endregionk
 
     # region Other
 

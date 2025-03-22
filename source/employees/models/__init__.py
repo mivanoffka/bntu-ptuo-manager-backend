@@ -1,27 +1,19 @@
 from .employee import Employee
-from .sub import (
-    # region Common
-    Name,
-    # endregion
-    # region BNTU
-    BntuPosition,
-    BntuDepartment,
-    # endregion
-    # region Contacts
-    PhoneNumber,
-    PhoneNumberType,
-    Address,
-    Email,
-    # endregion
-    # region Trade Union
-    TradeUnionPosition,
-    TradeUnionDepartment,
-    WorkingGroup,
-    # endregion
-    # region Other
-    Reward,
-    Relative,
-    RelativeType,
-    Comment,
-    # endregion
-)
+
+from .bntu import BntuDepartment, BntuPosition, BntuPositionName
+
+from .common import Name
+
+from .trade_union import TradeUnionDepartment, TradeUnionPosition, WorkingGroup
+
+from .contacts import Email, Address, PhoneNumber, PhoneNumberType
+
+from .education import EducationalInstitution
+
+from .other import Relative, RelativeType, Comment, Reward
+
+from .gender import Gender
+
+from .degrees import AcademicDegree
+
+from .level import EducationLevel

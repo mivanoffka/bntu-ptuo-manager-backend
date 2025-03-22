@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug backend",
+            "runtimeExecutable": "/bin/bash",
+            "skipFiles": ["<node_internals>/**"],
+            "console": "integratedTerminal",
+
+            "windows": {
+                "runtimeArgs": [
+                    "-c",
+                    "${workspaceFolder}\\.venv/Scripts\\python.exe ${workspaceFolder}\\source\\manage.py runserver"
+                ]
+            },
+            "osx": {
+                "runtimeArgs": [
+                    "-c",
+                    "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py runserver"
+                ]
+            },
+            "linux": {
+                "runtimeArgs": [
+                    "-c",
+                    "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py runserver"
+                ]
+            }
+        }
+    ]
+}

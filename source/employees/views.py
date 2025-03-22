@@ -8,7 +8,7 @@ from rest_framework import status
 
 from .models import Name
 
-from .serializers.employee import EmployeeSerializer
+from .serializers.employee_serializer import EmployeeSerializer
 from .models import Employee
 from users.serializers import RegisterSerializer, UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -16,8 +16,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
-class Spreadsheet(APIView):
-    def get(self, request): ...
+class SpreadsheetView(APIView):
+    def get(self, request):
+        employees = Employee.objects.all()
+        employees_s = [EmployeeSerializer(employee).data for employee in employees]
+
+        return Response({"employees": employees_s})
 
 
 # Create your views here.
