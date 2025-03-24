@@ -13,7 +13,7 @@ class Relative(models.Model):
 
     full_name = models.CharField(max_length=128)
 
-    birthdate = models.DateField(null=True)
+    birthdate = models.DateTimeField(null=True)
 
     comment = models.TextField(null=True, blank=True, max_length=512)
 

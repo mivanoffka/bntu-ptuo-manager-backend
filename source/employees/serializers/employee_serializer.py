@@ -1,14 +1,23 @@
 from rest_framework import serializers
 
-from .enumerated_serializer import EnumeratedSerializer
+from .other import CommentSerializer, RelativeSerializer, RewardSerializer
+
+from .trade_union.trade_union_position_serializer import TradeUnionPositionSerializer
+
+from .education import (
+    EducationLevelSerializer,
+    AcademicDegreeSerializer,
+    EducationalInstitutionSerializer,
+)
+
+from .common import GenderSerializer, NameSerializer
 
 from .bntu.bntu_position_serializer import BntuPositionSerializer
 
 from .contacts import EmailSerializer, AddressSerializer, PhoneNumberSerializer
-from .common import NameSerializer
-from .education import EducationalInstitutionSerializer
 
 from ..utils.history import History
+
 from ..models import Employee, Name
 
 
@@ -23,7 +32,10 @@ class EmployeeSerializer(serializers.ModelSerializer):
         return History[Name].from_timestamped(obj.names).serialize(NameSerializer)
 
     def get_gender(self, obj: Employee):
-        return EnumeratedSerializer.from_field(obj, "gender")
+        if not obj.gender:
+            return None
+
+        return GenderSerializer(obj.gender).data
 
     # endregion
 
@@ -51,6 +63,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
     educational_institutions = serializers.SerializerMethodField()
     education_level = serializers.SerializerMethodField()
+    academic_degree = serializers.SerializerMethodField()
 
     def get_educational_institutions(self, obj: Employee):
         return (
@@ -59,10 +72,16 @@ class EmployeeSerializer(serializers.ModelSerializer):
         )
 
     def get_education_level(self, obj: Employee):
-        return EnumeratedSerializer.from_field(obj, "education_level")
+        if not obj.education_level:
+            return None
+
+        return EducationLevelSerializer(obj.education_level).data
 
     def get_academic_degree(self, obj: Employee):
-        return EnumeratedSerializer.from_field(obj, "academic_degree")
+        if not obj.academic_degree:
+            return None
+
+        return AcademicDegreeSerializer(obj.academic_degree).data
 
     # endregion
 
@@ -75,6 +94,35 @@ class EmployeeSerializer(serializers.ModelSerializer):
             BntuPositionSerializer(position).data
             for position in obj.bntu_positions.all()
         )
+
+    # endregion
+
+    # region TradeUnion
+
+    trade_union_positions = serializers.SerializerMethodField()
+
+    def get_trade_union_positions(self, obj: Employee):
+        return (
+            TradeUnionPositionSerializer(position).data
+            for position in obj.trade_union_positions.all()
+        )
+
+    # endregion
+
+    # region Other
+
+    comments = serializers.SerializerMethodField()
+    relatives = serializers.SerializerMethodField()
+    rewards = serializers.SerializerMethodField()
+
+    def get_comments(self, obj: Employee):
+        return (CommentSerializer(comment).data for comment in obj.comments.all())
+
+    def get_relatives(self, obj: Employee):
+        return (RelativeSerializer(relative).data for relative in obj.relatives.all())
+
+    def get_rewards(self, obj: Employee):
+        return (RewardSerializer(reward).data for reward in obj.rewards.all())
 
     # endregion
 

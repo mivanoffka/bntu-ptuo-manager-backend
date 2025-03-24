@@ -1,26 +1,20 @@
 from typing import TYPE_CHECKING
 from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
-
-from ..employee import Employee
-from .trade_union_position import TradeUnionPosition
+from treebeard.mp_tree import MP_Node
 
 
 if TYPE_CHECKING:
+    from .trade_union_position import TradeUnionPosition
     from django.db.models import Manager
 
 
-class TradeUnionDepartment(MPTTModel):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=256)
+class TradeUnionDepartment(MP_Node):
+    label = models.CharField(max_length=255)
 
-    positions = models.ForeignKey(
-        TradeUnionPosition, on_delete=models.CASCADE, related_name="department"
-    )
+    node_order_by = ["label"]
 
-    parent = TreeForeignKey(
-        "self", null=True, blank=True, on_delete=models.CASCADE, related_name="children"
-    )
+    def __str__(self):
+        return self.label
 
     if TYPE_CHECKING:
-        children: Manager["TradeUnionDepartment"]
+        trade_union_positions: Manager[TradeUnionPosition]

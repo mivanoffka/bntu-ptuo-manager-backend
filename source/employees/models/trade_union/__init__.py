@@ -1,3 +1,4 @@
 from .trade_union_department import TradeUnionDepartment
 from .trade_union_position import TradeUnionPosition
 from .working_group import WorkingGroup
+from .trade_union_position_name import TradeUnionPositionName

@@ -6,14 +6,31 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework import status
 
-from .models import Name
+from ..models import (
+    WorkingGroup,
+    TradeUnionDepartment,
+    TradeUnionPositionName,
+    TradeUnionPosition,
+    BntuDepartment,
+    BntuPositionName,
+    BntuPosition,
+    PhoneNumberType,
+    PhoneNumber,
+    Email,
+    EducationalInstitution,
+    EducationLevel,
+    Gender,
+    Name,
+    Employee,
+)
 
-from .serializers.employee_serializer import EmployeeSerializer
-from .models import Employee
+from ..serializers import EmployeeSerializer
 from users.serializers import RegisterSerializer, UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from datetime import datetime, date
 
 
 class SpreadsheetView(APIView):
@@ -22,25 +39,3 @@ class SpreadsheetView(APIView):
         employees_s = [EmployeeSerializer(employee).data for employee in employees]
 
         return Response({"employees": employees_s})
-
-
-# Create your views here.
-class EmployeeView(APIView):
-    def post(self, request): ...
-
-    def get(self, request):
-        employee = Employee.objects.create(
-            birthdate=None,
-            gender=None,
-            is_archived=False,
-            is_retired=False,
-        )
-
-        name = Name.objects.create(
-            employee=employee,
-            first_name="John",
-            last_name="Doe",
-            middle_name="A",
-        )
-
-        return Response({"employee": EmployeeSerializer(employee).data})

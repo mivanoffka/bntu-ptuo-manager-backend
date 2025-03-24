@@ -20,3 +20,5 @@ class PhoneNumber(models.Model):
     phone_number_type = models.ForeignKey(
         PhoneNumberType, on_delete=models.CASCADE, null=True, blank=True
     )
+
+    comment = models.TextField(null=True, blank=True, max_length=512)

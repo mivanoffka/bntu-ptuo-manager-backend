@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
+from .bntu_department_serializer import BntuDepartmentSerializer
+
 from ...models import BntuPosition
-from ..enumerated_serializer import EnumeratedSerializer
 
 
 class BntuPositionSerializer(serializers.ModelSerializer):
@@ -9,10 +10,12 @@ class BntuPositionSerializer(serializers.ModelSerializer):
     department = serializers.SerializerMethodField()
 
     def get_name(self, obj):
-        return obj.name.value
+        if obj.name:
+            return obj.name.label
+        return None
 
     def get_department(self, obj):
-        return EnumeratedSerializer.from_field(obj, "department")
+        return BntuDepartmentSerializer(obj.department).data
 
     class Meta:
         model = BntuPosition

@@ -10,6 +10,6 @@ class Reward(models.Model):
         Employee, on_delete=models.CASCADE, related_name="rewards"
     )
 
-    value = models.CharField(max_length=128)
+    label = models.CharField(max_length=128)
 
     comment = models.TextField(null=True, blank=True, max_length=512)

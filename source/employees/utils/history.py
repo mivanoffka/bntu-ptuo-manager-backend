@@ -28,7 +28,7 @@ class BaseHistory(Generic[T]):
 
     def serialize(self, serializer: type[serializers.ModelSerializer]):
         return {
-            "history": (serializer(item).data for item in self._history),
+            "history": (item.serialize(serializer) for item in self._history),
             "relevant": serializer(self._relevant).data,
         }
 

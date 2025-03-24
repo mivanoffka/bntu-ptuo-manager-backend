@@ -142,6 +142,13 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_RENDERER_CLASSES": (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+    ),
+    "DEFAULT_PARSER_CLASSES": (
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+        "rest_framework.parsers.MultiPartParser",
+    ),
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -149,6 +156,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }

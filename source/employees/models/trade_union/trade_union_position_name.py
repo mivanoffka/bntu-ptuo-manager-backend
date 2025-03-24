@@ -4,12 +4,12 @@ from django.db import models
 
 if TYPE_CHECKING:
     from django.db.models import Manager
-    from .bntu_position import BntuPosition
+    from .trade_union_position import TradeUnionPosition
 
 
-class BntuPositionName(models.Model):
+class TradeUnionPositionName(models.Model):
     id = models.AutoField(primary_key=True)
     label = models.CharField(max_length=64)
 
     if TYPE_CHECKING:
-        entrances = Manager[BntuPosition]
+        entrances = Manager[TradeUnionPosition]

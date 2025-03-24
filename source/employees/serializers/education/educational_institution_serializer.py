@@ -6,4 +6,4 @@ from ...models import EducationalInstitution
 class EducationalInstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = EducationalInstitution
-        fields = ["value", "comment"]
+        fields = ["id", "label"]

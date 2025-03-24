@@ -1,16 +1,15 @@
+from typing import TYPE_CHECKING
 from django.db import models
 
-from ..employee import Employee
+from ...utils import Enumerated
 
 
-class EducationalInstitution(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=64)
+if TYPE_CHECKING:
+    from ..employee import Employee
 
-    employees = models.ForeignKey(
-        Employee,
-        on_delete=models.CASCADE,
-        related_name="educational_institutions",
-        null=True,
-        blank=True,
-    )
+
+class EducationalInstitution(Enumerated):
+    if TYPE_CHECKING:
+        employees = models.ManyToManyField(
+            Employee, related_name="educational_institutions"
+        )

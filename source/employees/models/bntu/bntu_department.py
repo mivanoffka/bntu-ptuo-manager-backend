@@ -1,26 +1,20 @@
 from typing import TYPE_CHECKING
+
 from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
-
-from ..employee import Employee
-
-from .bntu_position import BntuPosition
+from treebeard.mp_tree import MP_Node
 
 if TYPE_CHECKING:
+    from .bntu_position import BntuPosition
     from django.db.models import Manager
 
 
-class BntuDepartment(MPTTModel):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=256)
+class BntuDepartment(MP_Node):
+    label = models.CharField(max_length=255)
 
-    bntu_positions = models.ForeignKey(
-        BntuPosition, on_delete=models.CASCADE, related_name="department"
-    )
+    node_order_by = ["label"]
 
-    parent = TreeForeignKey(
-        "self", null=True, blank=True, on_delete=models.CASCADE, related_name="children"
-    )
+    def __str__(self):
+        return self.label
 
     if TYPE_CHECKING:
-        children: Manager["BntuDepartment"]
+        bntu_positions = Manager[BntuPosition]

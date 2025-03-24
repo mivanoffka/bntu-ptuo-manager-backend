@@ -24,6 +24,7 @@ from .models import (
     Gender,
     AcademicDegree,
     EducationLevel,
+    TradeUnionPositionName,
 )
 
 
@@ -49,6 +50,7 @@ def register():
     # region Trade Union
     admin.site.register(TradeUnionPosition),
     admin.site.register(TradeUnionDepartment),
+    admin.site.register(TradeUnionPositionName)
     admin.site.register(WorkingGroup),
     # endregion
 

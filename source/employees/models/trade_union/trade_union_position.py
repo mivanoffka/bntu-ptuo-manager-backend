@@ -1,12 +1,11 @@
 from typing import TYPE_CHECKING
 from django.db import models
 
+from .trade_union_position_name import TradeUnionPositionName
+
 from ..employee import Employee
 from .working_group import WorkingGroup
-
-
-if TYPE_CHECKING:
-    from .trade_union_department import TradeUnionDepartment
+from .trade_union_department import TradeUnionDepartment
 
 
 class TradeUnionPosition(models.Model):
@@ -24,10 +23,21 @@ class TradeUnionPosition(models.Model):
         blank=True,
     )
 
-    name = models.CharField(max_length=64)
+    name = models.ForeignKey(
+        TradeUnionPositionName,
+        on_delete=models.CASCADE,
+        related_name="positions",
+        null=True,
+        blank=True,
+    )
 
-    if TYPE_CHECKING:
-        department: TradeUnionDepartment
+    department = models.ForeignKey(
+        TradeUnionDepartment,
+        on_delete=models.CASCADE,
+        related_name="positions",
+        null=True,
+        blank=True,
+    )
 
-    joinedAt = models.DateTimeField(null=True, blank=True)
-    leftAt = models.DateTimeField(null=True, blank=True)
+    joined_at = models.DateTimeField(null=True, blank=True)
+    left_at = models.DateTimeField(null=True, blank=True)

@@ -6,6 +6,7 @@ from django.db import models
 from .gender import Gender
 from .level import EducationLevel
 from .degrees import AcademicDegree
+from .education import EducationalInstitution
 
 
 if TYPE_CHECKING:
@@ -14,7 +15,6 @@ if TYPE_CHECKING:
     from .bntu import BntuPosition
     from .contacts import PhoneNumber, Address, Email
     from .trade_union import TradeUnionPosition
-    from .education import EducationalInstitution
     from .other import Relative, Reward, Comment
 
 
@@ -34,7 +34,7 @@ class Employee(models.Model):
         blank=True,
     )
 
-    birthdate = models.DateField(null=True, blank=True)
+    birthdate = models.DateTimeField(null=True, blank=True)
     birthplace = models.CharField(max_length=256, null=True, blank=True)
 
     # endregion
@@ -61,8 +61,9 @@ class Employee(models.Model):
 
     # region Education
 
-    if TYPE_CHECKING:
-        educational_institutions: Manager[EducationalInstitution]
+    educational_institutions = models.ManyToManyField(
+        EducationalInstitution, related_name="employees"
+    )
 
     education_level = models.ForeignKey(
         EducationLevel,

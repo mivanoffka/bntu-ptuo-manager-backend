@@ -4,7 +4,12 @@ from .bntu import BntuDepartment, BntuPosition, BntuPositionName
 
 from .common import Name
 
-from .trade_union import TradeUnionDepartment, TradeUnionPosition, WorkingGroup
+from .trade_union import (
+    TradeUnionDepartment,
+    TradeUnionPosition,
+    WorkingGroup,
+    TradeUnionPositionName,
+)
 
 from .contacts import Email, Address, PhoneNumber, PhoneNumberType
 
