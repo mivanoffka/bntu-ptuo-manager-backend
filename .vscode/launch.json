@@ -5,23 +5,25 @@
             "type": "node",
             "request": "launch",
             "name": "Debug backend",
-            "runtimeExecutable": "/bin/bash",
             "skipFiles": ["<node_internals>/**"],
             "console": "integratedTerminal",
 
             "windows": {
+                "runtimeExecutable": "powershell.exe",
                 "runtimeArgs": [
                     "-c",
                     "${workspaceFolder}\\.venv/Scripts\\python.exe ${workspaceFolder}\\source\\manage.py runserver"
                 ]
             },
             "osx": {
+                "runtimeExecutable": "/bin/bash",
                 "runtimeArgs": [
                     "-c",
                     "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py runserver"
                 ]
             },
             "linux": {
+                "runtimeExecutable": "/bin/bash",
                 "runtimeArgs": [
                     "-c",
                     "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py runserver"
