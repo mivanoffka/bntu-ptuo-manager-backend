@@ -12,4 +12,6 @@ class Reward(models.Model):
 
     label = models.CharField(max_length=128)
 
+    granted_at = models.DateTimeField(null=True, blank=True)
+
     comment = models.TextField(null=True, blank=True, max_length=512)

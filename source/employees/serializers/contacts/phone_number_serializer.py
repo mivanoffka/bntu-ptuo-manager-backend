@@ -13,4 +13,4 @@ class PhoneNumberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PhoneNumber
-        fields = ["value", "phone_number_type", "comment"]
+        fields = ["id", "value", "phone_number_type", "comment"]

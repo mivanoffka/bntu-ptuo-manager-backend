@@ -10,4 +10,4 @@ class Comment(models.Model):
         Employee, on_delete=models.CASCADE, related_name="comments"
     )
 
-    content = models.TextField(max_length=512)
+    value = models.TextField(max_length=512)

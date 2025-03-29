@@ -5,4 +5,4 @@ from ...models import Email
 class EmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Email
-        fields = ["value", "comment"]
+        fields = ["id", "value", "comment"]
