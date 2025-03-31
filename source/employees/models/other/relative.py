@@ -5,10 +5,13 @@ from .relative_types import RelativeType
 
 
 class Relative(models.Model):
+    class Meta:
+        db_table = "relatives"
+
     id = models.AutoField(primary_key=True)
 
     employee = models.ForeignKey(
-        Employee, on_delete=models.CASCADE, related_name="relatives"
+        Employee, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
     full_name = models.CharField(max_length=128)

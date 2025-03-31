@@ -2,29 +2,25 @@ from typing import TYPE_CHECKING
 from django.db import models
 
 from employees.models import Employee
-from .bntu_position_name import BntuPositionName
 from .bntu_department import BntuDepartment
 
 
 class BntuPosition(models.Model):
+    class Meta:
+        db_table = "bntu_positions"
+
     id = models.AutoField(primary_key=True)
 
-    name = models.ForeignKey(
-        BntuPositionName,
-        on_delete=models.CASCADE,
-        related_name="entrances",
-        null=True,
-        blank=True,
-    )
+    label = models.CharField(max_length=255)
 
     employee = models.ForeignKey(
-        Employee, on_delete=models.CASCADE, related_name="bntu_positions"
+        Employee, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
     department = models.ForeignKey(
         BntuDepartment,
         on_delete=models.CASCADE,
-        related_name="bntu_positions",
+        related_name=Meta.db_table,
         null=True,
         blank=True,
     )

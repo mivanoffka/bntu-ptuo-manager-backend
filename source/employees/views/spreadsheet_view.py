@@ -9,10 +9,8 @@ from rest_framework import status
 from ..models import (
     WorkingGroup,
     TradeUnionDepartment,
-    TradeUnionPositionName,
     TradeUnionPosition,
     BntuDepartment,
-    BntuPositionName,
     BntuPosition,
     PhoneNumberType,
     PhoneNumber,

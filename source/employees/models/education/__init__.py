@@ -1,4 +1,4 @@
 # from .degrees import AcademicDegree
-from .institution import EducationalInstitution
+from .educational_institution import EducationalInstitution
 
 # from .level import EducationLevel

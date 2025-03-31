@@ -11,5 +11,8 @@ if TYPE_CHECKING:
 
 
 class RelativeType(Enumerated):
+    class Meta(Enumerated.Meta):
+        db_table = "relative_types"
+
     if TYPE_CHECKING:
         relatives = Manager[Relative]

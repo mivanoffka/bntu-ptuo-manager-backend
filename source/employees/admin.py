@@ -16,7 +16,6 @@ from .models import (
     Reward,
     Relative,
     EducationalInstitution,
-    BntuPositionName,
     WorkingGroup,
     PhoneNumberType,
     RelativeType,
@@ -24,7 +23,8 @@ from .models import (
     Gender,
     AcademicDegree,
     EducationLevel,
-    TradeUnionPositionName,
+    TradeUnionDepartmentOption,
+    WorkingGroupOption,
 )
 
 
@@ -37,7 +37,6 @@ def register():
     # region BNTU
     admin.site.register(BntuPosition),
     admin.site.register(BntuDepartment),
-    admin.site.register(BntuPositionName)
     # endregion
 
     # region Contacts
@@ -50,8 +49,9 @@ def register():
     # region Trade Union
     admin.site.register(TradeUnionPosition),
     admin.site.register(TradeUnionDepartment),
-    admin.site.register(TradeUnionPositionName)
     admin.site.register(WorkingGroup),
+    admin.site.register(TradeUnionDepartmentOption),
+    admin.site.register(WorkingGroupOption),
     # endregion
 
     # region Education

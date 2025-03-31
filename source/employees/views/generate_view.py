@@ -1,15 +1,14 @@
-from typing import TypeVar
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from django.db import models
 
 
 from ..models import (
     WorkingGroup,
     TradeUnionDepartment,
-    TradeUnionPositionName,
     TradeUnionPosition,
     BntuDepartment,
-    BntuPositionName,
     BntuPosition,
     PhoneNumberType,
     PhoneNumber,
@@ -21,27 +20,35 @@ from ..models import (
     Employee,
     Address,
     AcademicDegree,
+    WorkingGroupOption,
+    TradeUnionDepartmentOption,
+    Relative,
+    RelativeType,
+    Reward,
+    Comment,
 )
 
 from ..serializers import EmployeeSerializer
 import random
 
 from faker import Faker
-from datetime import datetime
-from django.db.models import Manager, Model
 
 
 class GenerateView(APIView):
     _faker = Faker()
 
-    def _get_random_object(self, Type: type[Model]):
+    def _get_random_object(self, Type: type[models.Model]):
         return random.choice(Type.objects.all())
 
     def _get_random_count(self):
         return random.randint(1, 2)
 
     def _get_random_comment(self):
-        return self._faker.text(50) if random.randint(-2, 1) > 0 else None
+        chance = random.randint(0, 3)
+        if chance == 0:
+            return self._faker.text(50)
+        else:
+            return None
 
     def _add_random_names(self, employee: Employee):
         for i in range(self._get_random_count()):
@@ -79,17 +86,12 @@ class GenerateView(APIView):
 
     def _add_random_education_institutions(self, employee: Employee):
         for i in range(self._get_random_count()):
-            is_old = random.randint(0, 6)
-            institution: EducationalInstitution
-            if is_old:
-                institution = EducationalInstitution.objects.create(
-                    label=self._faker.company()
-                )
-            else:
-                institution = self._get_random_object(EducationalInstitution)  # type: ignore
-
-            institution.employees.add(employee)
-            employee.educational_institutions.add(institution)
+            EducationalInstitution.objects.create(
+                employee=employee,
+                label=self._faker.company(),
+                graduated_at=self._faker.date(),
+                comment=self._get_random_comment(),
+            )
 
     def _add_random_bntu_positions(self, employee: Employee):
         for i in range(self._get_random_count()):
@@ -100,13 +102,13 @@ class GenerateView(APIView):
 
             if not is_not_discharged:
                 discharged_at = self._faker.date()
-                is_discharged_voluntarily = random.randint(0, 5)
+                is_discharged_voluntarily = bool(random.randint(0, 5))
                 if not is_discharged_voluntarily:
                     dischargement_comment = self._faker.text(35)
 
             BntuPosition.objects.create(
                 employee=employee,
-                name=self._get_random_object(BntuPositionName),
+                label=self._faker.text(30),
                 hired_at=self._faker.date(),
                 discharged_at=discharged_at,
                 is_discharged_voluntarily=is_discharged_voluntarily,
@@ -114,26 +116,83 @@ class GenerateView(APIView):
                 department=self._get_random_object(BntuDepartment),
             )
 
+    def _add_random_trade_union_info(self, employee: Employee):
+        self._add_random_working_groups(employee)
+        self._add_random_trade_union_departments(employee)
+        self._add_random_trade_union_positions(employee)
+
+    def _add_random_working_groups(self, employee: Employee):
+        for i in range(self._get_random_count()):
+            WorkingGroup.objects.create(
+                employee=employee,
+                working_group_option=self._get_random_object(WorkingGroupOption),
+            )
+
+    def _add_random_trade_union_departments(self, employee: Employee):
+        for i in range(self._get_random_count()):
+            TradeUnionDepartment.objects.create(
+                employee=employee,
+                trade_union_department_option=self._get_random_object(
+                    TradeUnionDepartmentOption
+                ),
+            )
+
     def _add_random_trade_union_positions(self, employee: Employee):
         for i in range(self._get_random_count()):
-
             TradeUnionPosition.objects.create(
                 employee=employee,
-                department=self._get_random_object(TradeUnionDepartment),
-                name=self._get_random_object(TradeUnionPositionName),
-                working_group=self._get_random_object(WorkingGroup),
-                joined_at=self._faker.date(),
-                left_at=self._faker.date() if not self._get_random_count() else None,
+                label=self._faker.text(30),
+                occurred_at=self._faker.date(),
+                comment=self._get_random_comment(),
+            )
+
+    def _add_random_relatives(self, employee: Employee):
+        for i in range(self._get_random_count()):
+            Relative.objects.create(
+                employee=employee,
+                birthdate=self._faker.date(),
+                relative_type=self._get_random_object(RelativeType),
+                full_name=self._faker.name(),
+                comment=self._get_random_comment(),
+            )
+
+    def _add_random_rewards(self, employee: Employee):
+        for i in range(self._get_random_count()):
+            Reward.objects.create(
+                employee=employee,
+                label=self._faker.text(30),
+                granted_at=self._faker.date(),
+                comment=self._get_random_comment(),
+            )
+
+    def _add_random_comments(self, employee: Employee):
+        for i in range(self._get_random_count()):
+            Comment.objects.create(
+                employee=employee,
+                value=self._faker.text(100),
             )
 
     def post(self, request):
+        is_archived = random.randint(0, 4)
+        archived_at = self._faker.date() if not is_archived else None
+        is_archived = not bool(is_archived)
+
+        is_retired = random.randint(0, 4)
+        retired_at = self._faker.date() if not is_retired else None
+        is_retired = not bool(is_retired)
+
         employee = Employee.objects.create(
             birthdate=self._faker.date(),
             birthplace=self._faker.city(),
             joined_at=self._faker.date(),
+            recorded_at=self._faker.date(),
             gender=self._get_random_object(Gender),
             education_level=self._get_random_object(EducationLevel),
             academic_degree=self._get_random_object(AcademicDegree),
+            is_archived=is_archived,
+            archived_at=archived_at,
+            is_retired=is_retired,
+            retired_at=retired_at,
         )
 
         self._add_random_names(employee)
@@ -142,6 +201,9 @@ class GenerateView(APIView):
         self._add_random_phone_numbers(employee)
         self._add_random_education_institutions(employee)
         self._add_random_bntu_positions(employee)
-        self._add_random_trade_union_positions(employee)
+        self._add_random_trade_union_info(employee)
+        self._add_random_relatives(employee)
+        self._add_random_rewards(employee)
+        self._add_random_comments(employee)
 
         return Response({"employee": EmployeeSerializer(employee).data})

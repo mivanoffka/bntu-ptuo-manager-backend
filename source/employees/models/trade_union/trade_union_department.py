@@ -1,20 +1,26 @@
-from typing import TYPE_CHECKING
+from encodings.punycode import T
 from django.db import models
-from treebeard.mp_tree import MP_Node
+
+from .trade_union_department_option import TradeUnionDepartmentOption
+
+from ..employee import Employee
+from ...utils.timestamp import Timestamped
 
 
-if TYPE_CHECKING:
-    from .trade_union_position import TradeUnionPosition
-    from django.db.models import Manager
+class TradeUnionDepartment(Timestamped):
+    class Meta(Timestamped.Meta):
+        db_table = "trade_union_departments"
 
+    id = models.AutoField(primary_key=True)
 
-class TradeUnionDepartment(MP_Node):
-    label = models.CharField(max_length=255)
+    employee = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name=Meta.db_table
+    )
 
-    node_order_by = ["label"]
-
-    def __str__(self):
-        return self.label
-
-    if TYPE_CHECKING:
-        trade_union_positions: Manager[TradeUnionPosition]
+    trade_union_department_option = models.ForeignKey(
+        TradeUnionDepartmentOption,
+        on_delete=models.CASCADE,
+        related_name=Meta.db_table,
+        null=True,
+        blank=True,
+    )

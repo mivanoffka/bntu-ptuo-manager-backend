@@ -1,15 +1,20 @@
-from typing import List
 from rest_framework import serializers
+
+from .trade_union_department_option_serializer import (
+    TradeUnionDepartmentOptionSerializer,
+)
 
 from ...models import TradeUnionDepartment
 
 
 class TradeUnionDepartmentSerializer(serializers.ModelSerializer):
-    hierarchy = serializers.SerializerMethodField()
+    trade_union_department_option = serializers.SerializerMethodField()
 
-    def get_hierarchy(self, obj: TradeUnionDepartment):
-        return [ancestor.label for ancestor in obj.get_ancestors().all()]  # type: ignore
+    def get_trade_union_department_option(self, obj: TradeUnionDepartment):
+        return TradeUnionDepartmentOptionSerializer(
+            obj.trade_union_department_option
+        ).data
 
     class Meta:
         model = TradeUnionDepartment
-        fields = ["id", "path", "label", "hierarchy"]
+        fields = ["id", "trade_union_department_option"]

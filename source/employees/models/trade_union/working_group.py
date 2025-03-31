@@ -1,15 +1,27 @@
 from typing import TYPE_CHECKING
 from django.db import models
 
+from .working_group_option import WorkingGroupOption
 
-from ...utils import Enumerated
+from ..employee import Employee
 
-
-if TYPE_CHECKING:
-    from django.db.models import Manager
-    from .trade_union_position import TradeUnionPosition
+from ...utils.timestamp import Timestamped
 
 
-class WorkingGroup(Enumerated):
-    if TYPE_CHECKING:
-        positions = Manager[TradeUnionPosition]
+class WorkingGroup(Timestamped):
+    class Meta(Timestamped.Meta):
+        db_table = "working_groups"
+
+    id = models.AutoField(primary_key=True)
+
+    employee = models.ForeignKey(
+        Employee, on_delete=models.CASCADE, related_name=Meta.db_table
+    )
+
+    working_group_option = models.ForeignKey(
+        WorkingGroupOption,
+        on_delete=models.CASCADE,
+        related_name=Meta.db_table,
+        null=True,
+        blank=True,
+    )

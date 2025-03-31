@@ -1,14 +1,16 @@
+from .trade_union.working_group_option import WorkingGroupOption
 from .employee import Employee
 
-from .bntu import BntuDepartment, BntuPosition, BntuPositionName
+from .bntu import BntuDepartment, BntuPosition
 
 from .common import Name
 
 from .trade_union import (
     TradeUnionDepartment,
-    TradeUnionPosition,
     WorkingGroup,
-    TradeUnionPositionName,
+    TradeUnionDepartmentOption,
+    WorkingGroupOption,
+    TradeUnionPosition,
 )
 
 from .contacts import Email, Address, PhoneNumber, PhoneNumberType

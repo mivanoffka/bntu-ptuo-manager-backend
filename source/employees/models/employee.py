@@ -6,7 +6,6 @@ from django.db import models
 from .gender import Gender
 from .level import EducationLevel
 from .degrees import AcademicDegree
-from .education import EducationalInstitution
 
 
 if TYPE_CHECKING:
@@ -14,11 +13,15 @@ if TYPE_CHECKING:
     from .common import Name
     from .bntu import BntuPosition
     from .contacts import PhoneNumber, Address, Email
-    from .trade_union import TradeUnionPosition
+    from .trade_union import TradeUnionDepartment, WorkingGroup, TradeUnionPosition
     from .other import Relative, Reward, Comment
+    from .education import EducationalInstitution
 
 
 class Employee(models.Model):
+    class Meta:
+        db_table = "employees"
+
     # region Common
 
     if TYPE_CHECKING:
@@ -29,7 +32,7 @@ class Employee(models.Model):
     gender = models.ForeignKey(
         Gender,
         on_delete=models.CASCADE,
-        related_name="employees",
+        related_name=Meta.db_table,
         null=True,
         blank=True,
     )
@@ -49,9 +52,12 @@ class Employee(models.Model):
     # region Trade union
 
     if TYPE_CHECKING:
+        trade_union_departments: Manager[TradeUnionDepartment]
+        working_groups: Manager[WorkingGroup]
         trade_union_positions: Manager[TradeUnionPosition]
 
     joined_at = models.DateTimeField(null=True, blank=True)
+    recorded_at = models.DateTimeField(null=True, blank=True)
     is_archived = models.BooleanField(default=False)
     archived_at = models.DateTimeField(null=True, blank=True)
     is_retired = models.BooleanField(default=False)
@@ -61,21 +67,20 @@ class Employee(models.Model):
 
     # region Education
 
-    educational_institutions = models.ManyToManyField(
-        EducationalInstitution, related_name="employees"
-    )
+    if TYPE_CHECKING:
+        educational_institutions: Manager[EducationalInstitution]
 
     education_level = models.ForeignKey(
         EducationLevel,
         on_delete=models.CASCADE,
-        related_name="employees",
+        related_name=Meta.db_table,
         null=True,
         blank=True,
     )
     academic_degree = models.ForeignKey(
         AcademicDegree,
         on_delete=models.CASCADE,
-        related_name="employees",
+        related_name=Meta.db_table,
         null=True,
         blank=True,
     )
@@ -89,7 +94,7 @@ class Employee(models.Model):
         addresses: Manager[Address]
         emails: Manager[Email]
 
-    # endregionk
+    # endregion
 
     # region Other
 

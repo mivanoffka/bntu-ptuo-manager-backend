@@ -5,12 +5,15 @@ from .phone_number_type import PhoneNumberType
 
 
 class PhoneNumber(models.Model):
+    class Meta:
+        db_table = "phone_numbers"
+
     id = models.AutoField(primary_key=True)
 
     employee = models.ForeignKey(
         Employee,
         on_delete=models.CASCADE,
-        related_name="phone_numbers",
+        related_name=Meta.db_table,
         null=True,
         blank=True,
     )

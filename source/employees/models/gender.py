@@ -10,5 +10,8 @@ if TYPE_CHECKING:
 
 
 class Gender(Enumerated):
+    class Meta(Enumerated.Meta):
+        db_table = "genders"
+
     if TYPE_CHECKING:
         employees = Manager[Employee]

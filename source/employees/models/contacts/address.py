@@ -4,10 +4,13 @@ from ..employee import Employee
 
 
 class Address(models.Model):
+    class Meta:
+        db_table = "addresses"
+
     id = models.AutoField(primary_key=True)
 
     employee = models.ForeignKey(
-        Employee, on_delete=models.CASCADE, related_name="addresses"
+        Employee, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
     value = models.CharField(max_length=256)

@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from .other import CommentSerializer, RelativeSerializer, RewardSerializer
+from ..models.trade_union.working_group import WorkingGroup
 
-from .trade_union.trade_union_position_serializer import TradeUnionPositionSerializer
+from .other import CommentSerializer, RelativeSerializer, RewardSerializer
 
 from .education import (
     EducationLevelSerializer,
@@ -12,13 +12,19 @@ from .education import (
 
 from .common import GenderSerializer, NameSerializer
 
-from .bntu.bntu_position_serializer import BntuPositionSerializer
+from .bntu import BntuPositionSerializer
 
 from .contacts import EmailSerializer, AddressSerializer, PhoneNumberSerializer
 
+from .trade_union import (
+    WorkingGroupSerializer,
+    TradeUnionPositionSerializer,
+    TradeUnionDepartmentSerializer,
+)
+
 from ..utils.history import History
 
-from ..models import Employee, Name
+from ..models import Employee, Name, TradeUnionDepartment
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -100,11 +106,27 @@ class EmployeeSerializer(serializers.ModelSerializer):
     # region TradeUnion
 
     trade_union_positions = serializers.SerializerMethodField()
+    trade_union_departments = serializers.SerializerMethodField()
+    working_groups = serializers.SerializerMethodField()
 
     def get_trade_union_positions(self, obj: Employee):
         return (
-            TradeUnionPositionSerializer(position).data
-            for position in obj.trade_union_positions.all()
+            TradeUnionPositionSerializer(trade_union_position).data
+            for trade_union_position in obj.trade_union_positions.all()
+        )
+
+    def get_trade_union_departments(self, obj: Employee):
+        return (
+            History[TradeUnionDepartment]
+            .from_timestamped(obj.trade_union_departments)
+            .serialize(TradeUnionDepartmentSerializer)
+        )
+
+    def get_working_groups(self, obj: Employee):
+        return (
+            History[WorkingGroup]
+            .from_timestamped(obj.working_groups)
+            .serialize(WorkingGroupSerializer)
         )
 
     # endregion
@@ -136,7 +158,10 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "gender",
             "bntu_positions",
             "trade_union_positions",
+            "trade_union_departments",
+            "working_groups",
             "joined_at",
+            "recorded_at",
             "is_archived",
             "is_retired",
             "archived_at",

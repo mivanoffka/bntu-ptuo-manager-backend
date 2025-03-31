@@ -6,13 +6,7 @@ from ...models import BntuPosition
 
 
 class BntuPositionSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
     department = serializers.SerializerMethodField()
-
-    def get_name(self, obj):
-        if obj.name:
-            return obj.name.label
-        return None
 
     def get_department(self, obj):
         return BntuDepartmentSerializer(obj.department).data
@@ -20,7 +14,7 @@ class BntuPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = BntuPosition
         fields = [
-            "name",
+            "label",
             "hired_at",
             "is_discharged",
             "discharged_at",

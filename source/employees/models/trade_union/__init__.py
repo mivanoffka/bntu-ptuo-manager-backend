@@ -1,4 +1,5 @@
+from .trade_union_department_option import TradeUnionDepartmentOption
+from .working_group_option import WorkingGroupOption
 from .trade_union_department import TradeUnionDepartment
-from .trade_union_position import TradeUnionPosition
 from .working_group import WorkingGroup
-from .trade_union_position_name import TradeUnionPositionName
+from .trade_union_position import TradeUnionPosition

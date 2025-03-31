@@ -6,13 +6,13 @@ from ...utils import Enumerated
 
 
 if TYPE_CHECKING:
+    from .working_group import WorkingGroup
     from django.db.models import Manager
-    from .phone_number import PhoneNumber
 
 
-class PhoneNumberType(Enumerated):
+class WorkingGroupOption(Enumerated):
     class Meta(Enumerated.Meta):
-        db_table = "phone_number_types"
+        db_table = "working_group_options"
 
     if TYPE_CHECKING:
-        phone_numbers = Manager[PhoneNumber]
+        working_groups = Manager[WorkingGroup]
