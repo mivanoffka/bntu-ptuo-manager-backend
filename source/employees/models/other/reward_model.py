@@ -1,16 +1,16 @@
 from django.db import models
 
-from ..employee import Employee
+from ..employee_model import EmployeeModel
 
 
-class Reward(models.Model):
+class RewardModel(models.Model):
     class Meta:
         db_table = "rewards"
 
     id = models.AutoField(primary_key=True)
 
     employee = models.ForeignKey(
-        Employee, on_delete=models.CASCADE, related_name=Meta.db_table
+        EmployeeModel, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
     label = models.CharField(max_length=128)

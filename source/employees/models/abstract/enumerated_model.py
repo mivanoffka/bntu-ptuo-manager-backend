@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Enumerated(models.Model):
+class EnumeratedModel(models.Model):
     id = models.AutoField(primary_key=True)
     label = models.CharField(max_length=64)
 

@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from .bntu_department_serializer import BntuDepartmentSerializer
 
-from ...models import BntuPosition
+from ...models import BntuPositionModel
 
 
 class BntuPositionSerializer(serializers.ModelSerializer):
@@ -12,7 +12,7 @@ class BntuPositionSerializer(serializers.ModelSerializer):
         return BntuDepartmentSerializer(obj.department).data
 
     class Meta:
-        model = BntuPosition
+        model = BntuPositionModel
         fields = [
             "label",
             "hired_at",

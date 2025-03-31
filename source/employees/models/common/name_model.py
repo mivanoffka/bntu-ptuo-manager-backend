@@ -1,17 +1,17 @@
 from django.db import models
 
-from ..employee import Employee
-from ...utils.timestamp import Timestamped
+from ..employee_model import EmployeeModel
+from ..abstract import TimestampedModel
 
 
-class Name(Timestamped):
-    class Meta(Timestamped.Meta):
+class NameModel(TimestampedModel):
+    class Meta(TimestampedModel.Meta):
         db_table = "names"
 
     id = models.AutoField(primary_key=True)
 
     employee = models.ForeignKey(
-        Employee, on_delete=models.CASCADE, related_name=Meta.db_table
+        EmployeeModel, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
     first_name = models.CharField(max_length=64)

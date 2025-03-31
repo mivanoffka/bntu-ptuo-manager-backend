@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class Timestamped(models.Model):
+class TimestampedModel(models.Model):
     id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(default=timezone.now)
 

@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from ...models import Gender
+from ...models import GenderModel
 
 
 class GenderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Gender
+        model = GenderModel
         fields = ["id", "label"]

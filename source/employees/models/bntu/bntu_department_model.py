@@ -4,11 +4,11 @@ from django.db import models
 from treebeard.mp_tree import MP_Node
 
 if TYPE_CHECKING:
-    from .bntu_position import BntuPosition
+    from .bntu_position_model import BntuPositionModel
     from django.db.models import Manager
 
 
-class BntuDepartment(MP_Node):
+class BntuDepartmentModel(MP_Node):
     class Meta(MP_Node.Meta):
         db_table = "bntu_departments"
 
@@ -20,4 +20,4 @@ class BntuDepartment(MP_Node):
         return self.label
 
     if TYPE_CHECKING:
-        bntu_positions = Manager[BntuPosition]
+        bntu_positions = Manager[BntuPositionModel]

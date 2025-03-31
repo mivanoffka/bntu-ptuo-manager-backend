@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from ...models import Email
+from ...models import EmailModel
 
 
 class EmailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Email
+        model = EmailModel
         fields = ["id", "value", "comment"]

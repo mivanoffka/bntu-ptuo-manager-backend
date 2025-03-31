@@ -7,19 +7,19 @@ from rest_framework.decorators import permission_classes
 from rest_framework import status
 
 from ..models import (
-    WorkingGroup,
-    TradeUnionDepartment,
-    TradeUnionPosition,
-    BntuDepartment,
-    BntuPosition,
-    PhoneNumberType,
-    PhoneNumber,
-    Email,
-    EducationalInstitution,
-    EducationLevel,
-    Gender,
-    Name,
-    Employee,
+    WorkingGroupModel,
+    TradeUnionDepartmentModel,
+    TradeUnionPositionModel,
+    BntuDepartmentModel,
+    BntuPositionModel,
+    PhoneNumberTypeModel,
+    PhoneNumberModel,
+    EmailModel,
+    EducationalInstitutionModel,
+    EducationLevelModel,
+    GenderModel,
+    NameModel,
+    EmployeeModel,
 )
 
 from ..serializers import EmployeeSerializer
@@ -33,7 +33,7 @@ from datetime import datetime, date
 
 class SpreadsheetView(APIView):
     def get(self, request):
-        employees = Employee.objects.all()
+        employees = EmployeeModel.objects.all()
         employees_s = [EmployeeSerializer(employee).data for employee in employees]
 
         return Response({"employees": employees_s})

@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from ...models import TradeUnionPosition
+from ...models import TradeUnionPositionModel
 
 
 class TradeUnionPositionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TradeUnionPosition
+        model = TradeUnionPositionModel
         fields = ["id", "label", "occurred_at", "comment"]

@@ -1,17 +1,17 @@
 from django.db import models
 
-from ..employee import Employee
-from .relative_types import RelativeType
+from ..employee_model import EmployeeModel
+from .relative_type_model import RelativeTypeModel
 
 
-class Relative(models.Model):
+class RelativeModel(models.Model):
     class Meta:
         db_table = "relatives"
 
     id = models.AutoField(primary_key=True)
 
     employee = models.ForeignKey(
-        Employee, on_delete=models.CASCADE, related_name=Meta.db_table
+        EmployeeModel, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
     full_name = models.CharField(max_length=128)
@@ -21,5 +21,5 @@ class Relative(models.Model):
     comment = models.TextField(null=True, blank=True, max_length=512)
 
     relative_type = models.ForeignKey(
-        RelativeType, on_delete=models.CASCADE, null=True, blank=True
+        RelativeTypeModel, on_delete=models.CASCADE, null=True, blank=True
     )

@@ -11,12 +11,12 @@ from ..serializers import (
 )
 
 from ..models import (
-    PhoneNumberType,
-    Gender,
+    PhoneNumberTypeModel,
+    GenderModel,
     AcademicDegree,
-    EducationLevel,
-    WorkingGroup,
-    RelativeType,
+    EducationLevelModel,
+    WorkingGroupModel,
+    RelativeTypeModel,
 )
 
 
@@ -25,14 +25,16 @@ class EnumerationsView(APIView):
         self,
     ):
         return {
-            "genders": [GenderSerializer(item).data for item in Gender.objects.all()],
+            "genders": [
+                GenderSerializer(item).data for item in GenderModel.objects.all()
+            ],
             "phone_number_types": [
                 PhoneNumberTypeSerializer(item).data
-                for item in PhoneNumberType.objects.all()
+                for item in PhoneNumberTypeModel.objects.all()
             ],
             "education_level": [
                 EducationLevelSerializer(item).data
-                for item in EducationLevel.objects.all()
+                for item in EducationLevelModel.objects.all()
             ],
             "academic_degrees": [
                 AcademicDegreeSerializer(item).data
@@ -40,10 +42,11 @@ class EnumerationsView(APIView):
             ],
             "working_groups": [
                 WorkingGroupOptionSerializer(item).data
-                for item in WorkingGroup.objects.all()
+                for item in WorkingGroupModel.objects.all()
             ],
             "relative_types": [
-                RelativeTypeSerializer(item).data for item in RelativeType.objects.all()
+                RelativeTypeSerializer(item).data
+                for item in RelativeTypeModel.objects.all()
             ],
         }
 

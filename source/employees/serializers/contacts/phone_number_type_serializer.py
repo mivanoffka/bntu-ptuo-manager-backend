@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from ...models import PhoneNumberType
+from ...models import PhoneNumberTypeModel
 
 
 class PhoneNumberTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = PhoneNumberType
+        model = PhoneNumberTypeModel
         fields = ["id", "label"]

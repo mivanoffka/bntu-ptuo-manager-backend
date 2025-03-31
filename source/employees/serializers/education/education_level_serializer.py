@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from ...models import EducationLevel
+from ...models import EducationLevelModel
 
 
 class EducationLevelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = EducationLevel
+        model = EducationLevelModel
         fields = ["id", "label"]

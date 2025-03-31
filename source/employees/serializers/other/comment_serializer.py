@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from ...models import Comment
+from ...models import CommentModel
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comment
+        model = CommentModel
         fields = ["id", "value"]

@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from ...models import RelativeType
+from ...models import RelativeTypeModel
 
 
 class RelativeTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RelativeType
+        model = RelativeTypeModel
         fields = ["id", "label"]

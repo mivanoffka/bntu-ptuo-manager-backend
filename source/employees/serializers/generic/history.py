@@ -1,11 +1,11 @@
 from typing import Generic, Optional, Tuple, TypeVar
 from .history_item import HistoryItem
-from .timestamp import Timestamped
+from ...models import TimestampedModel
 from django.db.models import QuerySet
 from rest_framework import serializers
 
 
-T = TypeVar("T", bound=Timestamped)
+T = TypeVar("T", bound=TimestampedModel)
 
 
 class BaseHistory(Generic[T]):

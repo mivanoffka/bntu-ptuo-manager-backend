@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models.trade_union.working_group import WorkingGroup
+from ..models.trade_union.working_group_model import WorkingGroupModel
 
 from .other import CommentSerializer, RelativeSerializer, RewardSerializer
 
@@ -22,9 +22,9 @@ from .trade_union import (
     TradeUnionDepartmentSerializer,
 )
 
-from ..utils.history import History
+from .generic import History
 
-from ..models import Employee, Name, TradeUnionDepartment
+from ..models import EmployeeModel, NameModel, TradeUnionDepartmentModel
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -34,10 +34,10 @@ class EmployeeSerializer(serializers.ModelSerializer):
     names = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
 
-    def get_names(self, obj: Employee):
-        return History[Name].from_timestamped(obj.names).serialize(NameSerializer)
+    def get_names(self, obj: EmployeeModel):
+        return History[NameModel].from_timestamped(obj.names).serialize(NameSerializer)
 
-    def get_gender(self, obj: Employee):
+    def get_gender(self, obj: EmployeeModel):
         if not obj.gender:
             return None
 
@@ -51,16 +51,16 @@ class EmployeeSerializer(serializers.ModelSerializer):
     phone_numbers = serializers.SerializerMethodField()
     addresses = serializers.SerializerMethodField()
 
-    def get_emails(self, obj: Employee):
+    def get_emails(self, obj: EmployeeModel):
         return (EmailSerializer(email).data for email in obj.emails.all())
 
-    def get_phone_numbers(self, obj: Employee):
+    def get_phone_numbers(self, obj: EmployeeModel):
         return (
             PhoneNumberSerializer(phone_number).data
             for phone_number in obj.phone_numbers.all()
         )
 
-    def get_addresses(self, obj: Employee):
+    def get_addresses(self, obj: EmployeeModel):
         return (AddressSerializer(address).data for address in obj.addresses.all())
 
     # endregion
@@ -71,19 +71,19 @@ class EmployeeSerializer(serializers.ModelSerializer):
     education_level = serializers.SerializerMethodField()
     academic_degree = serializers.SerializerMethodField()
 
-    def get_educational_institutions(self, obj: Employee):
+    def get_educational_institutions(self, obj: EmployeeModel):
         return (
             EducationalInstitutionSerializer(institution).data
             for institution in obj.educational_institutions.all()
         )
 
-    def get_education_level(self, obj: Employee):
+    def get_education_level(self, obj: EmployeeModel):
         if not obj.education_level:
             return None
 
         return EducationLevelSerializer(obj.education_level).data
 
-    def get_academic_degree(self, obj: Employee):
+    def get_academic_degree(self, obj: EmployeeModel):
         if not obj.academic_degree:
             return None
 
@@ -95,7 +95,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
     bntu_positions = serializers.SerializerMethodField()
 
-    def get_bntu_positions(self, obj: Employee):
+    def get_bntu_positions(self, obj: EmployeeModel):
         return (
             BntuPositionSerializer(position).data
             for position in obj.bntu_positions.all()
@@ -109,22 +109,22 @@ class EmployeeSerializer(serializers.ModelSerializer):
     trade_union_departments = serializers.SerializerMethodField()
     working_groups = serializers.SerializerMethodField()
 
-    def get_trade_union_positions(self, obj: Employee):
+    def get_trade_union_positions(self, obj: EmployeeModel):
         return (
             TradeUnionPositionSerializer(trade_union_position).data
             for trade_union_position in obj.trade_union_positions.all()
         )
 
-    def get_trade_union_departments(self, obj: Employee):
+    def get_trade_union_departments(self, obj: EmployeeModel):
         return (
-            History[TradeUnionDepartment]
+            History[TradeUnionDepartmentModel]
             .from_timestamped(obj.trade_union_departments)
             .serialize(TradeUnionDepartmentSerializer)
         )
 
-    def get_working_groups(self, obj: Employee):
+    def get_working_groups(self, obj: EmployeeModel):
         return (
-            History[WorkingGroup]
+            History[WorkingGroupModel]
             .from_timestamped(obj.working_groups)
             .serialize(WorkingGroupSerializer)
         )
@@ -137,19 +137,19 @@ class EmployeeSerializer(serializers.ModelSerializer):
     relatives = serializers.SerializerMethodField()
     rewards = serializers.SerializerMethodField()
 
-    def get_comments(self, obj: Employee):
+    def get_comments(self, obj: EmployeeModel):
         return (CommentSerializer(comment).data for comment in obj.comments.all())
 
-    def get_relatives(self, obj: Employee):
+    def get_relatives(self, obj: EmployeeModel):
         return (RelativeSerializer(relative).data for relative in obj.relatives.all())
 
-    def get_rewards(self, obj: Employee):
+    def get_rewards(self, obj: EmployeeModel):
         return (RewardSerializer(reward).data for reward in obj.rewards.all())
 
     # endregion
 
     class Meta:
-        model = Employee
+        model = EmployeeModel
         fields = [
             "id",
             "names",

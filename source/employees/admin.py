@@ -1,76 +1,73 @@
 from django.contrib import admin
 
-from .utils.enumeration import Enumerated
-
-
 from .models import (
-    Employee,
-    Name,
-    BntuDepartment,
-    BntuPosition,
-    Address,
-    PhoneNumber,
-    Email,
-    TradeUnionDepartment,
-    TradeUnionPosition,
-    Reward,
-    Relative,
-    EducationalInstitution,
-    WorkingGroup,
-    PhoneNumberType,
-    RelativeType,
-    Comment,
-    Gender,
+    EmployeeModel,
+    NameModel,
+    BntuDepartmentModel,
+    BntuPositionModel,
+    AddressModel,
+    PhoneNumberModel,
+    EmailModel,
+    TradeUnionDepartmentModel,
+    TradeUnionPositionModel,
+    RewardModel,
+    RelativeModel,
+    EducationalInstitutionModel,
+    WorkingGroupModel,
+    PhoneNumberTypeModel,
+    RelativeTypeModel,
+    CommentModel,
+    GenderModel,
     AcademicDegree,
-    EducationLevel,
-    TradeUnionDepartmentOption,
-    WorkingGroupOption,
+    EducationLevelModel,
+    TradeUnionDepartmentOptionModel,
+    WorkingGroupOptionModel,
 )
 
 
 def register():
     # region Common
-    admin.site.register(Name),
-    admin.site.register(Gender)
+    admin.site.register(NameModel),
+    admin.site.register(GenderModel)
     # endregion
 
     # region BNTU
-    admin.site.register(BntuPosition),
-    admin.site.register(BntuDepartment),
+    admin.site.register(BntuPositionModel),
+    admin.site.register(BntuDepartmentModel),
     # endregion
 
     # region Contacts
-    admin.site.register(PhoneNumber),
-    admin.site.register(Address),
-    admin.site.register(Email),
-    admin.site.register(PhoneNumberType)
+    admin.site.register(PhoneNumberModel),
+    admin.site.register(AddressModel),
+    admin.site.register(EmailModel),
+    admin.site.register(PhoneNumberTypeModel)
     # endregion
 
     # region Trade Union
-    admin.site.register(TradeUnionPosition),
-    admin.site.register(TradeUnionDepartment),
-    admin.site.register(WorkingGroup),
-    admin.site.register(TradeUnionDepartmentOption),
-    admin.site.register(WorkingGroupOption),
+    admin.site.register(TradeUnionPositionModel),
+    admin.site.register(TradeUnionDepartmentModel),
+    admin.site.register(WorkingGroupModel),
+    admin.site.register(TradeUnionDepartmentOptionModel),
+    admin.site.register(WorkingGroupOptionModel),
     # endregion
 
     # region Education
 
-    admin.site.register(EducationalInstitution)
-    admin.site.register(EducationLevel)
+    admin.site.register(EducationalInstitutionModel)
+    admin.site.register(EducationLevelModel)
     admin.site.register(AcademicDegree)
 
     # endregion
 
     # region Other
-    admin.site.register(Reward),
-    admin.site.register(Relative),
-    admin.site.register(RelativeType),
-    admin.site.register(Comment)
+    admin.site.register(RewardModel),
+    admin.site.register(RelativeModel),
+    admin.site.register(RelativeTypeModel),
+    admin.site.register(CommentModel)
 
     # endregion
 
-    admin.site.register(Employee)
+    admin.site.register(EmployeeModel)
 
 
 register()

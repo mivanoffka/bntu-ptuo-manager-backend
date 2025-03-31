@@ -1,26 +1,29 @@
-from .trade_union.working_group_option import WorkingGroupOption
-from .employee import Employee
+from .trade_union.working_group_option_model import WorkingGroupOptionModel
 
-from .bntu import BntuDepartment, BntuPosition
+from .employee_model import EmployeeModel
 
-from .common import Name
+from .bntu import BntuDepartmentModel, BntuPositionModel
+
+from .common import NameModel
 
 from .trade_union import (
-    TradeUnionDepartment,
-    WorkingGroup,
-    TradeUnionDepartmentOption,
-    WorkingGroupOption,
-    TradeUnionPosition,
+    TradeUnionDepartmentModel,
+    WorkingGroupModel,
+    TradeUnionDepartmentOptionModel,
+    WorkingGroupOptionModel,
+    TradeUnionPositionModel,
 )
 
-from .contacts import Email, Address, PhoneNumber, PhoneNumberType
+from .contacts import EmailModel, AddressModel, PhoneNumberModel, PhoneNumberTypeModel
 
-from .education import EducationalInstitution
+from .education import EducationalInstitutionModel
 
-from .other import Relative, RelativeType, Comment, Reward
+from .other import RelativeModel, RelativeTypeModel, CommentModel, RewardModel
 
-from .gender import Gender
+from .gender_model import GenderModel
 
-from .degrees import AcademicDegree
+from .academic_degree_model import AcademicDegree
 
-from .level import EducationLevel
+from .level_model import EducationLevelModel
+
+from .abstract import EnumeratedModel, TimestampedModel

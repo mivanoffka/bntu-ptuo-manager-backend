@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 from django.db import models
 
-from employees.models import Employee
-from .bntu_department import BntuDepartment
+from employees.models import EmployeeModel
+from .bntu_department_model import BntuDepartmentModel
 
 
-class BntuPosition(models.Model):
+class BntuPositionModel(models.Model):
     class Meta:
         db_table = "bntu_positions"
 
@@ -14,11 +14,11 @@ class BntuPosition(models.Model):
     label = models.CharField(max_length=255)
 
     employee = models.ForeignKey(
-        Employee, on_delete=models.CASCADE, related_name=Meta.db_table
+        EmployeeModel, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
     department = models.ForeignKey(
-        BntuDepartment,
+        BntuDepartmentModel,
         on_delete=models.CASCADE,
         related_name=Meta.db_table,
         null=True,

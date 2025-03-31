@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from .relative_type_serializer import RelativeTypeSerializer
 
-from ...models import Relative
+from ...models import RelativeModel
 
 
 class RelativeSerializer(serializers.ModelSerializer):
@@ -12,5 +12,5 @@ class RelativeSerializer(serializers.ModelSerializer):
         return RelativeTypeSerializer(obj.relative_type).data
 
     class Meta:
-        model = Relative
+        model = RelativeModel
         fields = ["id", "full_name", "birthdate", "comment", "relative_type"]
