@@ -1,8 +1,5 @@
 from encodings.punycode import T
 from rest_framework import serializers
-
-from .abstract.deserializer import Deserializer
-
 from ..models.trade_union.working_group_model import WorkingGroupModel
 
 from .other import CommentSerializer, RelativeSerializer, RewardSerializer
@@ -30,7 +27,7 @@ from .generic import History
 from ..models import EmployeeModel, NameModel, TradeUnionDepartmentModel
 
 
-class EmployeeSerializer(Deserializer):
+class EmployeeSerializer(serializers.ModelSerializer):
 
     # region Common
 
@@ -77,7 +74,7 @@ class EmployeeSerializer(Deserializer):
 
     # endregion
 
-    class Meta(Deserializer.Meta):
+    class Meta:
         model = EmployeeModel
         fields = [
             "id",

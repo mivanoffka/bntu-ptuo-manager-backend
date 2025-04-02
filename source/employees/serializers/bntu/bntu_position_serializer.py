@@ -1,16 +1,15 @@
 from rest_framework import serializers
 
-from ..abstract.deserializer import Deserializer
 
 from .bntu_department_serializer import BntuDepartmentSerializer
 
 from ...models import BntuPositionModel
 
 
-class BntuPositionSerializer(Deserializer):
+class BntuPositionSerializer(serializers.ModelSerializer):
     department = BntuDepartmentSerializer()
 
-    class Meta(Deserializer.Meta):
+    class Meta:
         model = BntuPositionModel
         fields = [
             "id",
