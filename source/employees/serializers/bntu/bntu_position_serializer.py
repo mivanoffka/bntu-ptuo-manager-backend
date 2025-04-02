@@ -1,19 +1,19 @@
 from rest_framework import serializers
 
+from ..abstract.deserializer import Deserializer
+
 from .bntu_department_serializer import BntuDepartmentSerializer
 
 from ...models import BntuPositionModel
 
 
-class BntuPositionSerializer(serializers.ModelSerializer):
-    department = serializers.SerializerMethodField()
+class BntuPositionSerializer(Deserializer):
+    department = BntuDepartmentSerializer()
 
-    def get_department(self, obj):
-        return BntuDepartmentSerializer(obj.department).data
-
-    class Meta:
+    class Meta(Deserializer.Meta):
         model = BntuPositionModel
         fields = [
+            "id",
             "label",
             "hired_at",
             "is_discharged",
