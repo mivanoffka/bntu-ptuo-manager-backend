@@ -1,25 +1,19 @@
 from .employee_serializer import EmployeeSerializer
-from .bntu import BntuDepartmentSerializer, BntuPositionSerializer
+from .bntu import BntuPositionSerializer
 from .trade_union import (
-    TradeUnionDepartmentOptionSerializer,
     TradeUnionPositionSerializer,
-    WorkingGroupOptionSerializer,
 )
 from .other import (
     CommentSerializer,
     RelativeSerializer,
-    RelativeTypeSerializer,
     RewardSerializer,
 )
 from .contacts import (
     PhoneNumberSerializer,
-    PhoneNumberTypeSerializer,
     EmailSerializer,
     AddressSerializer,
 )
 from .education import (
     EducationalInstitutionSerializer,
-    EducationLevelSerializer,
-    AcademicDegreeSerializer,
 )
-from .common import GenderSerializer, NameSerializer
+from .common import NameSerializer
