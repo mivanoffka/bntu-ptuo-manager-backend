@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (
-    EmployeeModel,
+    EmployeeVersionModel,
     NameModel,
     BntuDepartmentModel,
     BntuPositionModel,
@@ -67,7 +67,7 @@ def register():
 
     # endregion
 
-    admin.site.register(EmployeeModel)
+    admin.site.register(EmployeeVersionModel)
 
 
 register()

@@ -12,4 +12,4 @@ class TradeUnionDepartmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TradeUnionDepartmentModel
-        fields = ["id", "trade_union_department_option_id"]
+        fields = ["id", "trade_union_department_option_id", "created_at"]

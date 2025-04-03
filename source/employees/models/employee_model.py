@@ -22,9 +22,9 @@ if TYPE_CHECKING:
     from .education import EducationalInstitutionModel
 
 
-class EmployeeModel(models.Model):
+class EmployeeVersionModel(models.Model):
     class Meta:
-        db_table = "employees"
+        db_table = "employee_versions"
 
     # region Common
 

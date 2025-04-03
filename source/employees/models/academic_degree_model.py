@@ -5,7 +5,7 @@ from .abstract import EnumeratedModel
 
 if TYPE_CHECKING:
     from django.db.models import Manager
-    from .employee_model import EmployeeModel
+    from .employee_model import EmployeeVersionModel
 
 
 class AcademicDegreeModel(EnumeratedModel):
@@ -13,4 +13,4 @@ class AcademicDegreeModel(EnumeratedModel):
         db_table = "academic_degrees"
 
     if TYPE_CHECKING:
-        employees = Manager[EmployeeModel]
+        employees = Manager[EmployeeVersionModel]

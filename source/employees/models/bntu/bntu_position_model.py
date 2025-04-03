@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from django.db import models
 
-from employees.models import EmployeeModel
+from employees.models import EmployeeVersionModel
 from .bntu_department_model import BntuDepartmentModel
 
 
@@ -14,7 +14,7 @@ class BntuPositionModel(models.Model):
     label = models.CharField(max_length=255)
 
     employee = models.ForeignKey(
-        EmployeeModel, on_delete=models.CASCADE, related_name=Meta.db_table
+        EmployeeVersionModel, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
     department = models.ForeignKey(

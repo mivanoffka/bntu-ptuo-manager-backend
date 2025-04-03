@@ -1,6 +1,6 @@
 from django.db import models
 
-from ..employee_model import EmployeeModel
+from ..employee_model import EmployeeVersionModel
 
 
 class RewardModel(models.Model):
@@ -10,7 +10,7 @@ class RewardModel(models.Model):
     id = models.AutoField(primary_key=True)
 
     employee = models.ForeignKey(
-        EmployeeModel, on_delete=models.CASCADE, related_name=Meta.db_table
+        EmployeeVersionModel, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
     label = models.CharField(max_length=128)

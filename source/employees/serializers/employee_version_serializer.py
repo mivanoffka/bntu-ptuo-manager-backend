@@ -12,7 +12,7 @@ from ..models import (
     EmailModel,
     EducationLevelModel,
     WorkingGroupModel,
-    EmployeeModel,
+    EmployeeVersionModel,
     NameModel,
     TradeUnionDepartmentModel,
     GenderModel,
@@ -90,7 +90,7 @@ class EmployeeSerializer(ModelSerializer):
     # endregion
 
     class Meta:
-        model = EmployeeModel
+        model = EmployeeVersionModel
         fields = (
             "id",
             "names",
@@ -140,7 +140,7 @@ class EmployeeSerializer(ModelSerializer):
             field: validated_data.pop(field, []) for field in model_map.keys()
         }
 
-        employee = EmployeeModel.objects.create(**validated_data)
+        employee = EmployeeVersionModel.objects.create(**validated_data)
 
         for field, data_list in related_data.items():
             model_class = model_map[field]

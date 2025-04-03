@@ -1,3 +1,3 @@
-from .employee_view import EmployeeView
+from .employee_versions_view_set import EmployeeVersionViewSet
 from .generate_view import GenerateView
 from .enumerations_view import EnumerationsView

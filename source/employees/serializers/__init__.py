@@ -1,4 +1,4 @@
-from .employee_serializer import EmployeeSerializer
+from .employee_version_serializer import EmployeeSerializer
 from .bntu import BntuPositionSerializer
 from .trade_union import (
     TradeUnionPositionSerializer,

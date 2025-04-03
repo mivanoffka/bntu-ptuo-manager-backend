@@ -11,4 +11,4 @@ class WorkingGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkingGroupModel
-        fields = ["id", "working_group_option_id"]
+        fields = ["id", "working_group_option_id", "created_at"]

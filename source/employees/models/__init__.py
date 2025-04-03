@@ -1,6 +1,6 @@
 from .trade_union.working_group_option_model import WorkingGroupOptionModel
 
-from .employee_model import EmployeeModel
+from .employee_model import EmployeeVersionModel
 
 from .bntu import BntuDepartmentModel, BntuPositionModel
 
