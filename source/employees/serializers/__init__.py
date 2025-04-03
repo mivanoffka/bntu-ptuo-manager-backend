@@ -17,3 +17,5 @@ from .education import (
     EducationalInstitutionSerializer,
 )
 from .common import NameSerializer
+
+from .generic import EnumeratedSerializer, TreeNodeSerializer
