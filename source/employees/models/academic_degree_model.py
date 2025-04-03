@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .employee_model import EmployeeModel
 
 
-class AcademicDegree(EnumeratedModel):
+class AcademicDegreeModel(EnumeratedModel):
     class Meta(EnumeratedModel.Meta):
         db_table = "academic_degrees"
 

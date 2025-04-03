@@ -5,7 +5,7 @@ from django.db import models
 
 from .gender_model import GenderModel
 from .level_model import EducationLevelModel
-from .academic_degree_model import AcademicDegree
+from .academic_degree_model import AcademicDegreeModel
 
 
 if TYPE_CHECKING:
@@ -82,7 +82,7 @@ class EmployeeModel(models.Model):
         blank=True,
     )
     academic_degree = models.ForeignKey(
-        AcademicDegree,
+        AcademicDegreeModel,
         on_delete=models.CASCADE,
         related_name=Meta.db_table,
         null=True,

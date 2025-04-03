@@ -1,2 +1,1 @@
-from .bntu_department_serializer import BntuDepartmentSerializer
 from .bntu_position_serializer import BntuPositionSerializer

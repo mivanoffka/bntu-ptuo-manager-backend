@@ -1,14 +1,13 @@
 from rest_framework import serializers
 
-
-from .relative_type_serializer import RelativeTypeSerializer
-
-from ...models import RelativeModel
+from ...models import RelativeModel, RelativeTypeModel
 
 
 class RelativeSerializer(serializers.ModelSerializer):
-    relative_type = RelativeTypeSerializer()
+    relative_type_id = serializers.PrimaryKeyRelatedField(
+        queryset=RelativeTypeModel.objects.all(), source="relative_type"
+    )
 
     class Meta:
         model = RelativeModel
-        fields = ["id", "full_name", "birthdate", "comment", "relative_type"]
+        fields = ["id", "full_name", "birthdate", "comment", "relative_type_id"]

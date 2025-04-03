@@ -13,7 +13,7 @@ from ..serializers import (
 from ..models import (
     PhoneNumberTypeModel,
     GenderModel,
-    AcademicDegree,
+    AcademicDegreeModel,
     EducationLevelModel,
     WorkingGroupModel,
     RelativeTypeModel,
@@ -38,7 +38,7 @@ class EnumerationsView(APIView):
             ],
             "academic_degrees": [
                 AcademicDegreeSerializer(item).data
-                for item in AcademicDegree.objects.all()
+                for item in AcademicDegreeModel.objects.all()
             ],
             "working_groups": [
                 WorkingGroupOptionSerializer(item).data

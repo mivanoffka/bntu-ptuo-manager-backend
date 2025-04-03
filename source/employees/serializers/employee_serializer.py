@@ -1,16 +1,28 @@
-from encodings.punycode import T
-from rest_framework import serializers
-from ..models.trade_union.working_group_model import WorkingGroupModel
+from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
+
+from ..models import (
+    RewardModel,
+    RelativeModel,
+    CommentModel,
+    TradeUnionPositionModel,
+    BntuPositionModel,
+    EducationalInstitutionModel,
+    AddressModel,
+    PhoneNumberModel,
+    EmailModel,
+    EducationLevelModel,
+    WorkingGroupModel,
+    EmployeeModel,
+    NameModel,
+    TradeUnionDepartmentModel,
+    GenderModel,
+    AcademicDegreeModel,
+)
+
 
 from .other import CommentSerializer, RelativeSerializer, RewardSerializer
 
-from .education import (
-    EducationLevelSerializer,
-    AcademicDegreeSerializer,
-    EducationalInstitutionSerializer,
-)
-
-from .common import GenderSerializer, NameSerializer
+from .common import NameSerializer
 
 from .bntu import BntuPositionSerializer
 
@@ -22,16 +34,16 @@ from .trade_union import (
     TradeUnionDepartmentSerializer,
 )
 
-from .generic import History
-
-from ..models import EmployeeModel, NameModel, TradeUnionDepartmentModel
+from .education import EducationalInstitutionSerializer
 
 
-class EmployeeSerializer(serializers.ModelSerializer):
+class EmployeeSerializer(ModelSerializer):
     # region Common
 
     names = NameSerializer(many=True)
-    gender = GenderSerializer()
+    gender_id = PrimaryKeyRelatedField(
+        queryset=GenderModel.objects.all(), source="gender"
+    )
 
     # endregion
 
@@ -46,8 +58,12 @@ class EmployeeSerializer(serializers.ModelSerializer):
     # region Education
 
     educational_institutions = EducationalInstitutionSerializer(many=True)
-    education_level = EducationLevelSerializer()
-    academic_degree = AcademicDegreeSerializer()
+    education_level_id = PrimaryKeyRelatedField(
+        queryset=EducationLevelModel.objects.all(), source="education_level"
+    )
+    academic_degree_id = PrimaryKeyRelatedField(
+        queryset=AcademicDegreeModel.objects.all(), source="academic_degree"
+    )
 
     # endregion
 
@@ -74,37 +90,13 @@ class EmployeeSerializer(serializers.ModelSerializer):
     # endregion
 
     class Meta:
-        plain_fields = (
-            "id",
-            "joined_at",
-            "recorded_at",
-            "is_archived",
-            "is_retired",
-            "archived_at",
-            "retired_at",
-            "birthdate",
-            "birthplace",
-        )
-        list_fields = (
-            "phone_numbers",
-            "emails",
-            "addresses",
-            "comments",
-            "rewards",
-            "bntu_positions",
-            "trade_union_positions",
-            "relatives",
-            "educational_institutions",
-        )
-        history_fields = ("names", "trade_union_departments", "working_groups")
-        enum_fields = ("gender", "education_level", "academic_degree")
         model = EmployeeModel
         fields = (
             "id",
             "names",
             "birthdate",
             "birthplace",
-            "gender",
+            "gender_id",
             "bntu_positions",
             "trade_union_positions",
             "trade_union_departments",
@@ -116,8 +108,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "archived_at",
             "retired_at",
             "educational_institutions",
-            "education_level",
-            "academic_degree",
+            "education_level_id",
+            "academic_degree_id",
             "phone_numbers",
             "addresses",
             "emails",
@@ -128,32 +120,31 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
     emails = EmailSerializer(many=True)
 
-    def _update_list(self, instance, field, validated_data):
-        data = validated_data.pop(field, [])
-
-        current_items = {
-            item.id: item for item in instance.__getattribute__(field).all()
+    def create(self, validated_data):
+        model_map = {
+            "names": NameModel,
+            "emails": EmailModel,
+            "phone_numbers": PhoneNumberModel,
+            "addresses": AddressModel,
+            "educational_institutions": EducationalInstitutionModel,
+            "bntu_positions": BntuPositionModel,
+            "trade_union_positions": TradeUnionPositionModel,
+            "trade_union_departments": TradeUnionDepartmentModel,
+            "working_groups": WorkingGroupModel,
+            "comments": CommentModel,
+            "relatives": RelativeModel,
+            "rewards": RewardModel,
         }
-        received_items_ids = {e["id"] for e in data if e.get("id")}
 
-        for id in set(current_items.keys()) - received_items_ids:
-            current_items[id].delete()
+        related_data = {
+            field: validated_data.pop(field, []) for field in model_map.keys()
+        }
 
-        for item_data in data:
-            id = item_data.pop("id", None)
+        employee = EmployeeModel.objects.create(**validated_data)
 
-            if id and id in current_items:
-                item = current_items[id]
-                for attr, value in item_data.items():
-                    setattr(item, attr, value)
-                item.save()
-            else:
-                if id >= 0:
-                    raise Exception("Unknown object")
-                instance.__getattribute__(field).create(**item_data)
+        for field, data_list in related_data.items():
+            model_class = model_map[field]
+            for data in data_list:
+                model_class.objects.create(employee=employee, **data)
 
-    def update(self, instance, validated_data):
-        for field in self.Meta.list_fields:
-            self._update_list(instance, field, validated_data)
-
-        return super().update(instance, validated_data)
+        return employee

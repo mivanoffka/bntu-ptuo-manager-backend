@@ -22,7 +22,7 @@ from .other import RelativeModel, RelativeTypeModel, CommentModel, RewardModel
 
 from .gender_model import GenderModel
 
-from .academic_degree_model import AcademicDegree
+from .academic_degree_model import AcademicDegreeModel
 
 from .level_model import EducationLevelModel
 

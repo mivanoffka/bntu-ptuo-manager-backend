@@ -18,7 +18,7 @@ from .models import (
     RelativeTypeModel,
     CommentModel,
     GenderModel,
-    AcademicDegree,
+    AcademicDegreeModel,
     EducationLevelModel,
     TradeUnionDepartmentOptionModel,
     WorkingGroupOptionModel,
@@ -55,7 +55,7 @@ def register():
 
     admin.site.register(EducationalInstitutionModel)
     admin.site.register(EducationLevelModel)
-    admin.site.register(AcademicDegree)
+    admin.site.register(AcademicDegreeModel)
 
     # endregion
 

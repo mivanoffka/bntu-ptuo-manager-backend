@@ -1,4 +1,3 @@
 from .email_serializer import EmailSerializer
 from .phone_number_serializer import PhoneNumberSerializer
 from .address_serializer import AddressSerializer
-from .phone_number_type_serializer import PhoneNumberTypeSerializer

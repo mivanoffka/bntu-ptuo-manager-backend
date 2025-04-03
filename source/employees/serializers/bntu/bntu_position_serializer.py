@@ -1,13 +1,12 @@
 from rest_framework import serializers
 
-
-from .bntu_department_serializer import BntuDepartmentSerializer
-
-from ...models import BntuPositionModel
+from ...models import BntuPositionModel, BntuDepartmentModel
 
 
 class BntuPositionSerializer(serializers.ModelSerializer):
-    department = BntuDepartmentSerializer()
+    department_id = serializers.PrimaryKeyRelatedField(
+        queryset=BntuDepartmentModel.objects.all(),
+    )
 
     class Meta:
         model = BntuPositionModel
@@ -17,7 +16,7 @@ class BntuPositionSerializer(serializers.ModelSerializer):
             "hired_at",
             "is_discharged",
             "discharged_at",
-            "department",
+            "department_id",
             "is_discharged_voluntarily",
             "dischargement_comment",
         ]

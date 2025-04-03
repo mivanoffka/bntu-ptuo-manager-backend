@@ -1,20 +1,15 @@
 from rest_framework import serializers
 
-from .trade_union_department_option_serializer import (
-    TradeUnionDepartmentOptionSerializer,
-)
 
-from ...models import TradeUnionDepartmentModel
+from ...models import TradeUnionDepartmentModel, TradeUnionDepartmentOptionModel
 
 
 class TradeUnionDepartmentSerializer(serializers.ModelSerializer):
-    trade_union_department_option = serializers.SerializerMethodField()
-
-    def get_trade_union_department_option(self, obj: TradeUnionDepartmentModel):
-        return TradeUnionDepartmentOptionSerializer(
-            obj.trade_union_department_option
-        ).data
+    trade_union_department_option_id = serializers.PrimaryKeyRelatedField(
+        queryset=TradeUnionDepartmentOptionModel.objects.all(),
+        source="trade_union_department_option",
+    )
 
     class Meta:
         model = TradeUnionDepartmentModel
-        fields = ["id", "trade_union_department_option"]
+        fields = ["id", "trade_union_department_option_id"]
