@@ -1,14 +1,9 @@
 from typing import Type, TypeVar
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
 from django.db import models
 
-from ..serializers.employee_serializer import EmployeeSerializer
-from ..models.employee_model import EmployeeModel
-
-
 from ..models import (
+    EmployeeModel,
     WorkingGroupRecordModel,
     TradeUnionDepartmentRecordModel,
     TradeUnionPositionModel,
@@ -32,13 +27,12 @@ from ..models import (
     CommentModel,
 )
 
-from ..serializers import EmployeeVersionSerializer
 import random
 
 from faker import Faker
 
 
-class GenerateView(APIView):
+class EmployeeGenerator:
     _faker = Faker()
 
     T = TypeVar("T", bound=models.Model)
@@ -195,7 +189,7 @@ class GenerateView(APIView):
                 value=self._faker.text(100),
             )
 
-    def post(self, request):
+    def generate(self) -> EmployeeModel:
         employee = EmployeeModel.objects.create()
 
         is_archived = random.randint(0, 4)
@@ -234,4 +228,4 @@ class GenerateView(APIView):
 
         employee.employee_versions.add(employee_version)
 
-        return Response({"employee": EmployeeSerializer(employee).data})
+        return employee

@@ -1,7 +1,3 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
-
 from ..models import (
     PhoneNumberTypeModel,
     GenderModel,
@@ -16,10 +12,9 @@ from ..models import (
 from ..serializers import EnumeratedSerializer, TreeNodeSerializer
 
 
-class EnumerationsView(APIView):
-    def _get_all_enums(
-        self,
-    ):
+class Enumerations:
+    @staticmethod
+    def get():
         return {
             "genders": [
                 EnumeratedSerializer(item).data for item in GenderModel.objects.all()
@@ -53,6 +48,3 @@ class EnumerationsView(APIView):
                 for item in TradeUnionDepartmentOptionModel.objects.all()
             ],
         }
-
-    def get(self, request):
-        return Response(self._get_all_enums())

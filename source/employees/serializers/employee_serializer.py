@@ -1,3 +1,4 @@
+from os import read
 from rest_framework.serializers import ModelSerializer
 
 from .employee_version_serializer import EmployeeVersionSerializer
@@ -22,80 +23,26 @@ from ..models import (
 class EmployeeSerializer(ModelSerializer):
     class Meta:
         model = EmployeeModel
-        fields = (
-            "id",
-            "employee_versions",
-        )
+        fields = ("id", "employee_versions", "employee_version")
 
-    employee_versions = EmployeeVersionSerializer(many=True)
+    employee_versions = EmployeeVersionSerializer(many=True, read_only=True)
+    employee_version = EmployeeVersionSerializer(write_only=True)
 
     def create(self, validated_data):
         instance = EmployeeModel.objects.create()
 
-        employee_version_data = validated_data.pop("employee_versions")[0]
+        employee_version_data = validated_data.pop("employee_version")
+        employee_version_data["employee"] = instance
 
-        model_map = {
-            "names": NameModel,
-            "emails": EmailModel,
-            "phone_numbers": PhoneNumberModel,
-            "addresses": AddressModel,
-            "educational_institutions": EducationalInstitutionModel,
-            "bntu_positions": BntuPositionModel,
-            "trade_union_positions": TradeUnionPositionModel,
-            "trade_union_department_records": TradeUnionDepartmentRecordModel,
-            "working_group_records": WorkingGroupRecordModel,
-            "comments": CommentModel,
-            "relatives": RelativeModel,
-            "rewards": RewardModel,
-        }
-
-        related_data = {
-            field: employee_version_data.pop(field, []) for field in model_map.keys()
-        }
-        employee_version = EmployeeVersionModel.objects.create(
-            employee=instance, **employee_version_data
-        )
-
-        for field, data_list in related_data.items():
-            model_class = model_map[field]
-            for data in data_list:
-                if "id" in data.keys():
-                    data.pop("id")
-                model_class.objects.create(employee_version=employee_version, **data)
+        EmployeeVersionSerializer().create(employee_version_data)
 
         return instance
 
     def update(self, instance: EmployeeModel, validated_data):
-        employee_version_data = validated_data.pop("employee_versions")[0]
+        employee_version_data = validated_data.pop("employee_version")
+        employee_version_data["employee"] = instance
 
-        model_map = {
-            "names": NameModel,
-            "emails": EmailModel,
-            "phone_numbers": PhoneNumberModel,
-            "addresses": AddressModel,
-            "educational_institutions": EducationalInstitutionModel,
-            "bntu_positions": BntuPositionModel,
-            "trade_union_positions": TradeUnionPositionModel,
-            "trade_union_department_records": TradeUnionDepartmentRecordModel,
-            "working_group_records": WorkingGroupRecordModel,
-            "comments": CommentModel,
-            "relatives": RelativeModel,
-            "rewards": RewardModel,
-        }
-
-        related_data = {
-            field: employee_version_data.pop(field, []) for field in model_map.keys()
-        }
-        employee_version = EmployeeVersionModel.objects.create(
-            employee=instance, **employee_version_data
-        )
-
-        for field, data_list in related_data.items():
-            model_class = model_map[field]
-            for data in data_list:
-                if "id" in data.keys():
-                    data.pop("id")
-                model_class.objects.create(employee_version=employee_version, **data)
+        EmployeeVersionSerializer().create(employee_version_data)
 
         return instance
 

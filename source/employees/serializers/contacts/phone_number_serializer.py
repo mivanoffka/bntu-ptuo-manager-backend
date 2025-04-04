@@ -5,6 +5,8 @@ from ...models import PhoneNumberModel, PhoneNumberTypeModel
 
 
 class PhoneNumberSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     phone_number_type_id = serializers.PrimaryKeyRelatedField(
         queryset=PhoneNumberTypeModel.objects.all(), source="phone_number_type"
     )

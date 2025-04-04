@@ -5,6 +5,8 @@ from ...models import TradeUnionDepartmentRecordModel, TradeUnionDepartmentOptio
 
 
 class TradeUnionDepartmentRecordSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     trade_union_department_option_id = serializers.PrimaryKeyRelatedField(
         queryset=TradeUnionDepartmentOptionModel.objects.all(),
         source="trade_union_department_option",

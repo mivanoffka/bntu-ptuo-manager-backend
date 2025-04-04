@@ -5,7 +5,7 @@ from ...models import EmailModel
 
 
 class EmailSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False)
+    id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = EmailModel

@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from urllib import request
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
 
@@ -18,6 +19,7 @@ from ..models import (
     TradeUnionDepartmentRecordModel,
     GenderModel,
     AcademicDegreeModel,
+    EmployeeModel,
 )
 
 
@@ -36,6 +38,9 @@ from .trade_union import (
 )
 
 from .education import EducationalInstitutionSerializer
+
+if TYPE_CHECKING:
+    from .employee_serializer import EmployeeSerializer
 
 
 class EmployeeVersionSerializer(ModelSerializer):
@@ -122,8 +127,6 @@ class EmployeeVersionSerializer(ModelSerializer):
     emails = EmailSerializer(many=True)
 
     def create(self, validated_data):
-        print(validated_data)
-
         model_map = {
             "names": NameModel,
             "emails": EmailModel,
@@ -142,11 +145,9 @@ class EmployeeVersionSerializer(ModelSerializer):
         related_data = {
             field: validated_data.pop(field, []) for field in model_map.keys()
         }
-        employee = EmployeeVersionModel.objects.create(**validated_data)
+        employee_version = EmployeeVersionModel.objects.create(**validated_data)
 
         for field, data_list in related_data.items():
             model_class = model_map[field]
             for data in data_list:
-                model_class.objects.create(employee=employee, **data)
-
-        return employee
+                model_class.objects.create(employee_version=employee_version, **data)

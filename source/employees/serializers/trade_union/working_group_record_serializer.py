@@ -4,6 +4,8 @@ from ...models import WorkingGroupRecordModel, WorkingGroupOptionModel
 
 
 class WorkingGroupRecordSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     working_group_option_id = serializers.PrimaryKeyRelatedField(
         queryset=WorkingGroupOptionModel.objects.all(),
         source="working_group_option",
