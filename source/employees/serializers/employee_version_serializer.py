@@ -1,3 +1,4 @@
+from urllib import request
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
 
 from ..models import (
@@ -11,10 +12,10 @@ from ..models import (
     PhoneNumberModel,
     EmailModel,
     EducationLevelModel,
-    WorkingGroupModel,
+    WorkingGroupRecordModel,
     EmployeeVersionModel,
     NameModel,
-    TradeUnionDepartmentModel,
+    TradeUnionDepartmentRecordModel,
     GenderModel,
     AcademicDegreeModel,
 )
@@ -29,15 +30,15 @@ from .bntu import BntuPositionSerializer
 from .contacts import EmailSerializer, AddressSerializer, PhoneNumberSerializer
 
 from .trade_union import (
-    WorkingGroupSerializer,
+    WorkingGroupRecordSerializer,
     TradeUnionPositionSerializer,
-    TradeUnionDepartmentSerializer,
+    TradeUnionDepartmentRecordSerializer,
 )
 
 from .education import EducationalInstitutionSerializer
 
 
-class EmployeeSerializer(ModelSerializer):
+class EmployeeVersionSerializer(ModelSerializer):
     # region Common
 
     names = NameSerializer(many=True)
@@ -76,8 +77,8 @@ class EmployeeSerializer(ModelSerializer):
     # region TradeUnion
 
     trade_union_positions = TradeUnionPositionSerializer(many=True)
-    trade_union_departments = TradeUnionDepartmentSerializer(many=True)
-    working_groups = WorkingGroupSerializer(many=True)
+    trade_union_department_records = TradeUnionDepartmentRecordSerializer(many=True)
+    working_group_records = WorkingGroupRecordSerializer(many=True)
 
     # endregion
 
@@ -99,8 +100,8 @@ class EmployeeSerializer(ModelSerializer):
             "gender_id",
             "bntu_positions",
             "trade_union_positions",
-            "trade_union_departments",
-            "working_groups",
+            "trade_union_department_records",
+            "working_group_records",
             "joined_at",
             "recorded_at",
             "is_archived",
@@ -121,6 +122,8 @@ class EmployeeSerializer(ModelSerializer):
     emails = EmailSerializer(many=True)
 
     def create(self, validated_data):
+        print(validated_data)
+
         model_map = {
             "names": NameModel,
             "emails": EmailModel,
@@ -129,8 +132,8 @@ class EmployeeSerializer(ModelSerializer):
             "educational_institutions": EducationalInstitutionModel,
             "bntu_positions": BntuPositionModel,
             "trade_union_positions": TradeUnionPositionModel,
-            "trade_union_departments": TradeUnionDepartmentModel,
-            "working_groups": WorkingGroupModel,
+            "trade_union_department_records": TradeUnionDepartmentRecordModel,
+            "working_group_records": WorkingGroupRecordModel,
             "comments": CommentModel,
             "relatives": RelativeModel,
             "rewards": RewardModel,
@@ -139,7 +142,6 @@ class EmployeeSerializer(ModelSerializer):
         related_data = {
             field: validated_data.pop(field, []) for field in model_map.keys()
         }
-
         employee = EmployeeVersionModel.objects.create(**validated_data)
 
         for field, data_list in related_data.items():

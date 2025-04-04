@@ -6,8 +6,8 @@ from ..abstract import EnumeratedModel
 
 
 if TYPE_CHECKING:
-    from .working_group_model import WorkingGroupModel
-    from django.db.models import Manager
+    from .working_group_record_model import WorkingGroupRecordModel
+    from django.db.models.manager import RelatedManager
 
 
 class WorkingGroupOptionModel(EnumeratedModel):
@@ -15,4 +15,4 @@ class WorkingGroupOptionModel(EnumeratedModel):
         db_table = "working_group_options"
 
     if TYPE_CHECKING:
-        working_groups = Manager[WorkingGroupModel]
+        working_group_records = RelatedManager[WorkingGroupRecordModel]

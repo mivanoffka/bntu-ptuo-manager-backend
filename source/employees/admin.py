@@ -1,19 +1,21 @@
 from django.contrib import admin
 
+
 from .models import (
     EmployeeVersionModel,
+    EmployeeModel,
     NameModel,
-    BntuDepartmentModel,
+    BntuDepartmentOptionModel,
     BntuPositionModel,
     AddressModel,
     PhoneNumberModel,
     EmailModel,
-    TradeUnionDepartmentModel,
+    TradeUnionDepartmentRecordModel,
     TradeUnionPositionModel,
     RewardModel,
     RelativeModel,
     EducationalInstitutionModel,
-    WorkingGroupModel,
+    WorkingGroupRecordModel,
     PhoneNumberTypeModel,
     RelativeTypeModel,
     CommentModel,
@@ -33,7 +35,7 @@ def register():
 
     # region BNTU
     admin.site.register(BntuPositionModel),
-    admin.site.register(BntuDepartmentModel),
+    admin.site.register(BntuDepartmentOptionModel),
     # endregion
 
     # region Contacts
@@ -45,8 +47,8 @@ def register():
 
     # region Trade Union
     admin.site.register(TradeUnionPositionModel),
-    admin.site.register(TradeUnionDepartmentModel),
-    admin.site.register(WorkingGroupModel),
+    admin.site.register(TradeUnionDepartmentRecordModel),
+    admin.site.register(WorkingGroupRecordModel),
     admin.site.register(TradeUnionDepartmentOptionModel),
     admin.site.register(WorkingGroupOptionModel),
     # endregion
@@ -60,6 +62,7 @@ def register():
     # endregion
 
     # region Other
+
     admin.site.register(RewardModel),
     admin.site.register(RelativeModel),
     admin.site.register(RelativeTypeModel),
@@ -68,6 +71,7 @@ def register():
     # endregion
 
     admin.site.register(EmployeeVersionModel)
+    admin.site.register(EmployeeModel)
 
 
 register()

@@ -6,7 +6,7 @@ from ..abstract import EnumeratedModel
 
 
 if TYPE_CHECKING:
-    from django.db.models import Manager
+    from django.db.models.manager import RelatedManager
     from .relative_model import RelativeModel
 
 
@@ -15,4 +15,4 @@ class RelativeTypeModel(EnumeratedModel):
         db_table = "relative_types"
 
     if TYPE_CHECKING:
-        relatives = Manager[RelativeModel]
+        relatives = RelatedManager[RelativeModel]

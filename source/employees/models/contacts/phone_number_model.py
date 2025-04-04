@@ -1,6 +1,6 @@
 from django.db import models
 
-from ..employee_model import EmployeeVersionModel
+from ..employee_version_model import EmployeeVersionModel
 from .phone_number_type_model import PhoneNumberTypeModel
 
 
@@ -10,7 +10,7 @@ class PhoneNumberModel(models.Model):
 
     id = models.AutoField(primary_key=True)
 
-    employee = models.ForeignKey(
+    employee_version = models.ForeignKey(
         EmployeeVersionModel,
         on_delete=models.CASCADE,
         related_name=Meta.db_table,
@@ -21,7 +21,11 @@ class PhoneNumberModel(models.Model):
     value = models.CharField(max_length=255)
 
     phone_number_type = models.ForeignKey(
-        PhoneNumberTypeModel, on_delete=models.CASCADE, null=True, blank=True
+        PhoneNumberTypeModel,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name=Meta.db_table,
     )
 
     comment = models.TextField(null=True, blank=True, max_length=512)

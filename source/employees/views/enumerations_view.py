@@ -9,7 +9,7 @@ from ..models import (
     EducationLevelModel,
     RelativeTypeModel,
     WorkingGroupOptionModel,
-    BntuDepartmentModel,
+    BntuDepartmentOptionModel,
     TradeUnionDepartmentOptionModel,
 )
 
@@ -44,9 +44,9 @@ class EnumerationsView(APIView):
                 EnumeratedSerializer(item).data
                 for item in RelativeTypeModel.objects.all()
             ],
-            "bntu_departments": [
+            "bntu_department_options": [
                 TreeNodeSerializer(item).data
-                for item in BntuDepartmentModel.objects.all()
+                for item in BntuDepartmentOptionModel.objects.all()
             ],
             "trade_union_department_options": [
                 TreeNodeSerializer(item).data

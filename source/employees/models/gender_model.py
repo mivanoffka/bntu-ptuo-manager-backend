@@ -5,8 +5,8 @@ from .abstract import EnumeratedModel
 
 
 if TYPE_CHECKING:
-    from django.db.models import Manager
-    from .employee_model import EmployeeVersionModel
+    from django.db.models.manager import RelatedManager
+    from .employee_version_model import EmployeeVersionModel
 
 
 class GenderModel(EnumeratedModel):
@@ -14,4 +14,4 @@ class GenderModel(EnumeratedModel):
         db_table = "genders"
 
     if TYPE_CHECKING:
-        employees = Manager[EmployeeVersionModel]
+        employees: RelatedManager[EmployeeVersionModel]

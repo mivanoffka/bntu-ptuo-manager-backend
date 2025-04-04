@@ -1,7 +1,11 @@
-from .employee_version_serializer import EmployeeSerializer
+from .employee_version_serializer import EmployeeVersionSerializer
+from .employee_serializer import EmployeeSerializer
+
 from .bntu import BntuPositionSerializer
 from .trade_union import (
     TradeUnionPositionSerializer,
+    TradeUnionDepartmentRecordSerializer,
+    WorkingGroupRecordSerializer,
 )
 from .other import (
     CommentSerializer,

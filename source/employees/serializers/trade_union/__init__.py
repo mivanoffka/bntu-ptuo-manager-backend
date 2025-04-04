@@ -1,3 +1,5 @@
 from .trade_union_position_serializer import TradeUnionPositionSerializer
-from .working_group_serializer import WorkingGroupSerializer
-from .trade_union_department_serializer import TradeUnionDepartmentSerializer
+from .working_group_record_serializer import WorkingGroupRecordSerializer
+from .trade_union_department_record_serializer import (
+    TradeUnionDepartmentRecordSerializer,
+)

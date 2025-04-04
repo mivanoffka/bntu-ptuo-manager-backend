@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from django.db import models
 
-from ..employee_model import EmployeeVersionModel
+from ..employee_version_model import EmployeeVersionModel
 
 
 class TradeUnionPositionModel(models.Model):
@@ -16,6 +16,6 @@ class TradeUnionPositionModel(models.Model):
 
     comment = models.TextField(null=True, blank=True, max_length=512)
 
-    employee = models.ForeignKey(
+    employee_version = models.ForeignKey(
         EmployeeVersionModel, on_delete=models.CASCADE, related_name=Meta.db_table
     )

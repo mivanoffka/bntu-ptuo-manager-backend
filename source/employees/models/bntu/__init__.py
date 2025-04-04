@@ -1,2 +1,2 @@
-from .bntu_department_model import BntuDepartmentModel
+from .bntu_department_option_model import BntuDepartmentOptionModel
 from .bntu_position_model import BntuPositionModel
