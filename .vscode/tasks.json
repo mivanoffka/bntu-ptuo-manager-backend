@@ -60,6 +60,54 @@
                 "isDefault": true
             },
             "problemMatcher": []
+        },
+        {
+            "label": "Create admin",
+            "type": "shell",
+            "command": "${command:osPlatform}",
+            "args": [],
+            "windows": {
+                "command": "$env:DJANGO_SUPERUSER_EMAIL='admin@example.com'; $env:DJANGO_SUPERUSER_USERNAME='admin'; $env:DJANGO_SUPERUSER_PASSWORD='admin'; ${workspaceFolder}\\.venv\\Scripts\\python.exe ${workspaceFolder}\\source\\manage.py createsuperuser --noinput",
+                "shell": {
+                    "executable": "pwsh.exe",
+                    "args": ["-Command"]
+                }
+            },
+            "linux": {
+                "command": "export DJANGO_SUPERUSER_EMAIL=admin@example.com && export DJANGO_SUPERUSER_USERNAME=admin && export DJANGO_SUPERUSER_PASSWORD=admin && ${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py createsuperuser --noinput"
+            },
+            "osx": {
+                "command": "export DJANGO_SUPERUSER_EMAIL=admin@example.com && export DJANGO_SUPERUSER_USERNAME=admin && export DJANGO_SUPERUSER_PASSWORD=admin && ${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py createsuperuser --noinput"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "pip install -r requirements.txt",
+            "type": "shell",
+            "command": "${command:osPlatform}",
+            "args": [],
+            "windows": {
+                "command": "${workspaceFolder}\\.venv/Scripts\\python.exe -m pip install -r requirements.txt"
+            },
+            "linux": {
+                "command": "${workspaceFolder}/.venv/bin/python -m pip install -r requirements.txt"
+            },
+            "osx": {
+                "command": "${workspaceFolder}/.venv/bin/python -m pip install -r requirements.txt"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         }
     ]
 }
