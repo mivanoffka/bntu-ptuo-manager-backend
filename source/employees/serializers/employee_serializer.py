@@ -29,11 +29,9 @@ class EmployeeSerializer(ModelSerializer):
         fields = (
             "id",
             "employee_version_timestamps",
-            "employee_version",
             "latest_employee_version",
         )
 
-    employee_version = EmployeeVersionSerializer(write_only=True)
     employee_version_timestamps = SerializerMethodField()
     latest_employee_version = SerializerMethodField()
 
@@ -48,7 +46,7 @@ class EmployeeSerializer(ModelSerializer):
     def create(self, validated_data):
         instance = EmployeeModel.objects.create()
 
-        employee_version_data = validated_data.pop("employee_version")
+        employee_version_data = validated_data.pop("latest_employee_version")
         employee_version_data["employee"] = instance
 
         EmployeeVersionSerializer().create(employee_version_data)
@@ -56,7 +54,7 @@ class EmployeeSerializer(ModelSerializer):
         return instance
 
     def update(self, instance: EmployeeModel, validated_data):
-        employee_version_data = validated_data.pop("employee_version")
+        employee_version_data = validated_data.pop("latest_employee_version")
         employee_version_data["employee"] = instance
 
         EmployeeVersionSerializer().create(employee_version_data)
