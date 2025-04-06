@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from urllib import request
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
 
 from ..models import (
@@ -47,6 +46,8 @@ class EmployeeVersionSerializer(ModelSerializer):
     # region Common
 
     names = NameSerializer(many=True)
+    new_name = NameSerializer(write_only=True, required=False)
+
     gender_id = PrimaryKeyRelatedField(
         queryset=GenderModel.objects.all(), source="gender"
     )
@@ -82,8 +83,16 @@ class EmployeeVersionSerializer(ModelSerializer):
     # region TradeUnion
 
     trade_union_positions = TradeUnionPositionSerializer(many=True)
+
     trade_union_department_records = TradeUnionDepartmentRecordSerializer(many=True)
+    new_trade_union_department_record = TradeUnionDepartmentRecordSerializer(
+        write_only=True, required=False
+    )
+
     working_group_records = WorkingGroupRecordSerializer(many=True)
+    new_working_group_record = WorkingGroupRecordSerializer(
+        write_only=True, required=False
+    )
 
     # endregion
 
@@ -100,13 +109,16 @@ class EmployeeVersionSerializer(ModelSerializer):
         fields = (
             "id",
             "names",
+            "new_name",
             "birthdate",
             "birthplace",
             "gender_id",
             "bntu_positions",
             "trade_union_positions",
             "trade_union_department_records",
+            "new_trade_union_department_record",
             "working_group_records",
+            "new_working_group_record",
             "joined_at",
             "recorded_at",
             "is_archived",
@@ -142,6 +154,12 @@ class EmployeeVersionSerializer(ModelSerializer):
             "rewards": RewardModel,
         }
 
+        appendix_map = {
+            "names": "new_name",
+            "trade_union_department_records": "new_trade_union_department_record",
+            "working_group_records": "new_working_group_record",
+        }
+
         related_data = {
             field: validated_data.pop(field, []) for field in model_map.keys()
         }
@@ -149,5 +167,11 @@ class EmployeeVersionSerializer(ModelSerializer):
 
         for field, data_list in related_data.items():
             model_class = model_map[field]
+
+            if field in appendix_map.keys():
+                if appendix_map[field] in validated_data.keys():
+                    new_data = validated_data.pop(appendix_map[field])
+                    data_list.append(new_data)
+
             for data in data_list:
                 model_class.objects.create(employee_version=employee_version, **data)
