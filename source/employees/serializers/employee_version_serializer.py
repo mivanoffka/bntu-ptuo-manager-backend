@@ -46,7 +46,7 @@ class EmployeeVersionSerializer(ModelSerializer):
     # region Common
 
     names = NameSerializer(many=True)
-    new_name = NameSerializer(write_only=True, required=False)
+    new_name = NameSerializer(write_only=True, required=False, allow_null=True)
 
     gender_id = PrimaryKeyRelatedField(
         queryset=GenderModel.objects.all(), source="gender"
@@ -139,39 +139,44 @@ class EmployeeVersionSerializer(ModelSerializer):
     emails = EmailSerializer(many=True)
 
     def create(self, validated_data):
-        model_map = {
-            "names": NameModel,
-            "emails": EmailModel,
-            "phone_numbers": PhoneNumberModel,
-            "addresses": AddressModel,
-            "educational_institutions": EducationalInstitutionModel,
-            "bntu_positions": BntuPositionModel,
-            "trade_union_positions": TradeUnionPositionModel,
-            "trade_union_department_records": TradeUnionDepartmentRecordModel,
-            "working_group_records": WorkingGroupRecordModel,
-            "comments": CommentModel,
-            "relatives": RelativeModel,
-            "rewards": RewardModel,
-        }
+        try:
+            model_map = {
+                "names": NameModel,
+                "emails": EmailModel,
+                "phone_numbers": PhoneNumberModel,
+                "addresses": AddressModel,
+                "educational_institutions": EducationalInstitutionModel,
+                "bntu_positions": BntuPositionModel,
+                "trade_union_positions": TradeUnionPositionModel,
+                "trade_union_department_records": TradeUnionDepartmentRecordModel,
+                "working_group_records": WorkingGroupRecordModel,
+                "comments": CommentModel,
+                "relatives": RelativeModel,
+                "rewards": RewardModel,
+            }
 
-        appendix_map = {
-            "names": "new_name",
-            "trade_union_department_records": "new_trade_union_department_record",
-            "working_group_records": "new_working_group_record",
-        }
+            new_items_fields = {
+                "names": "new_name",
+                "trade_union_department_records": "new_trade_union_department_record",
+                "working_group_records": "new_working_group_record",
+            }
 
-        related_data = {
-            field: validated_data.pop(field, []) for field in model_map.keys()
-        }
-        employee_version = EmployeeVersionModel.objects.create(**validated_data)
+            for items_field, new_item_field in new_items_fields.items():
+                new_item = validated_data.pop(new_item_field, None)
+                if new_item:
+                    validated_data[items_field].append(new_item)
 
-        for field, data_list in related_data.items():
-            model_class = model_map[field]
+            related_data = {
+                field: validated_data.pop(field, []) for field in model_map.keys()
+            }
+            employee_version = EmployeeVersionModel.objects.create(**validated_data)
 
-            if field in appendix_map.keys():
-                if appendix_map[field] in validated_data.keys():
-                    new_data = validated_data.pop(appendix_map[field])
-                    data_list.append(new_data)
-
-            for data in data_list:
-                model_class.objects.create(employee_version=employee_version, **data)
+            for field, data_list in related_data.items():
+                model_class = model_map[field]
+                for data in data_list:
+                    model_class.objects.create(
+                        employee_version=employee_version, **data
+                    )
+        except Exception as error:
+            print(error)
+            raise error
