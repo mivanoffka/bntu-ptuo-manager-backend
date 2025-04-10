@@ -23,7 +23,7 @@ class Enumerations:
                 EnumeratedSerializer(item).data
                 for item in PhoneNumberTypeModel.objects.all()
             ],
-            "education_level": [
+            "education_levels": [
                 EnumeratedSerializer(item).data
                 for item in EducationLevelModel.objects.all()
             ],
