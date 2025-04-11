@@ -23,3 +23,7 @@ from .education import (
 from .common import NameSerializer
 
 from .generic import EnumeratedSerializer, TreeNodeSerializer
+
+from .tree_serializer import (
+    BntuDepartmentOptionSerializer,
+)
