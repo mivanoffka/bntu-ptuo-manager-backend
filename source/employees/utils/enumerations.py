@@ -39,12 +39,4 @@ class Enumerations:
                 EnumeratedSerializer(item).data
                 for item in RelativeTypeModel.objects.all()
             ],
-            "bntu_department_options": [
-                TreeNodeSerializer(item).data
-                for item in BntuDepartmentOptionModel.objects.all()
-            ],
-            "trade_union_department_options": [
-                TreeNodeSerializer(item).data
-                for item in TradeUnionDepartmentOptionModel.objects.all()
-            ],
         }
