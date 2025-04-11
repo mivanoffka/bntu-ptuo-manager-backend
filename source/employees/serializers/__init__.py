@@ -26,4 +26,6 @@ from .generic import EnumeratedSerializer, TreeNodeSerializer
 
 from .tree_serializer import (
     BntuDepartmentOptionSerializer,
+    TreeSerializer,
+    TradeUnionDepartmentOptionSerializer,
 )
