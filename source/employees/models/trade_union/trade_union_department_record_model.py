@@ -21,10 +21,6 @@ class TradeUnionDepartmentRecordModel(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    trade_union_department_option = models.ForeignKey(
-        TradeUnionDepartmentOptionModel,
-        on_delete=models.CASCADE,
-        related_name=Meta.db_table[:-1],
-        null=True,
-        blank=True,
+    trade_union_department_option_path = models.CharField(
+        max_length=255, null=True, blank=True
     )

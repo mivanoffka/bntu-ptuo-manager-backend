@@ -12,6 +12,7 @@ from ..models import BntuDepartmentOptionModel, TradeUnionDepartmentOptionModel
 
 from collections import defaultdict
 from treebeard.mp_tree import MP_Node
+from django.db.models.manager import BaseManager
 
 
 class TreeViewSet(viewsets.ModelViewSet):
@@ -19,10 +20,10 @@ class TreeViewSet(viewsets.ModelViewSet):
     serializer_class = type[TreeSerializer]
     lookup_field = "path"
 
-    def get_queryset(self):
+    def get_queryset(self) -> BaseManager[MP_Node]:  # type: ignore
         return self.model_class.objects.all()
 
-    def get_object(self):
+    def get_object(self) -> MP_Node:  # type: ignore
         path = self.kwargs["path"]
         try:
             return self.model_class.objects.get(path=path)
@@ -31,7 +32,7 @@ class TreeViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         nodes = self.model_class.objects.all()
-        steplen = self.model_class.steplen  # Typically 4 for MP_Node
+        steplen = self.model_class.steplen
 
         nodes_by_parent = defaultdict(list)
 

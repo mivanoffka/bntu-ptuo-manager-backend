@@ -19,10 +19,8 @@ class BntuPositionModel(models.Model):
 
     bntu_department_authentic_label = models.CharField(max_length=255)
 
-    bntu_department_option = models.ForeignKey(
-        BntuDepartmentOptionModel,
-        on_delete=models.CASCADE,
-        related_name=Meta.db_table,
+    bntu_department_option_path = models.CharField(
+        max_length=255, null=True, blank=True
     )
 
     hired_at = models.DateTimeField(null=True, blank=True)

@@ -7,22 +7,17 @@ from ...models import TradeUnionDepartmentRecordModel, TradeUnionDepartmentOptio
 class TradeUnionDepartmentRecordSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
-    trade_union_department_option_id = serializers.PrimaryKeyRelatedField(
-        queryset=TradeUnionDepartmentOptionModel.objects.all(),
-        source="trade_union_department_option",
-    )
-
     def create(self, validated_data):
         validated_data.pop("authentic_label")
 
-        trade_union_department_option_id = validated_data[
-            "trade_union_department_option_id"
+        trade_union_department_option_path = validated_data[
+            "trade_union_department_option_path"
         ]
         authentic_label = TradeUnionDepartmentOptionModel.objects.get(
-            id=trade_union_department_option_id
+            path=trade_union_department_option_path
         ).label
 
-        instance = TradeUnionDepartmentOptionModel.objects.create(
+        instance = TradeUnionDepartmentRecordModel.objects.create(
             **validated_data, authentic_label=authentic_label
         )
 
@@ -32,7 +27,7 @@ class TradeUnionDepartmentRecordSerializer(serializers.ModelSerializer):
         model = TradeUnionDepartmentRecordModel
         fields = [
             "id",
-            "trade_union_department_option_id",
+            "trade_union_department_option_path",
             "created_at",
             "authentic_label",
         ]
