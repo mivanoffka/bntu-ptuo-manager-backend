@@ -5,6 +5,7 @@ from ...models import WorkingGroupRecordModel, WorkingGroupOptionModel
 
 class WorkingGroupRecordSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    authentic_label = serializers.CharField(read_only=True)
 
     working_group_option_id = serializers.PrimaryKeyRelatedField(
         queryset=WorkingGroupOptionModel.objects.all(),
@@ -12,8 +13,6 @@ class WorkingGroupRecordSerializer(serializers.ModelSerializer):
     )
 
     def create(self, validated_data):
-        validated_data.pop("authentic_label")
-
         working_group_option_id = validated_data["working_group_option_id"]
         authentic_label = WorkingGroupOptionModel.objects.get(
             id=working_group_option_id

@@ -86,12 +86,12 @@ class EmployeeVersionSerializer(ModelSerializer):
 
     trade_union_department_records = TradeUnionDepartmentRecordSerializer(many=True)
     new_trade_union_department_record = TradeUnionDepartmentRecordSerializer(
-        write_only=True, required=False
+        write_only=True, required=False, allow_null=True
     )
 
     working_group_records = WorkingGroupRecordSerializer(many=True)
     new_working_group_record = WorkingGroupRecordSerializer(
-        write_only=True, required=False
+        write_only=True, required=False, allow_null=True
     )
 
     # endregion

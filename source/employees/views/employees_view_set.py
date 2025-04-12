@@ -20,11 +20,19 @@ from django.utils.dateparse import parse_datetime
 
 from django.shortcuts import get_object_or_404
 
+from rest_framework.pagination import PageNumberPagination
+
+
+class EmployeesPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = "limit"
+
 
 @permission_classes([IsAuthenticated])
 class EmployeesViewSet(ModelViewSet):
     queryset = EmployeeModel.objects.all()
     serializer_class = EmployeeSerializer
+    pagination_class = EmployeesPagination
 
     @action(detail=True, methods=["get"], url_path=r"versions/(?P<created_at>.+)")
     def get_version_by_timestamp(self, request, pk: int, created_at: str):

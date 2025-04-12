@@ -6,10 +6,9 @@ from ...models import TradeUnionDepartmentRecordModel, TradeUnionDepartmentOptio
 
 class TradeUnionDepartmentRecordSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    authentic_label = serializers.CharField(read_only=True)
 
     def create(self, validated_data):
-        validated_data.pop("authentic_label")
-
         trade_union_department_option_path = validated_data[
             "trade_union_department_option_path"
         ]
