@@ -4,9 +4,9 @@ from ..models import (
     AcademicDegreeModel,
     EducationLevelModel,
     RelativeTypeModel,
-    WorkingGroupOptionModel,
-    BntuDepartmentOptionModel,
-    TradeUnionDepartmentOptionModel,
+    WorkingGroupModel,
+    BntuDepartmentModel,
+    TradeUnionDepartmentModel,
 )
 
 from ..serializers import EnumeratedSerializer, TreeNodeSerializer
@@ -33,7 +33,7 @@ class Enumerations:
             ],
             "working_groups": [
                 EnumeratedSerializer(item).data
-                for item in WorkingGroupOptionModel.objects.all()
+                for item in WorkingGroupModel.objects.all()
             ],
             "relative_types": [
                 EnumeratedSerializer(item).data

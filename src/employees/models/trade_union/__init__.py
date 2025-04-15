@@ -1,5 +1,3 @@
-from .trade_union_department_option_model import TradeUnionDepartmentOptionModel
-from .working_group_option_model import WorkingGroupOptionModel
-from .trade_union_department_record_model import TradeUnionDepartmentRecordModel
-from .working_group_record_model import WorkingGroupRecordModel
+from .trade_union_department_model import TradeUnionDepartmentModel
+from .working_group_model import WorkingGroupModel
 from .trade_union_position_model import TradeUnionPositionModel

@@ -1,5 +1,10 @@
+from tkinter import W
 from typing import TYPE_CHECKING
-from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
+from rest_framework.serializers import (
+    ModelSerializer,
+    PrimaryKeyRelatedField,
+    CharField,
+)
 
 from ..models import (
     RewardModel,
@@ -12,28 +17,23 @@ from ..models import (
     PhoneNumberModel,
     EmailModel,
     EducationLevelModel,
-    WorkingGroupRecordModel,
     EmployeeVersionModel,
-    NameModel,
-    TradeUnionDepartmentRecordModel,
     GenderModel,
     AcademicDegreeModel,
-    EmployeeModel,
+    TradeUnionDepartmentModel,
+    WorkingGroupModel,
 )
 
 
 from .other import CommentSerializer, RelativeSerializer, RewardSerializer
 
-from .common import NameSerializer
 
 from .bntu import BntuPositionSerializer
 
 from .contacts import EmailSerializer, AddressSerializer, PhoneNumberSerializer
 
 from .trade_union import (
-    WorkingGroupRecordSerializer,
     TradeUnionPositionSerializer,
-    TradeUnionDepartmentRecordSerializer,
 )
 
 from .education import EducationalInstitutionSerializer
@@ -45,8 +45,9 @@ if TYPE_CHECKING:
 class EmployeeVersionSerializer(ModelSerializer):
     # region Common
 
-    names = NameSerializer(many=True)
-    new_name = NameSerializer(write_only=True, required=False, allow_null=True)
+    first_name = CharField(required=False, allow_null=True, allow_blank=True)
+    last_name = CharField(required=False, allow_null=True, allow_blank=True)
+    middle_name = CharField(required=False, allow_null=True, allow_blank=True)
 
     gender_id = PrimaryKeyRelatedField(
         queryset=GenderModel.objects.all(), source="gender"
@@ -83,15 +84,14 @@ class EmployeeVersionSerializer(ModelSerializer):
     # region TradeUnion
 
     trade_union_positions = TradeUnionPositionSerializer(many=True)
-
-    trade_union_department_records = TradeUnionDepartmentRecordSerializer(many=True)
-    new_trade_union_department_record = TradeUnionDepartmentRecordSerializer(
-        write_only=True, required=False, allow_null=True
+    trade_union_department_path = CharField(
+        required=False, allow_null=True, allow_blank=True
     )
-
-    working_group_records = WorkingGroupRecordSerializer(many=True)
-    new_working_group_record = WorkingGroupRecordSerializer(
-        write_only=True, required=False, allow_null=True
+    working_group_id = PrimaryKeyRelatedField(
+        queryset=WorkingGroupModel.objects.all(),
+        source="working_group",
+        allow_null=True,
+        required=False,
     )
 
     # endregion
@@ -108,17 +108,18 @@ class EmployeeVersionSerializer(ModelSerializer):
         model = EmployeeVersionModel
         fields = (
             "id",
-            "names",
-            "new_name",
+            "last_name",
+            "first_name",
+            "middle_name",
             "birthdate",
             "birthplace",
             "gender_id",
             "bntu_positions",
             "trade_union_positions",
-            "trade_union_department_records",
-            "new_trade_union_department_record",
-            "working_group_records",
-            "new_working_group_record",
+            "trade_union_department_path",
+            "trade_union_department_authentic_label",
+            "working_group_id",
+            "working_group_authentic_label",
             "joined_at",
             "recorded_at",
             "is_archived",
@@ -135,41 +136,52 @@ class EmployeeVersionSerializer(ModelSerializer):
             "rewards",
             "relatives",
         )
+        read_only_fields = [
+            "working_group_authentic_label",
+            "trade_union_department_authentic_label",
+        ]
 
     emails = EmailSerializer(many=True)
 
     def create(self, validated_data):
         try:
+            trade_union_department_path = validated_data.pop(
+                "trade_union_department_path", None
+            )
+            if trade_union_department_path:
+                trade_union_department_authentic_label = (
+                    TradeUnionDepartmentModel.objects.get(
+                        path=trade_union_department_path
+                    ).label
+                )
+                validated_data["trade_union_department_authentic_label"] = (
+                    trade_union_department_authentic_label
+                )
+
+            working_group = validated_data.pop("working_group")
+            if working_group:
+                working_group_authentic_label = working_group.label
+                validated_data["working_group_authentic_label"] = (
+                    working_group_authentic_label
+                )
+
             model_map = {
-                "names": NameModel,
                 "emails": EmailModel,
                 "phone_numbers": PhoneNumberModel,
                 "addresses": AddressModel,
                 "educational_institutions": EducationalInstitutionModel,
                 "bntu_positions": BntuPositionModel,
                 "trade_union_positions": TradeUnionPositionModel,
-                "trade_union_department_records": TradeUnionDepartmentRecordModel,
-                "working_group_records": WorkingGroupRecordModel,
                 "comments": CommentModel,
                 "relatives": RelativeModel,
                 "rewards": RewardModel,
             }
-
-            new_items_fields = {
-                "names": "new_name",
-                "trade_union_department_records": "new_trade_union_department_record",
-                "working_group_records": "new_working_group_record",
-            }
-
-            for items_field, new_item_field in new_items_fields.items():
-                new_item = validated_data.pop(new_item_field, None)
-                if new_item:
-                    validated_data[items_field].append(new_item)
-
             related_data = {
                 field: validated_data.pop(field, []) for field in model_map.keys()
             }
-            employee_version = EmployeeVersionModel.objects.create(**validated_data)
+            employee_version = EmployeeVersionModel.objects.create(
+                **validated_data,
+            )
 
             for field, data_list in related_data.items():
                 model_class = model_map[field]

@@ -8,7 +8,7 @@ from ..serializers import (
     BntuDepartmentOptionSerializer,
     TradeUnionDepartmentOptionSerializer,
 )
-from ..models import BntuDepartmentOptionModel, TradeUnionDepartmentOptionModel
+from ..models import BntuDepartmentModel, TradeUnionDepartmentModel
 
 from collections import defaultdict
 from treebeard.mp_tree import MP_Node
@@ -85,10 +85,10 @@ class TreeViewSet(viewsets.ModelViewSet):
 
 
 class BntuDepartmentViewSet(TreeViewSet):
-    model_class = BntuDepartmentOptionModel
+    model_class = BntuDepartmentModel
     serializer_class = BntuDepartmentOptionSerializer
 
 
 class TradeUnionDepartmentViewSet(TreeViewSet):
-    model_class = TradeUnionDepartmentOptionModel
+    model_class = TradeUnionDepartmentModel
     serializer_class = TradeUnionDepartmentOptionSerializer

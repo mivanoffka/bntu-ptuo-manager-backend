@@ -3,21 +3,17 @@ from re import S
 import re
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from django.db.models import F
-from .common.name_serializer import NameSerializer
 
 from .employee_version_serializer import EmployeeVersionSerializer
 from ..models import (
     EmployeeVersionModel,
     EmployeeModel,
-    NameModel,
     EmailModel,
     PhoneNumberModel,
     AddressModel,
     EducationalInstitutionModel,
     BntuPositionModel,
     TradeUnionPositionModel,
-    TradeUnionDepartmentRecordModel,
-    WorkingGroupRecordModel,
     CommentModel,
     RelativeModel,
     RewardModel,

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from django.db import models
 
 from employees.models import EmployeeVersionModel
-from .bntu_department_option_model import BntuDepartmentOptionModel
+from .bntu_department_model import BntuDepartmentModel
 
 
 class BntuPositionModel(models.Model):
@@ -19,9 +19,7 @@ class BntuPositionModel(models.Model):
 
     bntu_department_authentic_label = models.CharField(max_length=255)
 
-    bntu_department_option_path = models.CharField(
-        max_length=255, null=True, blank=True
-    )
+    bntu_department_path = models.CharField(max_length=255, null=True, blank=True)
 
     hired_at = models.DateTimeField(null=True, blank=True)
     is_discharged = models.BooleanField(default=False)

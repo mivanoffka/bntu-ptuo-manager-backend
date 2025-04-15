@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import BntuDepartmentOptionModel, TradeUnionDepartmentOptionModel
+from ..models import BntuDepartmentModel, TradeUnionDepartmentModel
 from treebeard.mp_tree import MP_Node
 
 
@@ -38,9 +38,9 @@ class TreeSerializer(serializers.ModelSerializer):
 
 class BntuDepartmentOptionSerializer(TreeSerializer):
     class Meta(TreeSerializer.Meta):
-        model = BntuDepartmentOptionModel
+        model = BntuDepartmentModel
 
 
 class TradeUnionDepartmentOptionSerializer(TreeSerializer):
     class Meta(TreeSerializer.Meta):
-        model = TradeUnionDepartmentOptionModel
+        model = TradeUnionDepartmentModel

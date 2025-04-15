@@ -1,21 +1,18 @@
-from .trade_union.working_group_option_model import WorkingGroupOptionModel
+from .trade_union.working_group_model import WorkingGroupModel
 
 from .employee_version_model import EmployeeVersionModel
 
 from .employee_model import EmployeeModel
 
 from .bntu import (
-    BntuDepartmentOptionModel,
+    BntuDepartmentModel,
     BntuPositionModel,
 )
 
-from .common import NameModel
 
 from .trade_union import (
-    TradeUnionDepartmentRecordModel,
-    WorkingGroupRecordModel,
-    TradeUnionDepartmentOptionModel,
-    WorkingGroupOptionModel,
+    TradeUnionDepartmentModel,
+    WorkingGroupModel,
     TradeUnionPositionModel,
 )
 

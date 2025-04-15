@@ -3,14 +3,13 @@ from django.db.models.signals import pre_save, post_save, pre_delete
 from django.dispatch import receiver
 from abc import ABC, abstractmethod
 
-from .models.trade_union.trade_union_department_record_model import (
-    TradeUnionDepartmentRecordModel,
-)
-from .models.trade_union.trade_union_department_option_model import (
-    TradeUnionDepartmentOptionModel,
+from .models.employee_version_model import EmployeeVersionModel
+
+from .models.trade_union.trade_union_department_model import (
+    TradeUnionDepartmentModel,
 )
 from .models.abstract.tree_node_model import TreeNodeModel
-from .models import BntuDepartmentOptionModel, BntuPositionModel
+from .models import BntuDepartmentModel, BntuPositionModel
 
 
 class TreeSignals(ABC):
@@ -94,12 +93,12 @@ class TreeSignals(ABC):
 
 
 class BntuDepartmentSignals(TreeSignals):
-    tree_model_class = BntuDepartmentOptionModel
+    tree_model_class = BntuDepartmentModel
     related_model_class = BntuPositionModel
     related_model_path_field = "bntu_department_option_path"
 
 
 class TradeUnionDepartmentSignals(TreeSignals):
-    tree_model_class = TradeUnionDepartmentOptionModel
-    related_model_class = TradeUnionDepartmentRecordModel
+    tree_model_class = TradeUnionDepartmentModel
+    related_model_class = EmployeeVersionModel
     related_model_path_field = "trade_union_department_option_path"

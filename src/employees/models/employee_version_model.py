@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+from turtle import mode
 from typing import TYPE_CHECKING
 from django.db import models
+
+from .trade_union.working_group_model import WorkingGroupModel
 
 from .employee_model import EmployeeModel
 
@@ -12,12 +15,9 @@ from .academic_degree_model import AcademicDegreeModel
 
 if TYPE_CHECKING:
     from django.db.models.manager import RelatedManager
-    from .common import NameModel
     from .bntu import BntuPositionModel
     from .contacts import PhoneNumberModel, AddressModel, EmailModel
     from .trade_union import (
-        TradeUnionDepartmentRecordModel,
-        WorkingGroupRecordModel,
         TradeUnionPositionModel,
     )
     from .other import RelativeModel, RewardModel, CommentModel
@@ -38,8 +38,9 @@ class EmployeeVersionModel(models.Model):
         EmployeeModel, on_delete=models.CASCADE, related_name=Meta.db_table
     )
 
-    if TYPE_CHECKING:
-        names: RelatedManager[NameModel]
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
+    middle_name = models.CharField(max_length=64)
 
     gender = models.ForeignKey(
         GenderModel,
@@ -64,9 +65,19 @@ class EmployeeVersionModel(models.Model):
     # region Trade union
 
     if TYPE_CHECKING:
-        trade_union_department_records: RelatedManager[TradeUnionDepartmentRecordModel]
-        working_groups_record: RelatedManager[WorkingGroupRecordModel]
         trade_union_positions: RelatedManager[TradeUnionPositionModel]
+
+    working_group = models.ForeignKey(
+        WorkingGroupModel,
+        on_delete=models.CASCADE,
+        related_name=Meta.db_table,
+        null=True,
+        blank=True,
+    )
+    working_group_authentic_label = models.CharField(max_length=255, null=True)
+
+    trade_union_department_path = models.CharField(max_length=255, null=True)
+    trade_union_department_authentic_label = models.CharField(max_length=255, null=True)
 
     joined_at = models.DateTimeField(null=True, blank=True)
     recorded_at = models.DateTimeField(null=True, blank=True)

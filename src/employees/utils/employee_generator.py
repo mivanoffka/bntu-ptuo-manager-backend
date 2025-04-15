@@ -4,10 +4,8 @@ from django.db import models
 
 from ..models import (
     EmployeeModel,
-    WorkingGroupRecordModel,
-    TradeUnionDepartmentRecordModel,
     TradeUnionPositionModel,
-    BntuDepartmentOptionModel,
+    BntuDepartmentModel,
     BntuPositionModel,
     PhoneNumberTypeModel,
     PhoneNumberModel,
@@ -15,12 +13,11 @@ from ..models import (
     EducationalInstitutionModel,
     EducationLevelModel,
     GenderModel,
-    NameModel,
     EmployeeVersionModel,
     AddressModel,
     AcademicDegreeModel,
-    WorkingGroupOptionModel,
-    TradeUnionDepartmentOptionModel,
+    WorkingGroupModel,
+    TradeUnionDepartmentModel,
     RelativeModel,
     RelativeTypeModel,
     RewardModel,
@@ -49,15 +46,6 @@ class EmployeeGenerator:
             return self._faker.text(50)
         else:
             return None
-
-    def _add_random_names(self, employee_version: EmployeeVersionModel):
-        for i in range(self._get_random_count()):
-            NameModel.objects.create(
-                employee_version=employee_version,
-                first_name=self._faker.first_name(),
-                last_name=self._faker.first_name(),
-                middle_name=self._faker.first_name(),
-            )
 
     def _add_random_emails(self, employee_version: EmployeeVersionModel):
         for i in range(self._get_random_count()):
@@ -108,11 +96,11 @@ class EmployeeGenerator:
                 if not is_discharged_voluntarily:
                     dischargement_comment = self._faker.text(35)
 
-            bntu_department_option: BntuDepartmentOptionModel = self._get_random_object(
-                BntuDepartmentOptionModel
+            bntu_department: BntuDepartmentModel = self._get_random_object(
+                BntuDepartmentModel
             )
 
-            bntu_department_authentic_label = bntu_department_option.label
+            bntu_department_authentic_label = bntu_department.label
 
             BntuPositionModel.objects.create(
                 employee_version=employee_version,
@@ -121,37 +109,8 @@ class EmployeeGenerator:
                 discharged_at=discharged_at,
                 is_discharged_voluntarily=is_discharged_voluntarily,
                 dischargement_comment=dischargement_comment,
-                bntu_department_option=bntu_department_option,
+                bntu_department_path=bntu_department.path,
                 bntu_department_authentic_label=bntu_department_authentic_label,
-            )
-
-    def _add_random_trade_union_info(self, employee_version: EmployeeVersionModel):
-        self._add_random_working_groups(employee_version)
-        self._add_random_trade_union_departments(employee_version)
-        self._add_random_trade_union_positions(employee_version)
-
-    def _add_random_working_groups(self, employee_version: EmployeeVersionModel):
-        for i in range(self._get_random_count()):
-            working_group_option = self._get_random_object(WorkingGroupOptionModel)
-
-            WorkingGroupRecordModel.objects.create(
-                employee_version=employee_version,
-                working_group_option=working_group_option,
-                authentic_label=working_group_option.label,
-            )
-
-    def _add_random_trade_union_departments(
-        self, employee_version: EmployeeVersionModel
-    ):
-        for i in range(self._get_random_count()):
-            trade_union_department_option = self._get_random_object(
-                TradeUnionDepartmentOptionModel
-            )
-
-            TradeUnionDepartmentRecordModel.objects.create(
-                employee_version=employee_version,
-                trade_union_department_option=trade_union_department_option,
-                authentic_label=trade_union_department_option.label,
             )
 
     def _add_random_trade_union_positions(self, employee_version: EmployeeVersionModel):
@@ -202,11 +161,18 @@ class EmployeeGenerator:
 
         employee_version = EmployeeVersionModel.objects.create(
             employee=employee,
+            first_name=self._faker.first_name(),
+            last_name=self._faker.last_name(),
+            middle_name=self._faker.first_name(),
             birthdate=self._faker.date(),
             birthplace=self._faker.city(),
             joined_at=self._faker.date(),
             recorded_at=self._faker.date(),
             gender=self._get_random_object(GenderModel),
+            working_group=self._get_random_object(WorkingGroupModel),
+            trade_union_department_path=self._get_random_object(
+                TradeUnionDepartmentModel
+            ).path,
             education_level=self._get_random_object(EducationLevelModel),
             academic_degree=self._get_random_object(AcademicDegreeModel),
             is_archived=is_archived,
@@ -215,13 +181,12 @@ class EmployeeGenerator:
             retired_at=retired_at,
         )
 
-        self._add_random_names(employee_version)
         self._add_random_emails(employee_version)
         self._add_random_addresses(employee_version)
         self._add_random_phone_numbers(employee_version)
         self._add_random_education_institutions(employee_version)
         self._add_random_bntu_positions(employee_version)
-        self._add_random_trade_union_info(employee_version)
+        self._add_random_trade_union_positions(employee_version)
         self._add_random_relatives(employee_version)
         self._add_random_rewards(employee_version)
         self._add_random_comments(employee_version)

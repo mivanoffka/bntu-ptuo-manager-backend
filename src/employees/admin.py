@@ -4,38 +4,34 @@ from django.contrib import admin
 from .models import (
     EmployeeVersionModel,
     EmployeeModel,
-    NameModel,
-    BntuDepartmentOptionModel,
+    BntuDepartmentModel,
     BntuPositionModel,
     AddressModel,
     PhoneNumberModel,
     EmailModel,
-    TradeUnionDepartmentRecordModel,
     TradeUnionPositionModel,
     RewardModel,
     RelativeModel,
     EducationalInstitutionModel,
-    WorkingGroupRecordModel,
     PhoneNumberTypeModel,
     RelativeTypeModel,
     CommentModel,
     GenderModel,
     AcademicDegreeModel,
     EducationLevelModel,
-    TradeUnionDepartmentOptionModel,
-    WorkingGroupOptionModel,
+    TradeUnionDepartmentModel,
+    WorkingGroupModel,
 )
 
 
 def register():
     # region Common
-    admin.site.register(NameModel),
     admin.site.register(GenderModel)
     # endregion
 
     # region BNTU
     admin.site.register(BntuPositionModel),
-    admin.site.register(BntuDepartmentOptionModel),
+    admin.site.register(BntuDepartmentModel),
     # endregion
 
     # region Contacts
@@ -47,10 +43,8 @@ def register():
 
     # region Trade Union
     admin.site.register(TradeUnionPositionModel),
-    admin.site.register(TradeUnionDepartmentRecordModel),
-    admin.site.register(WorkingGroupRecordModel),
-    admin.site.register(TradeUnionDepartmentOptionModel),
-    admin.site.register(WorkingGroupOptionModel),
+    admin.site.register(TradeUnionDepartmentModel),
+    admin.site.register(WorkingGroupModel),
     # endregion
 
     # region Education
