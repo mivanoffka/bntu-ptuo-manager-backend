@@ -12,21 +12,21 @@
                 "runtimeExecutable": "powershell.exe",
                 "runtimeArgs": [
                     "-c",
-                    "${workspaceFolder}\\.venv/Scripts\\python.exe ${workspaceFolder}\\source\\manage.py runserver"
+                    "${workspaceFolder}\\.venv/Scripts\\python.exe ${workspaceFolder}\\src\\manage.py runserver"
                 ]
             },
             "osx": {
                 "runtimeExecutable": "/bin/bash",
                 "runtimeArgs": [
                     "-c",
-                    "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py runserver"
+                    "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/src/manage.py runserver"
                 ]
             },
             "linux": {
                 "runtimeExecutable": "/bin/bash",
                 "runtimeArgs": [
                     "-c",
-                    "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/source/manage.py runserver"
+                    "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/src/manage.py runserver"
                 ]
             }
         }
