@@ -1,10 +1,14 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
-
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 from rest_framework.response import Response
+
+from ..filters import EmployeeDynamicSearchFilter, EmployeeFilter
 
 from ..utils.enumerations import Enumerations
 
@@ -22,6 +26,8 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.pagination import PageNumberPagination
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 class EmployeesPagination(PageNumberPagination):
     page_size = 10
@@ -30,9 +36,75 @@ class EmployeesPagination(PageNumberPagination):
 
 @permission_classes([IsAuthenticated])
 class EmployeesViewSet(ModelViewSet):
-    queryset = EmployeeModel.objects.all()
+    queryset = EmployeeModel.objects.all().prefetch_related(
+        "employee_versions",
+        "employee_versions__gender",
+    )
     serializer_class = EmployeeSerializer
     pagination_class = EmployeesPagination
+    filter_backends = (EmployeeDynamicSearchFilter, DjangoFilterBackend)
+    filterset_class = EmployeeFilter
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                "search",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+            ),
+            openapi.Parameter(
+                "search_fields",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+            ),
+            openapi.Parameter(
+                "birthdate_min",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                format=openapi.FORMAT_DATE,
+            ),
+            openapi.Parameter(
+                "birthdate_max",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                format=openapi.FORMAT_DATE,
+            ),
+            openapi.Parameter(
+                "gender_ids",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_INTEGER),
+                collectionFormat="multi",
+                explode=True,
+            ),
+            openapi.Parameter(
+                "education_level_ids",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_INTEGER),
+                collectionFormat="multi",
+                explode=True,
+            ),
+            openapi.Parameter(
+                "academic_degree_ids",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_INTEGER),
+                collectionFormat="multi",
+                explode=True,
+            ),
+            openapi.Parameter(
+                "working_group_ids",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_INTEGER),
+                collectionFormat="multi",
+                explode=True,
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     @action(detail=True, methods=["get"], url_path=r"versions/(?P<created_at>.+)")
     def get_version_by_timestamp(self, request, pk: int, created_at: str):
