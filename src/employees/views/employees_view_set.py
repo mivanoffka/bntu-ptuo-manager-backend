@@ -39,6 +39,7 @@ class EmployeesViewSet(ModelViewSet):
     queryset = EmployeeModel.objects.all().prefetch_related(
         "employee_versions",
         "employee_versions__gender",
+        "employee_versions__bntu_positions",
     )
     serializer_class = EmployeeSerializer
     pagination_class = EmployeesPagination

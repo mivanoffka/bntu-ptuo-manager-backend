@@ -3,7 +3,13 @@ from rest_framework.filters import SearchFilter
 from rest_framework.exceptions import ValidationError
 
 _PREFIX = "employee_versions"
-_ALLOWED_FIELDS = ("first_name", "last_name", "middle_name", "birthplace")
+_ALLOWED_FIELDS = (
+    "first_name",
+    "last_name",
+    "middle_name",
+    "birthplace",
+    "bntu_positions__label",
+)
 _DEFAULT_FIELDS = ("first_name", "last_name", "middle_name")
 
 
