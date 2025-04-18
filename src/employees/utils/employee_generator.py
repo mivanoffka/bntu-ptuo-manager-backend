@@ -30,7 +30,7 @@ from faker import Faker
 
 
 class EmployeeGenerator:
-    _faker = Faker()
+    _faker = Faker("ru_RU")
 
     T = TypeVar("T", bound=models.Model)
 
@@ -104,7 +104,7 @@ class EmployeeGenerator:
 
             BntuPositionModel.objects.create(
                 employee_version=employee_version,
-                label=self._faker.text(30),
+                label=self._faker.job(),
                 hired_at=self._faker.date(),
                 discharged_at=discharged_at,
                 is_discharged_voluntarily=is_discharged_voluntarily,
@@ -159,16 +159,30 @@ class EmployeeGenerator:
         retired_at = self._faker.date() if not is_retired else None
         is_retired = not bool(is_retired)
 
+        gender = self._get_random_object(GenderModel)
+
         employee_version = EmployeeVersionModel.objects.create(
             employee=employee,
-            first_name=self._faker.first_name(),
-            last_name=self._faker.last_name(),
-            middle_name=self._faker.first_name(),
+            first_name=(
+                self._faker.first_name_male()
+                if gender.id == 1
+                else self._faker.first_name_female()
+            ),
+            last_name=(
+                self._faker.last_name_male()
+                if gender.id == 1
+                else self._faker.last_name_female()
+            ),
+            middle_name=(
+                self._faker.middle_name_male()
+                if gender.id == 1
+                else self._faker.middle_name_female()
+            ),
             birthdate=self._faker.date(),
             birthplace=self._faker.city(),
             joined_at=self._faker.date(),
             recorded_at=self._faker.date(),
-            gender=self._get_random_object(GenderModel),
+            gender=gender,
             working_group=self._get_random_object(WorkingGroupModel),
             trade_union_department_path=self._get_random_object(
                 TradeUnionDepartmentModel

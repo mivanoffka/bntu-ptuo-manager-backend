@@ -145,7 +145,9 @@ class EmployeeVersionSerializer(ModelSerializer):
 
     def create(self, validated_data):
         try:
-            trade_union_department_path = validated_data.pop(
+            print(validated_data)
+
+            trade_union_department_path = validated_data.get(
                 "trade_union_department_path", None
             )
             if trade_union_department_path:
@@ -158,7 +160,7 @@ class EmployeeVersionSerializer(ModelSerializer):
                     trade_union_department_authentic_label
                 )
 
-            working_group = validated_data.pop("working_group")
+            working_group = validated_data.get("working_group")
             if working_group:
                 working_group_authentic_label = working_group.label
                 validated_data["working_group_authentic_label"] = (
