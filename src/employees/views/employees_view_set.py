@@ -102,6 +102,11 @@ class EmployeesViewSet(ModelViewSet):
                 collectionFormat="multi",
                 explode=True,
             ),
+            openapi.Parameter(
+                "is_archived",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_BOOLEAN,
+            ),
         ]
     )
     def list(self, request, *args, **kwargs):

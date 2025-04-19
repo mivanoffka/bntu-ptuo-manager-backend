@@ -1,8 +1,10 @@
+from operator import is_
 from django_filters.rest_framework import (
     FilterSet,
     CharFilter,
     ModelChoiceFilter,
     ModelMultipleChoiceFilter,
+    BooleanFilter,
 )
 
 from ..models import (
@@ -48,3 +50,4 @@ class EmployeeFilter(FilterSet):
         blank=True,
         conjoined=False,
     )
+    is_archived = BooleanFilter(field_name="employee_versions__is_archived")
