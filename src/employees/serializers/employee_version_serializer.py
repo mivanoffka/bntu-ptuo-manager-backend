@@ -4,6 +4,7 @@ from rest_framework.serializers import (
     ModelSerializer,
     PrimaryKeyRelatedField,
     CharField,
+    DateTimeField,
 )
 
 from ..models import (
@@ -135,10 +136,12 @@ class EmployeeVersionSerializer(ModelSerializer):
             "comments",
             "rewards",
             "relatives",
+            "created_at",
         )
         read_only_fields = [
             "working_group_authentic_label",
             "trade_union_department_authentic_label",
+            "created_at",
         ]
 
     emails = EmailSerializer(many=True)
