@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from django.db import models
 
 from .abstract import EnumeratedModel
 

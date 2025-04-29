@@ -3,3 +3,4 @@ from .tree_view_set import (
     BntuDepartmentViewSet,
     TradeUnionDepartmentViewSet,
 )
+from .enumerations_view_set import EnumerationsViewSet

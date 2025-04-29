@@ -165,9 +165,9 @@ class EmployeesViewSet(ModelViewSet):
             status=status.HTTP_201_CREATED,
         )
 
-    @action(detail=False, methods=["get"], url_path="enumerations")
-    def enumerations(self, request):
-        return Response(Enumerations.get())
+    # @action(detail=False, methods=["get"], url_path="enumerations")
+    # def enumerations(self, request):
+    #     return Response(Enumerations.get())
 
     @action(detail=False, methods=["delete"], url_path="")
     def reset(self, request):
