@@ -1,7 +1,7 @@
 from django.db import models
 
 from ..employee_version_model import EmployeeVersionModel
-from .phone_number_type_model import PhoneNumberTypeModel
+from references.models import PhoneNumberTypeModel
 
 
 class PhoneNumberModel(models.Model):

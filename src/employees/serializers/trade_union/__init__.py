@@ -1,2 +1,1 @@
 from .trade_union_position_serializer import TradeUnionPositionSerializer
-from .working_group_serializer import WorkingGroupSerializer

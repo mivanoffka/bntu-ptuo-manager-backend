@@ -1,10 +1,8 @@
-# views.py
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from ..models import (
+from .models import (
     GenderModel,
     PhoneNumberTypeModel,
     EducationLevelModel,
@@ -12,7 +10,7 @@ from ..models import (
     WorkingGroupModel,
     RelativeTypeModel,
 )
-from ..serializers import (
+from .serializers import (
     GenderSerializer,
     PhoneNumberTypeSerializer,
     EducationLevelSerializer,
@@ -40,7 +38,7 @@ REQUEST_BODY = openapi.Schema(
 )
 
 
-class EnumerationsViewSet(viewsets.ViewSet):
+class ReferencesViewSet(viewsets.ViewSet):
     def list(self, request):
         result = {}
         for table_name, (model_class, serializer_class) in TABLES.items():

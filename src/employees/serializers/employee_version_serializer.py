@@ -4,7 +4,13 @@ from rest_framework.serializers import (
     ModelSerializer,
     PrimaryKeyRelatedField,
     CharField,
-    DateTimeField,
+)
+
+from references.models import (
+    GenderModel,
+    WorkingGroupModel,
+    AcademicDegreeModel,
+    EducationLevelModel,
 )
 
 from ..models import (
@@ -17,12 +23,8 @@ from ..models import (
     AddressModel,
     PhoneNumberModel,
     EmailModel,
-    EducationLevelModel,
     EmployeeVersionModel,
-    GenderModel,
-    AcademicDegreeModel,
     TradeUnionDepartmentModel,
-    WorkingGroupModel,
 )
 
 

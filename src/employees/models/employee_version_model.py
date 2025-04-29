@@ -4,13 +4,15 @@ from turtle import mode
 from typing import TYPE_CHECKING
 from django.db import models
 
-from .trade_union.working_group_model import WorkingGroupModel
 
 from .employee_model import EmployeeModel
 
-from .gender_model import GenderModel
-from .level_model import EducationLevelModel
-from .academic_degree_model import AcademicDegreeModel
+from references.models import (
+    GenderModel,
+    WorkingGroupModel,
+    AcademicDegreeModel,
+    EducationLevelModel,
+)
 
 
 if TYPE_CHECKING:

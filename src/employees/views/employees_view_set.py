@@ -10,8 +10,6 @@ from rest_framework.response import Response
 
 from ..filters import EmployeeDynamicSearchFilter, EmployeeFilter
 
-from ..utils.enumerations import Enumerations
-
 from ..utils import EmployeeGenerator
 
 from ..serializers import EmployeeSerializer, EmployeeVersionSerializer

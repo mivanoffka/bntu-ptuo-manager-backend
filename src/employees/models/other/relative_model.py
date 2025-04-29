@@ -1,7 +1,7 @@
 from django.db import models
 
 from ..employee_version_model import EmployeeVersionModel
-from .relative_type_model import RelativeTypeModel
+from references.models import RelativeTypeModel
 
 
 class RelativeModel(models.Model):

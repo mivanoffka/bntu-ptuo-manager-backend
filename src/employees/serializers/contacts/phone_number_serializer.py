@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-
-from ...models import PhoneNumberModel, PhoneNumberTypeModel
+from references.models import PhoneNumberTypeModel
+from ...models import PhoneNumberModel
 
 
 class PhoneNumberSerializer(serializers.ModelSerializer):

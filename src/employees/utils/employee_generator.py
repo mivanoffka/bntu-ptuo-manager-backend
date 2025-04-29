@@ -2,24 +2,27 @@ from typing import Type, TypeVar
 
 from django.db import models
 
+from references.models import (
+    PhoneNumberTypeModel,
+    RelativeTypeModel,
+    GenderModel,
+    AcademicDegreeModel,
+    EducationLevelModel,
+    WorkingGroupModel,
+)
+
 from ..models import (
     EmployeeModel,
     TradeUnionPositionModel,
     BntuDepartmentModel,
     BntuPositionModel,
-    PhoneNumberTypeModel,
     PhoneNumberModel,
     EmailModel,
     EducationalInstitutionModel,
-    EducationLevelModel,
-    GenderModel,
     EmployeeVersionModel,
     AddressModel,
-    AcademicDegreeModel,
-    WorkingGroupModel,
     TradeUnionDepartmentModel,
     RelativeModel,
-    RelativeTypeModel,
     RewardModel,
     CommentModel,
 )

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from ...models import RelativeModel, RelativeTypeModel
+from references.models import RelativeTypeModel
+from ...models import RelativeModel
 
 
 class RelativeSerializer(serializers.ModelSerializer):

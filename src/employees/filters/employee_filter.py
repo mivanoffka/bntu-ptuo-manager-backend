@@ -7,7 +7,7 @@ from django_filters.rest_framework import (
     BooleanFilter,
 )
 
-from ..models import (
+from references.models import (
     GenderModel,
     WorkingGroupModel,
     EducationLevelModel,

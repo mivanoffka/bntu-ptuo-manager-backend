@@ -1,3 +1,1 @@
 from .educational_institution_serializer import EducationalInstitutionSerializer
-from .academic_degree_serializer import AcademicDegreeSerializer
-from .education_level_serializer import EducationLevelSerializer
