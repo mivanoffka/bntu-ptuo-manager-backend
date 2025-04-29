@@ -1,8 +1,5 @@
-from typing import TYPE_CHECKING
 from django.db import models
-
 from employees.models import EmployeeVersionModel
-from .bntu_department_model import BntuDepartmentModel
 
 
 class BntuPositionModel(models.Model):

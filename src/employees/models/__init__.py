@@ -2,21 +2,12 @@ from .employee_version_model import EmployeeVersionModel
 
 from .employee_model import EmployeeModel
 
-from .bntu import (
-    BntuDepartmentModel,
-    BntuPositionModel,
-)
+from .bntu import BntuPositionModel
 
-
-from .trade_union import (
-    TradeUnionDepartmentModel,
-    TradeUnionPositionModel,
-)
+from .trade_union import TradeUnionPositionModel
 
 from .contacts import EmailModel, AddressModel, PhoneNumberModel
 
 from .education import EducationalInstitutionModel
 
 from .other import RelativeModel, CommentModel, RewardModel
-
-from .abstract import TimestampedModel

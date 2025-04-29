@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from ..models import BntuDepartmentModel, TradeUnionDepartmentModel
 from treebeard.mp_tree import MP_Node
+
+from .models import BntuDepartmentModel, TradeUnionDepartmentModel
 
 
 class TreeSerializer(serializers.ModelSerializer):

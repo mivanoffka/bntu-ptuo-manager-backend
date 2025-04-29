@@ -39,6 +39,7 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("employees/", include("employees.urls")),
     path("references/", include("references.urls")),
+    path("trees/", include("trees.urls")),
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),

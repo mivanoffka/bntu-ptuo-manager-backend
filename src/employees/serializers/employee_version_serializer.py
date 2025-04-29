@@ -24,7 +24,6 @@ from ..models import (
     PhoneNumberModel,
     EmailModel,
     EmployeeVersionModel,
-    TradeUnionDepartmentModel,
 )
 
 
@@ -43,6 +42,8 @@ from .education import EducationalInstitutionSerializer
 
 if TYPE_CHECKING:
     from .employee_serializer import EmployeeSerializer
+
+from trees.models import TradeUnionDepartmentModel
 
 
 class EmployeeVersionSerializer(ModelSerializer):

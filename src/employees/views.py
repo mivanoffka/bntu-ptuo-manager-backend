@@ -8,15 +8,15 @@ from drf_yasg import openapi
 
 from rest_framework.response import Response
 
-from ..filters import EmployeeDynamicSearchFilter, EmployeeFilter
+from .filters import EmployeeDynamicSearchFilter, EmployeeFilter
 
-from ..utils import EmployeeGenerator
+from .utils import EmployeeGenerator
 
-from ..serializers import EmployeeSerializer, EmployeeVersionSerializer
+from .serializers import EmployeeSerializer, EmployeeVersionSerializer
 
 from rest_framework.decorators import action
 
-from ..models.employee_version_model import EmployeeModel, EmployeeVersionModel
+from .models.employee_version_model import EmployeeModel, EmployeeVersionModel
 
 from django.utils.dateparse import parse_datetime
 

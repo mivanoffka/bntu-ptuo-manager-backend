@@ -4,7 +4,6 @@ from django.contrib import admin
 from .models import (
     EmployeeVersionModel,
     EmployeeModel,
-    BntuDepartmentModel,
     BntuPositionModel,
     AddressModel,
     PhoneNumberModel,
@@ -14,14 +13,12 @@ from .models import (
     RelativeModel,
     EducationalInstitutionModel,
     CommentModel,
-    TradeUnionDepartmentModel,
 )
 
 
 def register():
     # region BNTU
     admin.site.register(BntuPositionModel),
-    admin.site.register(BntuDepartmentModel),
     # endregion
 
     # region Contacts
@@ -32,7 +29,6 @@ def register():
 
     # region Trade Union
     admin.site.register(TradeUnionPositionModel),
-    admin.site.register(TradeUnionDepartmentModel),
 
     # endregion
 

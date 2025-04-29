@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from ...models import BntuPositionModel, BntuDepartmentModel
+from ...models import BntuPositionModel
+from trees.models import BntuDepartmentModel
 
 
 class BntuPositionSerializer(serializers.ModelSerializer):

@@ -11,17 +11,17 @@ from references.models import (
     WorkingGroupModel,
 )
 
+from trees.models import BntuDepartmentModel, TradeUnionDepartmentModel
+
 from ..models import (
     EmployeeModel,
     TradeUnionPositionModel,
-    BntuDepartmentModel,
     BntuPositionModel,
     PhoneNumberModel,
     EmailModel,
     EducationalInstitutionModel,
     EmployeeVersionModel,
     AddressModel,
-    TradeUnionDepartmentModel,
     RelativeModel,
     RewardModel,
     CommentModel,

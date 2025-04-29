@@ -1,2 +1,1 @@
-from .trade_union_department_model import TradeUnionDepartmentModel
 from .trade_union_position_model import TradeUnionPositionModel

@@ -36,19 +36,26 @@ ALLOWED_HOSTS = ["localhost"]
 # Application definition
 
 INSTALLED_APPS = [
+    # region Built-in
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # endregion
+    # region Libraries
     "corsheaders",
     "rest_framework",
     "drf_yasg",
+    "django_filters",
+    # endregion
+    # region Project
     "users",
     "employees",
     "references",
-    "django_filters",
+    "trees",
+    # endregion
 ]
 
 MIDDLEWARE = [
