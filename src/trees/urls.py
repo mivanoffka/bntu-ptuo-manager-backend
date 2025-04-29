@@ -1,7 +1,6 @@
-from rest_framework.routers import DefaultRouter
-from .views import TreesViewSet
+from django.urls import path
+from .views import TreesAPIView
 
-router = DefaultRouter()
-router.register(r"", TreesViewSet, "")
-
-urlpatterns = router.urls
+urlpatterns = [
+    path("", TreesAPIView.as_view(), name=""),
+]

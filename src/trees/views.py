@@ -1,7 +1,8 @@
 from re import M
 from django.http import Http404
-from rest_framework import viewsets, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from collections import defaultdict
@@ -40,9 +41,7 @@ PUT_REQUEST_BODY = openapi.Schema(
 )
 
 
-class TreesViewSet(viewsets.ViewSet):
-    lookup_field = "path"
-
+class TreesAPIView(APIView):
     def get_model_and_serializer(self, table_name):
         if not table_name or table_name not in TABLES:
             raise Http404("Invalid or missing table_name")
@@ -60,55 +59,78 @@ class TreesViewSet(viewsets.ViewSet):
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
-                "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            )
-        ]
+                "table_name",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                required=False,
+                description="Optional table name to retrieve specific table tree data",
+            ),
+        ],
     )
-    def list(self, request):
+    def get(self, request):
         table_name = request.query_params.get("table_name")
-        model_class, _ = self.get_model_and_serializer(table_name)
+        result = {}
 
-        nodes = self.get_queryset(model_class)
-        steplen = model_class.steplen
+        def build_tree(nodes, model_class, steplen):
+            nodes_by_parent = defaultdict(list)
+            for node in nodes:
+                if len(node.path) > steplen:
+                    parent_path = node.path[:-steplen]
+                else:
+                    parent_path = None
+                nodes_by_parent[parent_path].append(node)
 
-        nodes_by_parent = defaultdict(list)
+            def construct_tree(parent_path=None):
+                children = []
+                for node in nodes_by_parent.get(parent_path, []):
+                    children.append(
+                        {
+                            "path": node.path,
+                            "label": node.label,
+                            "children": construct_tree(node.path),
+                        }
+                    )
+                return children
 
-        for node in nodes:
-            if len(node.path) > steplen:
-                parent_path = node.path[:-steplen]
-            else:
-                parent_path = None
+            return construct_tree()
 
-            nodes_by_parent[parent_path].append(node)
-
-        def build_tree(parent_path=None):
-            children = []
-            for node in nodes_by_parent.get(parent_path, []):
-                children.append(
-                    {
-                        "path": node.path,
-                        "label": node.label,
-                        "children": build_tree(node.path),
-                    }
+        if table_name:
+            if table_name not in TABLES:
+                return Response(
+                    {"error": "Invalid table_name"},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
-            return children
+            model_class, _ = self.get_model_and_serializer(table_name)
+            nodes = self.get_queryset(model_class)
+            steplen = model_class.steplen
+            result[table_name] = build_tree(nodes, model_class, steplen)
+        else:
+            for table_name, (model_class, _) in TABLES.items():
+                nodes = self.get_queryset(model_class)
+                steplen = model_class.steplen
+                result[table_name] = build_tree(nodes, model_class, steplen)
 
-        tree_data = build_tree()
-        return Response(tree_data)
+        return Response(result)
 
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            )
+            ),
         ],
         request_body=POST_REQUEST_BODY,
     )
-    def create(self, request):
+    def post(self, request):
         table_name = request.query_params.get("table_name")
-        model_class, serializer_class = self.get_model_and_serializer(table_name)
+        try:
+            model_class, serializer_class = self.get_model_and_serializer(table_name)
+        except Http404:
+            return Response(
+                {"error": "Invalid or missing table_name"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        parent_path = request.data.get("path")
+        parent_path = request.data.get("parent_path")
         label = request.data.get("label")
 
         try:
@@ -130,13 +152,30 @@ class TreesViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            )
+            ),
+            openapi.Parameter(
+                "path", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
+            ),
         ],
         request_body=PUT_REQUEST_BODY,
     )
-    def update(self, request, path=None):
+    def put(self, request):
         table_name = request.query_params.get("table_name")
-        model_class, serializer_class = self.get_model_and_serializer(table_name)
+        path = request.query_params.get("path")
+
+        try:
+            model_class, serializer_class = self.get_model_and_serializer(table_name)
+        except Http404:
+            return Response(
+                {"error": "Invalid or missing table_name"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not path:
+            return Response(
+                {"error": "Missing path parameter"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         try:
             instance = self.get_object(model_class, path)
@@ -155,12 +194,29 @@ class TreesViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            )
+            ),
+            openapi.Parameter(
+                "path", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
+            ),
         ],
     )
-    def destroy(self, request, path=None):
+    def delete(self, request):
         table_name = request.query_params.get("table_name")
-        model_class, _ = self.get_model_and_serializer(table_name)
+        path = request.query_params.get("path")
+
+        try:
+            model_class, _ = self.get_model_and_serializer(table_name)
+        except Http404:
+            return Response(
+                {"error": "Invalid or missing table_name"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not path:
+            return Response(
+                {"error": "Missing path parameter"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         try:
             instance = self.get_object(model_class, path)

@@ -1,7 +1,6 @@
-from rest_framework.routers import DefaultRouter
-from .views import ReferencesViewSet
+from django.urls import path
+from .views import ReferencesAPIView
 
-router = DefaultRouter()
-router.register(r"", ReferencesViewSet, "")
-
-urlpatterns = router.urls
+urlpatterns = [
+    path("", ReferencesAPIView.as_view(), name=""),
+]

@@ -1,5 +1,6 @@
-from rest_framework import viewsets, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import (
@@ -28,7 +29,6 @@ TABLES = {
     "relative_types": (RelativeTypeModel, RelativeTypeSerializer),
 }
 
-
 REQUEST_BODY = openapi.Schema(
     type=openapi.TYPE_OBJECT,
     properties={
@@ -38,24 +38,49 @@ REQUEST_BODY = openapi.Schema(
 )
 
 
-class ReferencesViewSet(viewsets.ViewSet):
-    def list(self, request):
+class ReferencesAPIView(APIView):
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                "table_name",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                required=False,
+                description="Optional table name to retrieve specific table data",
+            ),
+        ],
+    )
+    def get(self, request):
+        table_name = request.query_params.get("table_name")
         result = {}
-        for table_name, (model_class, serializer_class) in TABLES.items():
+
+        if table_name:
+            if table_name not in TABLES:
+                return Response(
+                    {"error": "Invalid table_name"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            model_class, serializer_class = TABLES[table_name]
             queryset = model_class.objects.all()
             serializer = serializer_class(queryset, many=True)
             result[table_name] = serializer.data
+        else:
+            for table_name, (model_class, serializer_class) in TABLES.items():
+                queryset = model_class.objects.all()
+                serializer = serializer_class(queryset, many=True)
+                result[table_name] = serializer.data
+
         return Response(result)
 
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            )
+            ),
         ],
         request_body=REQUEST_BODY,
     )
-    def create(self, request):
+    def post(self, request):
         table_name = request.query_params.get("table_name")
         label = request.data.get("label")
 
@@ -70,24 +95,33 @@ class ReferencesViewSet(viewsets.ViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            )
+            ),
+            openapi.Parameter(
+                "id", openapi.IN_QUERY, type=openapi.TYPE_INTEGER, required=True
+            ),
         ],
         request_body=REQUEST_BODY,
     )
-    def update(self, request, pk=None):
+    def put(self, request):
         table_name = request.query_params.get("table_name")
+        pk = request.query_params.get("id")
         label = request.data.get("label")
 
         if not table_name or table_name not in TABLES:
             return Response(
                 {"error": "Invalid or missing table_name"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not pk:
+            return Response(
+                {"error": "Missing id parameter"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -103,22 +137,31 @@ class ReferencesViewSet(viewsets.ViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            )
+            ),
+            openapi.Parameter(
+                "id", openapi.IN_QUERY, type=openapi.TYPE_INTEGER, required=True
+            ),
         ],
     )
-    def destroy(self, request, pk=None):
+    def delete(self, request):
         table_name = request.query_params.get("table_name")
+        pk = request.query_params.get("id")
 
         if not table_name or table_name not in TABLES:
             return Response(
                 {"error": "Invalid or missing table_name"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not pk:
+            return Response(
+                {"error": "Missing id parameter"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
