@@ -21,5 +21,5 @@ class RelativeModel(models.Model):
     comment = models.TextField(null=True, blank=True, max_length=512)
 
     relative_type = models.ForeignKey(
-        RelativeTypeModel, on_delete=models.CASCADE, null=True, blank=True
+        RelativeTypeModel, on_delete=models.SET_NULL, null=True, blank=True
     )

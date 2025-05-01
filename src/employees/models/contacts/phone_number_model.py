@@ -22,7 +22,7 @@ class PhoneNumberModel(models.Model):
 
     phone_number_type = models.ForeignKey(
         PhoneNumberTypeModel,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name=Meta.db_table,

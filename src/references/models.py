@@ -57,7 +57,7 @@ class RelativeTypeModel(EnumeratedModel):
 
 class WorkingGroupModel(EnumeratedModel):
     class Meta(EnumeratedModel.Meta):
-        db_table = "working_group_options"
+        db_table = "working_groups"
 
     if TYPE_CHECKING:
         employee_versions: RelatedManager[EmployeeVersionModel]

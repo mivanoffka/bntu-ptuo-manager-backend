@@ -46,7 +46,7 @@ class EmployeeVersionModel(models.Model):
 
     gender = models.ForeignKey(
         GenderModel,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name=Meta.db_table,
         null=True,
         blank=True,
@@ -71,7 +71,7 @@ class EmployeeVersionModel(models.Model):
 
     working_group = models.ForeignKey(
         WorkingGroupModel,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name=Meta.db_table,
         null=True,
         blank=True,
@@ -97,7 +97,7 @@ class EmployeeVersionModel(models.Model):
 
     education_level = models.ForeignKey(
         EducationLevelModel,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name=Meta.db_table,
         null=True,
         blank=True,
