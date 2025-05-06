@@ -16,3 +16,5 @@ from .contacts import (
 from .education import (
     EducationalInstitutionSerializer,
 )
+
+from .utils import GenerateEmployeesSerializer

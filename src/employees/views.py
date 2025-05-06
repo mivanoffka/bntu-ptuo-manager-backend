@@ -12,7 +12,11 @@ from .filters import EmployeeDynamicSearchFilter, EmployeeFilter
 
 from .utils import EmployeeGenerator
 
-from .serializers import EmployeeSerializer, EmployeeVersionSerializer
+from .serializers import (
+    EmployeeSerializer,
+    EmployeeVersionSerializer,
+    GenerateEmployeesSerializer,
+)
 
 from rest_framework.decorators import action
 
@@ -156,16 +160,22 @@ class EmployeesViewSet(ModelViewSet):
         except Exception as e:
             return Response({"error": str(e)}, status=500)
 
+    @swagger_auto_schema(
+        method="post",
+        request_body=GenerateEmployeesSerializer,
+        responses={201: EmployeeSerializer(many=True)},
+    )
     @action(detail=False, methods=["post"], url_path="generate")
     def generate(self, request):
+        serializer = GenerateEmployeesSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        count = serializer.validated_data.get("count", 1)
+
+        employees = EmployeeGenerator().generate(count=count)
         return Response(
-            self.get_serializer(EmployeeGenerator().generate()).data,
+            self.get_serializer(employees, many=True).data,
             status=status.HTTP_201_CREATED,
         )
-
-    # @action(detail=False, methods=["get"], url_path="enumerations")
-    # def enumerations(self, request):
-    #     return Response(Enumerations.get())
 
     @action(detail=False, methods=["delete"], url_path="")
     def reset(self, request):

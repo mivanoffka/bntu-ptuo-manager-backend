@@ -14,6 +14,7 @@ from references.models import (
     EducationLevelModel,
 )
 
+from media.models import ImageModel
 
 if TYPE_CHECKING:
     from django.db.models.manager import RelatedManager
@@ -54,6 +55,14 @@ class EmployeeVersionModel(models.Model):
 
     birthdate = models.DateTimeField(null=True, blank=True)
     birthplace = models.CharField(max_length=256, null=True, blank=True)
+
+    image = models.ForeignKey(
+        ImageModel,
+        on_delete=models.SET_NULL,
+        related_name=Meta.db_table,
+        null=True,
+        blank=True,
+    )
 
     # endregion
 

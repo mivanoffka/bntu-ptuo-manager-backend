@@ -151,7 +151,15 @@ class EmployeeGenerator:
                 value=self._faker.text(100),
             )
 
-    def generate(self) -> EmployeeModel:
+    def generate(self, count: int = 1):
+        employees = []
+
+        for i in range(count):
+            employees.append(self._generate_one())
+
+        return employees
+
+    def _generate_one(self) -> EmployeeModel:
         employee = EmployeeModel.objects.create()
 
         is_archived = random.randint(0, 4)

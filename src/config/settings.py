@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "employees",
     "references",
     "trees",
+    "media",
     # endregion
 ]
 
@@ -182,3 +183,8 @@ SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
     "PERSIST_AUTH": True,
 }
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR.parent / "media"
+
+print(MEDIA_ROOT)
