@@ -1,8 +1,9 @@
+-- Active: 1745413193697@@127.0.0.1@5432@bntu_ptuo_db
 INSERT INTO
     genders (id, label)
 VALUES
-    (0, 'Мужской'),
-    (1, 'Женский');
+    (0, 'Женский'),
+    (1, 'Мужской');
 
 INSERT INTO
     education_levels (id, label)
