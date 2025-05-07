@@ -1,5 +1,6 @@
 from .employee_version_serializer import EmployeeVersionSerializer
 from .employee_serializer import EmployeeSerializer
+from .employee_version_plain_serializer import EmployeeVersionPlainSerializer
 
 from .bntu import BntuPositionSerializer
 from .trade_union import TradeUnionPositionSerializer
