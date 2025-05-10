@@ -1,3 +1,4 @@
+import re
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -82,6 +83,47 @@ class UsersViewSet(viewsets.ModelViewSet):
             user.delete()
 
             return Response(status=status.HTTP_204_NO_CONTENT)
+        except UserModel.DoesNotExist:
+            return Response(
+                {"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+    @swagger_auto_schema(
+        method="patch",
+        responses={
+            200: openapi.Response("User role updated successfully", UserSerializer),
+            404: openapi.Response("User not found"),
+            400: openapi.Response("Invalid role"),
+            409: openapi.Response("You cannot change your own role"),
+        },
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={"role": openapi.Schema(type=openapi.TYPE_STRING)},
+            required=["role"],
+        ),
+    )
+    @action(detail=True, methods=["patch"], url_path="role", url_name="role")
+    def update_role(self, request, pk=None):
+        try:
+            user = self.get_object()
+
+            if user == request.user:
+                return Response(
+                    {"detail": "You cannot change your own role"},
+                    status=status.HTTP_409_CONFLICT,
+                )
+
+            role = request.data["role"]
+
+            if role not in (choice[0] for choice in UserRoleModel.choices):
+                return Response(
+                    {"detail": "Invalid role"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+            user.role = role
+            user.save()
+            serializer = self.get_serializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except UserModel.DoesNotExist:
             return Response(
                 {"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND
