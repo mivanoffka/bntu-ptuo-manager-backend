@@ -12,24 +12,22 @@ from rest_framework.decorators import action
 from drf_yasg.utils import no_body, swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.decorators import permission_classes
+from rest_framework.pagination import PageNumberPagination
+
+
+class UsersPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = "limit"
 
 
 @permission_classes([UsersAccessPolicy])
 class UsersViewSet(viewsets.ModelViewSet):
+    pagination_class = UsersPagination
+
     queryset = UserModel.objects.all()
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["date_joined", "is_verified", "role"]
-
-    def get_queryset(self):
-        return UserModel.objects.all()
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        serializer = self.get_serializer(queryset, many=True)
-
-        return Response(serializer.data)
 
     @swagger_auto_schema(
         method="patch",
