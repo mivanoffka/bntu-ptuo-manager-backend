@@ -1,8 +1,10 @@
-from rest_framework.views import APIView
+from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
+from .access_policy import ReferencesAccessPolicy
 from .models import (
     GenderModel,
     PhoneNumberTypeModel,
@@ -31,14 +33,15 @@ TABLES = {
 
 REQUEST_BODY = openapi.Schema(
     type=openapi.TYPE_OBJECT,
-    properties={
-        "label": openapi.Schema(type=openapi.TYPE_STRING),
-    },
+    properties={"label": openapi.Schema(type=openapi.TYPE_STRING)},
     required=["label"],
 )
 
 
-class ReferencesAPIView(APIView):
+class ReferencesViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+    access_policy = ReferencesAccessPolicy()
+
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -47,28 +50,27 @@ class ReferencesAPIView(APIView):
                 type=openapi.TYPE_STRING,
                 required=False,
                 description="Optional table name to retrieve specific table data",
-            ),
-        ],
+            )
+        ]
     )
-    def get(self, request):
+    def list(self, request):
         table_name = request.query_params.get("table_name")
         result = {}
 
         if table_name:
             if table_name not in TABLES:
                 return Response(
-                    {"error": "Invalid table_name"},
-                    status=status.HTTP_400_BAD_REQUEST,
+                    {"error": "Invalid table_name"}, status=status.HTTP_400_BAD_REQUEST
                 )
             model_class, serializer_class = TABLES[table_name]
             queryset = model_class.objects.all()
             serializer = serializer_class(queryset, many=True)
             result[table_name] = serializer.data
         else:
-            for table_name, (model_class, serializer_class) in TABLES.items():
+            for name, (model_class, serializer_class) in TABLES.items():
                 queryset = model_class.objects.all()
                 serializer = serializer_class(queryset, many=True)
-                result[table_name] = serializer.data
+                result[name] = serializer.data
 
         return Response(result)
 
@@ -76,11 +78,11 @@ class ReferencesAPIView(APIView):
         manual_parameters=[
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            ),
+            )
         ],
         request_body=REQUEST_BODY,
     )
-    def post(self, request):
+    def create(self, request):
         table_name = request.query_params.get("table_name")
         label = request.data.get("label")
 
@@ -108,9 +110,9 @@ class ReferencesAPIView(APIView):
         ],
         request_body=REQUEST_BODY,
     )
-    def put(self, request):
+    def update(self, request, pk=None):
         table_name = request.query_params.get("table_name")
-        pk = request.query_params.get("id")
+        obj_id = request.query_params.get("id")
         label = request.data.get("label")
 
         if not table_name or table_name not in TABLES:
@@ -118,16 +120,14 @@ class ReferencesAPIView(APIView):
                 {"error": "Invalid or missing table_name"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
-        if not pk:
+        if not obj_id:
             return Response(
-                {"error": "Missing id parameter"},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": "Missing id parameter"}, status=status.HTTP_400_BAD_REQUEST
             )
 
         model_class, serializer_class = TABLES[table_name]
         try:
-            instance = model_class.objects.get(pk=pk)
+            instance = model_class.objects.get(pk=obj_id)
         except model_class.DoesNotExist:
             return Response(
                 {"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND
@@ -147,27 +147,25 @@ class ReferencesAPIView(APIView):
             openapi.Parameter(
                 "id", openapi.IN_QUERY, type=openapi.TYPE_INTEGER, required=True
             ),
-        ],
+        ]
     )
-    def delete(self, request):
+    def destroy(self, request, pk=None):
         table_name = request.query_params.get("table_name")
-        pk = request.query_params.get("id")
+        obj_id = request.query_params.get("id")
 
         if not table_name or table_name not in TABLES:
             return Response(
                 {"error": "Invalid or missing table_name"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
-        if not pk:
+        if not obj_id:
             return Response(
-                {"error": "Missing id parameter"},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": "Missing id parameter"}, status=status.HTTP_400_BAD_REQUEST
             )
 
         model_class, _ = TABLES[table_name]
         try:
-            instance = model_class.objects.get(pk=pk)
+            instance = model_class.objects.get(pk=obj_id)
             instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except model_class.DoesNotExist:

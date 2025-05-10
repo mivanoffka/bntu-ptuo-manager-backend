@@ -8,6 +8,8 @@ from drf_yasg import openapi
 
 from rest_framework.response import Response
 
+from .access_policy import EmployeesAccessPolicy
+
 from .serializers.employee_version_plain_serializer import (
     EmployeeVersionPlainSerializer,
 )
@@ -46,7 +48,7 @@ class EmployeesPagination(PageNumberPagination):
     page_size_query_param = "limit"
 
 
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, EmployeesAccessPolicy])
 class EmployeesViewSet(ModelViewSet):
     queryset = EmployeeModel.objects.all().prefetch_related(
         "employee_versions",
@@ -259,7 +261,29 @@ class EmployeesViewSet(ModelViewSet):
         except ValueError:
             return Response({"error": "Invalid timestamp"}, status=400)
 
-    @action(detail=True, methods=["post"], url_path=r"restore/(?P<created_at>.+)")
+    @action(
+        detail=True, methods=["delete"], url_path=r"versions/(?P<created_at>.+)/delete"
+    )
+    def delete_version_by_timestamp(self, request, pk: int, created_at: str):
+        employee = self.queryset.get(pk=pk)
+        try:
+            dt = parse_datetime(created_at)
+            if dt is None:
+                return Response({"error": "Invalid timestamp format"}, status=400)
+
+            version = get_object_or_404(
+                EmployeeVersionModel.objects.filter(employee=employee), created_at=dt
+            )
+
+            version.delete()
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValueError:
+            return Response({"error": "Invalid timestamp"}, status=400)
+
+    @action(
+        detail=True, methods=["post"], url_path=r"versions/(?P<created_at>.+)/restore"
+    )
     def restore(self, request, pk: int, created_at: str):
         try:
             dt = parse_datetime(created_at)
