@@ -24,7 +24,7 @@ class UsersPagination(PageNumberPagination):
 class UsersViewSet(viewsets.ModelViewSet):
     pagination_class = UsersPagination
 
-    queryset = UserModel.objects.all()
+    queryset = UserModel.objects.all().order_by("date_joined")
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["date_joined", "is_verified", "role"]
