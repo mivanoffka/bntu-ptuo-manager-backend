@@ -8,17 +8,17 @@ from drf_yasg import openapi
 
 from rest_framework.response import Response
 
-from .access_policy import EmployeesAccessPolicy
+from ..access_policies import EmployeesAccessPolicy
 
-from .serializers.employee_version_plain_serializer import (
+from ..serializers.employee_version_plain_serializer import (
     EmployeeVersionPlainSerializer,
 )
 
-from .filters import EmployeeDynamicSearchFilter, EmployeeFilter
+from ..filters import EmployeeDynamicSearchFilter, EmployeeFilter
 
-from .utils import EmployeeGenerator
+from ..utils import EmployeeGenerator
 
-from .serializers import (
+from ..serializers import (
     EmployeeSerializer,
     EmployeeVersionSerializer,
     GenerateEmployeesSerializer,
@@ -26,7 +26,7 @@ from .serializers import (
 
 from rest_framework.decorators import action
 
-from .models.employee_version_model import EmployeeModel, EmployeeVersionModel
+from ..models.employee_version_model import EmployeeModel, EmployeeVersionModel
 
 from django.utils.dateparse import parse_datetime
 
@@ -59,6 +59,8 @@ class EmployeesViewSet(ModelViewSet):
     pagination_class = EmployeesPagination
     filter_backends = (EmployeeDynamicSearchFilter, DjangoFilterBackend)
     filterset_class = EmployeeFilter
+
+    http_method_names = ["get", "post", "patch", "delete"]
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -244,74 +246,6 @@ class EmployeesViewSet(ModelViewSet):
             )
 
         return response
-
-    @action(detail=True, methods=["get"], url_path=r"versions/(?P<created_at>.+)")
-    def get_version_by_timestamp(self, request, pk: int, created_at: str):
-        employee = self.queryset.get(pk=pk)
-        try:
-            dt = parse_datetime(created_at)
-            if dt is None:
-                return Response({"error": "Invalid timestamp format"}, status=400)
-
-            version = get_object_or_404(
-                EmployeeVersionModel.objects.filter(employee=employee), created_at=dt
-            )
-            serializer = EmployeeVersionSerializer(version)
-            return Response(serializer.data)
-        except ValueError:
-            return Response({"error": "Invalid timestamp"}, status=400)
-
-    @action(
-        detail=True, methods=["delete"], url_path=r"versions/(?P<created_at>.+)/delete"
-    )
-    def delete_version_by_timestamp(self, request, pk: int, created_at: str):
-        employee = self.queryset.get(pk=pk)
-        try:
-            dt = parse_datetime(created_at)
-            if dt is None:
-                return Response({"error": "Invalid timestamp format"}, status=400)
-
-            version = get_object_or_404(
-                EmployeeVersionModel.objects.filter(employee=employee), created_at=dt
-            )
-
-            version.delete()
-
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except ValueError:
-            return Response({"error": "Invalid timestamp"}, status=400)
-
-    @action(
-        detail=True, methods=["post"], url_path=r"versions/(?P<created_at>.+)/restore"
-    )
-    def restore(self, request, pk: int, created_at: str):
-        try:
-            dt = parse_datetime(created_at)
-            if dt is None:
-                return Response({"error": "Invalid timestamp format"}, status=400)
-
-            employee = self.queryset.get(pk=pk)
-            version = (
-                EmployeeVersionModel.objects.filter(
-                    employee=employee, created_at__lte=dt
-                )
-                .order_by("-created_at")
-                .first()
-            )
-            if not version:
-                return Response(
-                    {"error": "No version found at or before the specified timestamp"},
-                    status=404,
-                )
-
-            EmployeeVersionModel.objects.filter(
-                employee=employee, created_at__gt=dt
-            ).delete()
-            return Response(status=status.HTTP_200_OK)
-        except ValueError:
-            return Response({"error": "Invalid timestamp"}, status=400)
-        except Exception as e:
-            return Response({"error": str(e)}, status=500)
 
     @swagger_auto_schema(
         method="post",
