@@ -5,7 +5,7 @@ from users.models import UserRoleModel
 class TreesAccessPolicy(AccessPolicy):
     statements = [
         {
-            "action": ["partial_update", "update", "destroy"],
+            "action": ["partial_update", "update", "destroy", "create"],
             "principal": "authenticated",
             "effect": "allow",
             "condition": "is_manager",

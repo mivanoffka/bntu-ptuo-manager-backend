@@ -8,17 +8,23 @@ class EmployeesAccessPolicy(AccessPolicy):
             "action": [
                 "list",
                 "export_excel",
-                "create",
-                "update",
-                "partial_update",
                 "retrieve",
-                "get_version_by_timestamp",
             ],
             "principal": "authenticated",
             "effect": "allow",
         },
         {
-            "action": ["restore", "delete_version_by_timestamp", "destroy"],
+            "action": [
+                "update",
+                "partial_update",
+                "create",
+            ],
+            "principal": "authenticated",
+            "effect": "allow",
+            "condition": "is_editor",
+        },
+        {
+            "action": ["destroy"],
             "principal": "authenticated",
             "effect": "allow",
             "condition": "is_manager",
@@ -30,6 +36,10 @@ class EmployeesAccessPolicy(AccessPolicy):
             "condition": "is_admin",
         },
     ]
+
+    def is_editor(self, request, view, action):
+        roles = [UserRoleModel.EDITOR, UserRoleModel.ADMIN, UserRoleModel.MANAGER]
+        return request.user.role in roles
 
     def is_manager(self, request, view, action):
         roles = [UserRoleModel.MANAGER, UserRoleModel.ADMIN]

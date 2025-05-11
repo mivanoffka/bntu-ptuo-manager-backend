@@ -40,6 +40,7 @@ PUT_REQUEST_BODY = openapi.Schema(
 
 
 class TreesViewSet(viewsets.ViewSet):
+    lookup_field = "path"
     permission_classes = [IsAuthenticated, TreesAccessPolicy]
 
     def get_model_and_serializer(self, table_name):
@@ -148,15 +149,11 @@ class TreesViewSet(viewsets.ViewSet):
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
             ),
-            openapi.Parameter(
-                "path", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            ),
         ],
         request_body=PUT_REQUEST_BODY,
     )
-    def update(self, request, pk=None):
+    def update(self, request, path=None):
         table_name = request.query_params.get("table_name")
-        path = request.query_params.get("path")
 
         try:
             model_class, serializer_class = self.get_model_and_serializer(table_name)
@@ -175,14 +172,10 @@ class TreesViewSet(viewsets.ViewSet):
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
             ),
-            openapi.Parameter(
-                "path", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            ),
         ]
     )
-    def destroy(self, request, pk=None):
+    def destroy(self, request, path=None):
         table_name = request.query_params.get("table_name")
-        path = request.query_params.get("path")
 
         try:
             model_class, _ = self.get_model_and_serializer(table_name)

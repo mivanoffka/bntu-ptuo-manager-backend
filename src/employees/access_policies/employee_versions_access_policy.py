@@ -23,6 +23,3 @@ class EmployeeVersionsAccessPolicy(AccessPolicy):
         print("!")
         roles = [UserRoleModel.MANAGER, UserRoleModel.ADMIN]
         return request.user.role in roles
-
-    def is_admin(self, request, view, action):
-        return request.user.role == UserRoleModel.ADMIN

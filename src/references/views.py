@@ -39,8 +39,7 @@ REQUEST_BODY = openapi.Schema(
 
 
 class ReferencesViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
-    access_policy = ReferencesAccessPolicy()
+    permission_classes = [IsAuthenticated, ReferencesAccessPolicy]
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -103,16 +102,12 @@ class ReferencesViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            ),
-            openapi.Parameter(
-                "id", openapi.IN_QUERY, type=openapi.TYPE_INTEGER, required=True
-            ),
+            )
         ],
         request_body=REQUEST_BODY,
     )
     def update(self, request, pk=None):
         table_name = request.query_params.get("table_name")
-        obj_id = request.query_params.get("id")
         label = request.data.get("label")
 
         if not table_name or table_name not in TABLES:
@@ -120,14 +115,14 @@ class ReferencesViewSet(viewsets.ViewSet):
                 {"error": "Invalid or missing table_name"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if not obj_id:
+        if not pk:
             return Response(
                 {"error": "Missing id parameter"}, status=status.HTTP_400_BAD_REQUEST
             )
 
         model_class, serializer_class = TABLES[table_name]
         try:
-            instance = model_class.objects.get(pk=obj_id)
+            instance = model_class.objects.get(pk=pk)
         except model_class.DoesNotExist:
             return Response(
                 {"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND
@@ -143,29 +138,25 @@ class ReferencesViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter(
                 "table_name", openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True
-            ),
-            openapi.Parameter(
-                "id", openapi.IN_QUERY, type=openapi.TYPE_INTEGER, required=True
-            ),
+            )
         ]
     )
     def destroy(self, request, pk=None):
         table_name = request.query_params.get("table_name")
-        obj_id = request.query_params.get("id")
 
         if not table_name or table_name not in TABLES:
             return Response(
                 {"error": "Invalid or missing table_name"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if not obj_id:
+        if not pk:
             return Response(
                 {"error": "Missing id parameter"}, status=status.HTTP_400_BAD_REQUEST
             )
 
         model_class, _ = TABLES[table_name]
         try:
-            instance = model_class.objects.get(pk=obj_id)
+            instance = model_class.objects.get(pk=pk)
             instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except model_class.DoesNotExist:
