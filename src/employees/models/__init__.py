@@ -4,8 +4,6 @@ from .employee_model import EmployeeModel
 
 from .bntu import BntuPositionModel
 
-from .trade_union import TradeUnionPositionModel
-
 from .contacts import EmailModel, AddressModel, PhoneNumberModel
 
 from .education import EducationalInstitutionModel

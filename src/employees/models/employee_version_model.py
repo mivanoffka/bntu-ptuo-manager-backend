@@ -20,9 +20,6 @@ if TYPE_CHECKING:
     from django.db.models.manager import RelatedManager
     from .bntu import BntuPositionModel
     from .contacts import PhoneNumberModel, AddressModel, EmailModel
-    from .trade_union import (
-        TradeUnionPositionModel,
-    )
     from .other import RelativeModel, RewardModel, CommentModel
     from .education import EducationalInstitutionModel
 
@@ -78,9 +75,6 @@ class EmployeeVersionModel(models.Model):
     trade_union_membership_number = models.CharField(
         max_length=255, null=True, blank=True
     )
-
-    if TYPE_CHECKING:
-        trade_union_positions: RelatedManager[TradeUnionPositionModel]
 
     working_group = models.ForeignKey(
         WorkingGroupModel,

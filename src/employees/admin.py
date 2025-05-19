@@ -8,7 +8,6 @@ from .models import (
     AddressModel,
     PhoneNumberModel,
     EmailModel,
-    TradeUnionPositionModel,
     RewardModel,
     RelativeModel,
     EducationalInstitutionModel,
@@ -25,11 +24,6 @@ def register():
     admin.site.register(PhoneNumberModel),
     admin.site.register(AddressModel),
     admin.site.register(EmailModel),
-    # endregion
-
-    # region Trade Union
-    admin.site.register(TradeUnionPositionModel),
-
     # endregion
 
     # region Education

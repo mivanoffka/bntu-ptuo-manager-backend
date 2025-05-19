@@ -13,7 +13,6 @@ from ..models import (
     AddressModel,
     EducationalInstitutionModel,
     BntuPositionModel,
-    TradeUnionPositionModel,
     CommentModel,
     RelativeModel,
     RewardModel,

@@ -12,7 +12,6 @@ from ..models import (
 from .other import CommentSerializer, RelativeSerializer, RewardSerializer
 from .bntu import BntuPositionSerializer
 from .contacts import EmailSerializer, AddressSerializer, PhoneNumberSerializer
-from .trade_union import TradeUnionPositionSerializer
 from .education import EducationalInstitutionSerializer
 
 
@@ -51,7 +50,6 @@ class EmployeeVersionPlainSerializer(ModelSerializer):
 
     # region TradeUnion
 
-    trade_union_positions = TradeUnionPositionSerializer(many=True)
     trade_union_department_path = CharField(
         required=False, allow_null=True, allow_blank=True
     )

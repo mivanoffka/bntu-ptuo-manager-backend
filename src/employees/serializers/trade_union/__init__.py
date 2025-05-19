@@ -1,1 +1,0 @@
-from .trade_union_position_serializer import TradeUnionPositionSerializer

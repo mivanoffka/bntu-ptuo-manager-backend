@@ -15,7 +15,6 @@ from trees.models import BntuDepartmentModel, TradeUnionDepartmentModel
 
 from ..models import (
     EmployeeModel,
-    TradeUnionPositionModel,
     BntuPositionModel,
     PhoneNumberModel,
     EmailModel,
@@ -116,15 +115,6 @@ class EmployeeGenerator:
                 bntu_department_authentic_label=bntu_department_authentic_label,
             )
 
-    def _add_random_trade_union_positions(self, employee_version: EmployeeVersionModel):
-        for i in range(self._get_random_count()):
-            TradeUnionPositionModel.objects.create(
-                employee_version=employee_version,
-                label=self._faker.text(30),
-                occurred_at=self._faker.date(),
-                comment=self._get_random_comment(),
-            )
-
     def _add_random_relatives(self, employee_version: EmployeeVersionModel):
         for i in range(self._get_random_count()):
             RelativeModel.objects.create(
@@ -212,7 +202,6 @@ class EmployeeGenerator:
         self._add_random_phone_numbers(employee_version)
         self._add_random_education_institutions(employee_version)
         self._add_random_bntu_positions(employee_version)
-        self._add_random_trade_union_positions(employee_version)
         self._add_random_relatives(employee_version)
         self._add_random_rewards(employee_version)
         self._add_random_comments(employee_version)

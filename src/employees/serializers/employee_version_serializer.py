@@ -18,7 +18,6 @@ from ..models import (
     RewardModel,
     RelativeModel,
     CommentModel,
-    TradeUnionPositionModel,
     BntuPositionModel,
     EducationalInstitutionModel,
     AddressModel,
@@ -29,7 +28,6 @@ from ..models import (
 from .other import CommentSerializer, RelativeSerializer, RewardSerializer
 from .bntu import BntuPositionSerializer
 from .contacts import EmailSerializer, AddressSerializer, PhoneNumberSerializer
-from .trade_union import TradeUnionPositionSerializer
 from .education import EducationalInstitutionSerializer
 from trees.models import TradeUnionDepartmentModel
 
@@ -77,7 +75,6 @@ class EmployeeVersionSerializer(ModelSerializer):
 
     # region TradeUnion
 
-    trade_union_positions = TradeUnionPositionSerializer(many=True)
     trade_union_department_path = CharField(
         required=False, allow_null=True, allow_blank=True
     )
@@ -146,7 +143,6 @@ class EmployeeVersionSerializer(ModelSerializer):
                 "addresses": AddressModel,
                 "educational_institutions": EducationalInstitutionModel,
                 "bntu_positions": BntuPositionModel,
-                "trade_union_positions": TradeUnionPositionModel,
                 "comments": CommentModel,
                 "relatives": RelativeModel,
                 "rewards": RewardModel,
@@ -181,7 +177,6 @@ class EmployeeVersionSerializer(ModelSerializer):
             "image_path",
             "bntu_positions",
             "trade_union_membership_number",
-            "trade_union_positions",
             "trade_union_department_path",
             "trade_union_department_authentic_label",
             "working_group_id",
