@@ -5,10 +5,10 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /
 
-COPY requirements.txt /code/
+COPY requirements.txt /
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY . /code/
+COPY . /
 
 CMD ["sh", "-c", "python src/manage.py migrate && python src/manage.py runserver 0.0.0.0:8000"]
 
