@@ -14,7 +14,6 @@ from datetime import timedelta
 import os
 from pathlib import Path
 import json
-from tkinter import ALL
 from dotenv import load_dotenv
 
 load_dotenv()
