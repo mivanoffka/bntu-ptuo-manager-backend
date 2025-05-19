@@ -14,6 +14,7 @@ from datetime import timedelta
 import os
 from pathlib import Path
 import json
+from tkinter import ALL
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -163,12 +164,14 @@ REST_FRAMEWORK = {
     ),
 }
 
+
 try:
     CORS_ALLOWED_ORIGINS = json.loads(os.getenv("ALLOWED_ORIGINS", "[]"))
+    ALLOWED_HOSTS = CORS_ALLOWED_ORIGINS
 except json.JSONDecodeError:
     CORS_ALLOWED_ORIGINS = []
+    ALLOWED_HOSTS = []
     print("Warning: ALLOWED_ORIGINS is not valid JSON. Using empty list.")
-print(f"Allowed origins: {CORS_ALLOWED_ORIGINS}")
 
 
 SIMPLE_JWT = {
