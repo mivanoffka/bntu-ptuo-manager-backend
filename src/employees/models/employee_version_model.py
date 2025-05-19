@@ -75,6 +75,10 @@ class EmployeeVersionModel(models.Model):
 
     # region Trade union
 
+    trade_union_membership_number = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+
     if TYPE_CHECKING:
         trade_union_positions: RelatedManager[TradeUnionPositionModel]
 

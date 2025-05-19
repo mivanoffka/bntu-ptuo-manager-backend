@@ -204,6 +204,7 @@ class EmployeeGenerator:
             archived_at=archived_at,
             is_retired=is_retired,
             retired_at=retired_at,
+            trade_union_membership_number=str(random.randint(1000000, 9999999)),
         )
 
         self._add_random_emails(employee_version)

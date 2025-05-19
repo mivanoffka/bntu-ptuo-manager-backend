@@ -180,6 +180,7 @@ class EmployeeVersionSerializer(ModelSerializer):
             "image",
             "image_path",
             "bntu_positions",
+            "trade_union_membership_number",
             "trade_union_positions",
             "trade_union_department_path",
             "trade_union_department_authentic_label",
