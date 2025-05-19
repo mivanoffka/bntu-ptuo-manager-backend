@@ -163,14 +163,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-
-try:
-    CORS_ALLOWED_ORIGINS = json.loads(os.getenv("ALLOWED_ORIGINS", "[]"))
-    ALLOWED_HOSTS = CORS_ALLOWED_ORIGINS
-except json.JSONDecodeError:
-    CORS_ALLOWED_ORIGINS = []
-    ALLOWED_HOSTS = []
-    print("Warning: ALLOWED_ORIGINS is not valid JSON. Using empty list.")
+CORS_ALLOWED_ORIGINS = json.loads(os.getenv("ALLOWED_ORIGINS", "[]"))
 
 
 SIMPLE_JWT = {
