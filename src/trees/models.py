@@ -13,7 +13,7 @@ class TreeNodeModel(MP_Node):
     id = models.AutoField(primary_key=True)
     path = models.CharField(max_length=255, unique=True)
     label = models.CharField(max_length=255)
-    node_order_by = ["label"]
+    node_order_by = []
 
     def __str__(self):
         return self.label
