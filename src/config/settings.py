@@ -163,6 +163,7 @@ REST_FRAMEWORK = {
     ),
 }
 
+ALLOWED_HOSTS = json.loads(os.getenv("ALLOWED_HOSTS", "[]"))
 CORS_ALLOWED_ORIGINS = json.loads(os.getenv("ALLOWED_ORIGINS", "[]"))
 
 
