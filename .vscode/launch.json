@@ -1,34 +1,13 @@
 {
-    "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "name": "Python Debugger: Django",
+            "type": "debugpy",
             "request": "launch",
-            "name": "Debug backend",
-            "skipFiles": ["<node_internals>/**"],
-            "console": "integratedTerminal",
-
-            "windows": {
-                "runtimeExecutable": "powershell.exe",
-                "runtimeArgs": [
-                    "-c",
-                    "${workspaceFolder}\\.venv/Scripts\\python.exe ${workspaceFolder}\\src\\manage.py runserver"
-                ]
-            },
-            "osx": {
-                "runtimeExecutable": "/bin/bash",
-                "runtimeArgs": [
-                    "-c",
-                    "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/src/manage.py runserver"
-                ]
-            },
-            "linux": {
-                "runtimeExecutable": "/bin/bash",
-                "runtimeArgs": [
-                    "-c",
-                    "${workspaceFolder}/.venv/bin/python ${workspaceFolder}/src/manage.py runserver"
-                ]
-            }
+            "args": ["runserver"],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/src/manage.py"
         }
     ]
 }
