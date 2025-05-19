@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from turtle import mode
 from typing import TYPE_CHECKING
 from django.db import models
 
