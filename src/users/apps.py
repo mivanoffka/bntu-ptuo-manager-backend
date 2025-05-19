@@ -1,8 +1,6 @@
-from operator import is_
 from django.apps import AppConfig
 from django.contrib.auth import get_user_model
 from django.db.utils import OperationalError
-from django.db import connections
 
 
 class UsersConfig(AppConfig):
@@ -10,6 +8,7 @@ class UsersConfig(AppConfig):
     name = "users"
 
     def ready(self):
+        from django.db import connections
 
         try:
             db_conn = connections["default"]

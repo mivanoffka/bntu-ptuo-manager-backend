@@ -168,6 +168,8 @@ try:
 except json.JSONDecodeError:
     CORS_ALLOWED_ORIGINS = []
     print("Warning: ALLOWED_ORIGINS is not valid JSON. Using empty list.")
+print(f"Allowed origins: {CORS_ALLOWED_ORIGINS}")
+
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
