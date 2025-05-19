@@ -2,8 +2,6 @@ from django.apps import AppConfig
 from django.contrib.auth import get_user_model
 from django.db.utils import OperationalError
 
-from .models.user_role_model import UserRoleModel
-
 
 class UsersConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
@@ -27,7 +25,7 @@ class UsersConfig(AppConfig):
                     email="admin@example.com",
                     password="admin",
                     is_verified=True,
-                    role=UserRoleModel.ADMIN,
+                    role="admin",
                 )
                 print("Superuser created.")
             except Exception as e:
