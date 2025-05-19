@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 import os
 from pathlib import Path
+import json
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -162,9 +163,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
+try:
+    CORS_ALLOWED_ORIGINS = json.loads(os.getenv("ALLOWED_ORIGINS", "[]"))
+except json.JSONDecodeError:
+    CORS_ALLOWED_ORIGINS = []
+    print("Warning: ALLOWED_ORIGINS is not valid JSON. Using empty list.")
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
@@ -186,5 +189,3 @@ SWAGGER_SETTINGS = {
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR.parent / "media"
-
-print(MEDIA_ROOT)
