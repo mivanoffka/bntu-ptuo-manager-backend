@@ -9,6 +9,7 @@ class EmployeesAccessPolicy(AccessPolicy):
                 "list",
                 "export_excel",
                 "retrieve",
+                "search_for",
             ],
             "principal": "authenticated",
             "effect": "allow",

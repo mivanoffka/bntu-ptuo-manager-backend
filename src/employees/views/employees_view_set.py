@@ -8,6 +8,12 @@ from drf_yasg import openapi
 
 from rest_framework.response import Response
 
+from ..models.education.educational_institution_model import EducationalInstitutionModel
+
+from ..models.other.reward_model import RewardModel
+
+from ..models.bntu.bntu_position_model import BntuPositionModel
+
 from ..access_policies import EmployeesAccessPolicy
 
 from ..serializers.employee_version_plain_serializer import (
@@ -46,6 +52,66 @@ from django.http import HttpResponse
 class EmployeesPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = "limit"
+
+
+SEARCH_SOURCES = {
+    "bntu_positions": BntuPositionModel,
+    "rewards": RewardModel,
+    "educational_institutions": EducationalInstitutionModel,
+}
+
+SEARCH_MANUAL_PARAMS = [
+    openapi.Parameter(
+        "source",
+        openapi.IN_QUERY,
+        type=openapi.TYPE_STRING,
+        required=True,
+    ),
+    openapi.Parameter(
+        "search",
+        openapi.IN_QUERY,
+        type=openapi.TYPE_STRING,
+    ),
+    openapi.Parameter(
+        "page",
+        openapi.IN_QUERY,
+        type=openapi.TYPE_INTEGER,
+    ),
+    openapi.Parameter(
+        "limit",
+        openapi.IN_QUERY,
+        type=openapi.TYPE_INTEGER,
+    ),
+]
+SEARCH_RESPONSES = {
+    200: openapi.Response(
+        "",
+        schema=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "count": openapi.Schema(
+                    type=openapi.TYPE_INTEGER,
+                ),
+                "next": openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    format=openapi.FORMAT_URI,
+                    nullable=True,
+                ),
+                "previous": openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    format=openapi.FORMAT_URI,
+                    nullable=True,
+                ),
+                "results": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                    ),
+                ),
+            },
+        ),
+    )
+}
 
 
 @permission_classes([IsAuthenticated, EmployeesAccessPolicy])
@@ -274,3 +340,29 @@ class EmployeesViewSet(ModelViewSet):
                 {"error": f"Failed to delete records: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+    @swagger_auto_schema(
+        manual_parameters=SEARCH_MANUAL_PARAMS,
+        responses=SEARCH_RESPONSES,
+    )
+    @action(detail=False, methods=["get"], url_path="search-for")
+    def search_for(self, request):
+        search_term = request.query_params.get("search", "")
+        search_source = request.query_params.get("source", "")
+
+        source_model_class = SEARCH_SOURCES[search_source]
+
+        queryset = (
+            source_model_class.objects.values_list("label", flat=True)
+            .distinct()
+            .order_by("label")
+        )
+
+        if search_term:
+            queryset = queryset.filter(label__iregex=rf"\m{search_term}")
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            return self.get_paginated_response(list(page))
+
+        return Response(list(queryset))
