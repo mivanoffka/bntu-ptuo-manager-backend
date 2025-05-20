@@ -146,3 +146,17 @@ class UsersViewSet(viewsets.ModelViewSet):
         return Response(
             {"detail": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
+
+    @swagger_auto_schema(
+        method="get",
+        responses={
+            200: openapi.Response(
+                "Current user retrieved successfully", UserSerializer
+            ),
+            401: openapi.Response("Unauthorized"),
+        },
+    )
+    @action(detail=False, methods=["get"], url_path="user", url_name="user")
+    def get_current_user(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
