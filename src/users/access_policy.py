@@ -5,6 +5,11 @@ from .models import UserRoleModel
 class UsersAccessPolicy(AccessPolicy):
     statements = [
         {
+            "action": ["get_current_user"],
+            "principal": "authenticated",
+            "effect": "allow",
+        },
+        {
             "action": ["*"],
             "principal": "authenticated",
             "effect": "allow",
