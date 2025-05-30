@@ -106,7 +106,6 @@ class EmployeeVersionPlainSerializer(ModelSerializer):
             "birthplace",
             "gender",
             "bntu_positions",
-            "trade_union_positions",
             "trade_union_department_path",
             "trade_union_department_authentic_label",
             "working_group",

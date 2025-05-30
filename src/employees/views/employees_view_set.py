@@ -274,7 +274,7 @@ class EmployeesViewSet(ModelViewSet):
 
             last_name += " " if last_name else None
             first_name += " " if first_name else None
-            middle_name += " " if middle_name else None
+            middle_name += " " if middle_name else ""
 
             row = {
                 "ФИО": f"{last_name}{first_name}{middle_name}"[:-1],
