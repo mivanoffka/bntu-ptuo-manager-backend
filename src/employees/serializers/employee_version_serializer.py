@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING
+import re
 from rest_framework.serializers import (
     ModelSerializer,
     PrimaryKeyRelatedField,
     CharField,
 )
-from urllib.parse import urlparse
 
 from media.serializers import ImageSerializer
 from references.models import (
@@ -35,15 +34,15 @@ from trees.models import TradeUnionDepartmentModel
 class EmployeeVersionSerializer(ModelSerializer):
     # region Common
 
-    first_name = CharField(required=False, allow_null=True, allow_blank=True)
-    last_name = CharField(required=False, allow_null=True, allow_blank=True)
-    middle_name = CharField(required=False, allow_null=True, allow_blank=True)
+    first_name = CharField()
+    last_name = CharField()
+    middle_name = CharField(allow_null=True)
 
     gender_id = PrimaryKeyRelatedField(
         queryset=GenderModel.objects.all(), source="gender"
     )
 
-    image_path = CharField(required=False, allow_null=True, allow_blank=True)
+    image_path = CharField(allow_null=True)
 
     # endregion
 
@@ -59,10 +58,14 @@ class EmployeeVersionSerializer(ModelSerializer):
 
     educational_institutions = EducationalInstitutionSerializer(many=True)
     education_level_id = PrimaryKeyRelatedField(
-        queryset=EducationLevelModel.objects.all(), source="education_level"
+        queryset=EducationLevelModel.objects.all(),
+        source="education_level",
+        allow_null=True,
     )
     academic_degree_id = PrimaryKeyRelatedField(
-        queryset=AcademicDegreeModel.objects.all(), source="academic_degree"
+        queryset=AcademicDegreeModel.objects.all(),
+        source="academic_degree",
+        allow_null=True,
     )
 
     # endregion

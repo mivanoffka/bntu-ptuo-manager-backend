@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.viewsets import ModelViewSet
@@ -127,6 +128,22 @@ class EmployeesViewSet(ModelViewSet):
     filterset_class = EmployeeFilter
 
     http_method_names = ["get", "post", "patch", "delete"]
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @transaction.atomic
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @transaction.atomic
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -318,6 +335,7 @@ class EmployeesViewSet(ModelViewSet):
         request_body=GenerateEmployeesSerializer,
         responses={201: EmployeeSerializer(many=True)},
     )
+    @transaction.atomic
     @action(detail=False, methods=["post"], url_path="generate")
     def generate(self, request):
         serializer = GenerateEmployeesSerializer(data=request.data)
@@ -330,6 +348,7 @@ class EmployeesViewSet(ModelViewSet):
             status=status.HTTP_201_CREATED,
         )
 
+    @transaction.atomic
     @action(detail=False, methods=["delete"], url_path="")
     def reset(self, request):
         try:

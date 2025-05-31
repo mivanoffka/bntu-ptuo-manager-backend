@@ -1,13 +1,13 @@
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from django.db import transaction
+from rest_framework.viewsets import ModelViewSet
 from .models import ImageModel
 from .serializers import ImageSerializer
 
-from rest_framework.decorators import permission_classes
 
-
-@permission_classes([IsAuthenticated])
-class ImagesViewSet(viewsets.ModelViewSet):
+class ImageViewSet(ModelViewSet):
     queryset = ImageModel.objects.all()
     serializer_class = ImageSerializer
-    permission_classes = [IsAuthenticated]
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)

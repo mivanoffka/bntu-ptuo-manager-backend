@@ -1,21 +1,9 @@
-from os import read, write
-from re import S
-import re
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from django.db.models import F
 
 from .employee_version_serializer import EmployeeVersionSerializer
 from ..models import (
-    EmployeeVersionModel,
     EmployeeModel,
-    EmailModel,
-    PhoneNumberModel,
-    AddressModel,
-    EducationalInstitutionModel,
-    BntuPositionModel,
-    CommentModel,
-    RelativeModel,
-    RewardModel,
 )
 
 

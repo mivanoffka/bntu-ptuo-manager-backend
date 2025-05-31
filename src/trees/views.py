@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.http import Http404
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -117,32 +118,36 @@ class TreesViewSet(viewsets.ViewSet):
         request_body=POST_REQUEST_BODY,
     )
     def create(self, request):
-        table_name = request.query_params.get("table_name")
-        try:
-            model_class, serializer_class = self.get_model_and_serializer(table_name)
-        except Http404:
-            return Response(
-                {"error": "Invalid or missing table_name"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        with transaction.atomic():
 
-        label = request.data.get("label")
-        parent_path = request.data.get("parent_path")
+            table_name = request.query_params.get("table_name")
+            try:
+                model_class, serializer_class = self.get_model_and_serializer(
+                    table_name
+                )
+            except Http404:
+                return Response(
+                    {"error": "Invalid or missing table_name"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-        try:
-            if parent_path:
-                parent = model_class.objects.get(path=parent_path)
-                new_node = parent.add_child(label=label)
-            else:
-                new_node = model_class.add_root(label=label)
-        except model_class.DoesNotExist:
-            return Response(
-                {"error": f"Parent with path {parent_path} not found"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            label = request.data.get("label")
+            parent_path = request.data.get("parent_path")
 
-        serializer = serializer_class(new_node)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            try:
+                if parent_path:
+                    parent = model_class.objects.get(path=parent_path)
+                    new_node = parent.add_child(label=label)
+                else:
+                    new_node = model_class.add_root(label=label)
+            except model_class.DoesNotExist:
+                return Response(
+                    {"error": f"Parent with path {parent_path} not found"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            serializer = serializer_class(new_node)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -153,19 +158,22 @@ class TreesViewSet(viewsets.ViewSet):
         request_body=PUT_REQUEST_BODY,
     )
     def update(self, request, path=None):
-        table_name = request.query_params.get("table_name")
+        with transaction.atomic():
+            table_name = request.query_params.get("table_name")
 
-        try:
-            model_class, serializer_class = self.get_model_and_serializer(table_name)
-            instance = self.get_object(model_class, path)
-        except Http404 as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                model_class, serializer_class = self.get_model_and_serializer(
+                    table_name
+                )
+                instance = self.get_object(model_class, path)
+            except Http404 as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = serializer_class(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = serializer_class(instance, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -175,12 +183,13 @@ class TreesViewSet(viewsets.ViewSet):
         ]
     )
     def destroy(self, request, path=None):
-        table_name = request.query_params.get("table_name")
+        with transaction.atomic():
+            table_name = request.query_params.get("table_name")
 
-        try:
-            model_class, _ = self.get_model_and_serializer(table_name)
-            instance = self.get_object(model_class, path)
-            instance.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Http404 as e:
-            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+            try:
+                model_class, _ = self.get_model_and_serializer(table_name)
+                instance = self.get_object(model_class, path)
+                instance.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            except Http404 as e:
+                return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)

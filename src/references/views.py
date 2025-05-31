@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -82,21 +83,22 @@ class ReferencesViewSet(viewsets.ViewSet):
         request_body=REQUEST_BODY,
     )
     def create(self, request):
-        table_name = request.query_params.get("table_name")
-        label = request.data.get("label")
+        with transaction.atomic():
+            table_name = request.query_params.get("table_name")
+            label = request.data.get("label")
 
-        if not table_name or table_name not in TABLES:
-            return Response(
-                {"error": "Invalid or missing table_name"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            if not table_name or table_name not in TABLES:
+                return Response(
+                    {"error": "Invalid or missing table_name"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-        model_class, serializer_class = TABLES[table_name]
-        serializer = serializer_class(data={"label": label})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            model_class, serializer_class = TABLES[table_name]
+            serializer = serializer_class(data={"label": label})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -107,32 +109,34 @@ class ReferencesViewSet(viewsets.ViewSet):
         request_body=REQUEST_BODY,
     )
     def update(self, request, pk=None):
-        table_name = request.query_params.get("table_name")
-        label = request.data.get("label")
+        with transaction.atomic():
+            table_name = request.query_params.get("table_name")
+            label = request.data.get("label")
 
-        if not table_name or table_name not in TABLES:
-            return Response(
-                {"error": "Invalid or missing table_name"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if not pk:
-            return Response(
-                {"error": "Missing id parameter"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            if not table_name or table_name not in TABLES:
+                return Response(
+                    {"error": "Invalid or missing table_name"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if not pk:
+                return Response(
+                    {"error": "Missing id parameter"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-        model_class, serializer_class = TABLES[table_name]
-        try:
-            instance = model_class.objects.get(pk=pk)
-        except model_class.DoesNotExist:
-            return Response(
-                {"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND
-            )
+            model_class, serializer_class = TABLES[table_name]
+            try:
+                instance = model_class.objects.get(pk=pk)
+            except model_class.DoesNotExist:
+                return Response(
+                    {"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND
+                )
 
-        serializer = serializer_class(instance, data={"label": label}, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = serializer_class(instance, data={"label": label}, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -142,24 +146,26 @@ class ReferencesViewSet(viewsets.ViewSet):
         ]
     )
     def destroy(self, request, pk=None):
-        table_name = request.query_params.get("table_name")
+        with transaction.atomic():
+            table_name = request.query_params.get("table_name")
 
-        if not table_name or table_name not in TABLES:
-            return Response(
-                {"error": "Invalid or missing table_name"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if not pk:
-            return Response(
-                {"error": "Missing id parameter"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            if not table_name or table_name not in TABLES:
+                return Response(
+                    {"error": "Invalid or missing table_name"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if not pk:
+                return Response(
+                    {"error": "Missing id parameter"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-        model_class, _ = TABLES[table_name]
-        try:
-            instance = model_class.objects.get(pk=pk)
-            instance.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except model_class.DoesNotExist:
-            return Response(
-                {"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND
-            )
+            model_class, _ = TABLES[table_name]
+            try:
+                instance = model_class.objects.get(pk=pk)
+                instance.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            except model_class.DoesNotExist:
+                return Response(
+                    {"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND
+                )
