@@ -116,8 +116,14 @@ class EmployeeVersionSerializer(ModelSerializer):
         try:
             image = None
             image_path: str = validated_data.pop("image_path", None)
+
+            print(image_path)
+
             if image_path:
-                file = image_path.replace("/media/", "")
+                file = image_path.replace("/media/", "").replace("media/", "")
+
+                print(file)
+
                 print(file)
                 image = ImageModel.objects.get(file=file)
 
