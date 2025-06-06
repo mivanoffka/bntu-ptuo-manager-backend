@@ -7,6 +7,7 @@ from django.db import models
 from .employee_model import EmployeeModel
 
 from references.models import (
+    ExemptionModel,
     GenderModel,
     WorkingGroupModel,
     AcademicDegreeModel,
@@ -133,5 +134,7 @@ class EmployeeVersionModel(models.Model):
         comments: RelatedManager[CommentModel]
         rewards: RelatedManager[RewardModel]
         relatives: RelatedManager[RelativeModel]
+
+    exemptions = models.ManyToManyField(ExemptionModel, related_name=Meta.db_table)
 
     # endregion

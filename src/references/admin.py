@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import (
+    ExemptionModel,
     PhoneNumberTypeModel,
     RelativeTypeModel,
     GenderModel,
@@ -17,6 +18,7 @@ def register():
     admin.site.register(EducationLevelModel)
     admin.site.register(AcademicDegreeModel)
     admin.site.register(RelativeTypeModel),
+    admin.site.register(ExemptionModel)
 
 
 register()

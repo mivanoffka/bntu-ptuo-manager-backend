@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import (
+    ExemptionModel,
     GenderModel,
     WorkingGroupModel,
     RelativeTypeModel,
@@ -44,3 +45,8 @@ class EducationLevelSerializer(ReferenceSerializer):
 class PhoneNumberTypeSerializer(ReferenceSerializer):
     class Meta(ReferenceSerializer.Meta):
         model = PhoneNumberTypeModel
+
+
+class ExemptionSerializer(ReferenceSerializer):
+    class Meta(ReferenceSerializer.Meta):
+        model = ExemptionModel

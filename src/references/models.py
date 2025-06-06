@@ -61,3 +61,11 @@ class WorkingGroupModel(EnumeratedModel):
 
     if TYPE_CHECKING:
         employee_versions: RelatedManager[EmployeeVersionModel]
+
+
+class ExemptionModel(EnumeratedModel):
+    class Meta(EnumeratedModel.Meta):
+        db_table = "exemptions"
+
+    if TYPE_CHECKING:
+        employee_versions: RelatedManager[EmployeeVersionModel]

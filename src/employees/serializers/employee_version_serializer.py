@@ -1,4 +1,3 @@
-import re
 from rest_framework.serializers import (
     ModelSerializer,
     PrimaryKeyRelatedField,
@@ -11,6 +10,7 @@ from references.models import (
     WorkingGroupModel,
     AcademicDegreeModel,
     EducationLevelModel,
+    ExemptionModel,
 )
 from media.models import ImageModel
 from ..models import (
@@ -36,7 +36,7 @@ class EmployeeVersionSerializer(ModelSerializer):
 
     first_name = CharField()
     last_name = CharField()
-    middle_name = CharField(allow_null=True)
+    middle_name = CharField(allow_null=True, allow_blank=True)
 
     gender_id = PrimaryKeyRelatedField(
         queryset=GenderModel.objects.all(), source="gender"
@@ -95,6 +95,9 @@ class EmployeeVersionSerializer(ModelSerializer):
     comments = CommentSerializer(many=True)
     relatives = RelativeSerializer(many=True)
     rewards = RewardSerializer(many=True)
+    exemption_ids = PrimaryKeyRelatedField(
+        queryset=ExemptionModel.objects.all(), source="exemptions", many=True
+    )
 
     # endregion
 
@@ -119,6 +122,9 @@ class EmployeeVersionSerializer(ModelSerializer):
                 image = ImageModel.objects.get(file=file)
 
             validated_data["image"] = image
+
+            # Extract M2M and related data
+            exemptions = validated_data.pop("exemptions", [])
 
             trade_union_department_path = validated_data.get(
                 "trade_union_department_path", None
@@ -153,15 +159,22 @@ class EmployeeVersionSerializer(ModelSerializer):
             related_data = {
                 field: validated_data.pop(field, []) for field in model_map.keys()
             }
+
             employee_version = EmployeeVersionModel.objects.create(**validated_data)
 
+            # Create related objects
             for field, data_list in related_data.items():
                 model_class = model_map[field]
                 for data in data_list:
                     model_class.objects.create(
                         employee_version=employee_version, **data
                     )
+
+            # Now assign M2M
+            employee_version.exemptions.set(exemptions)
+
             return employee_version
+
         except Exception as error:
             print(error)
             raise error
@@ -200,6 +213,7 @@ class EmployeeVersionSerializer(ModelSerializer):
             "rewards",
             "relatives",
             "created_at",
+            "exemption_ids",
         )
         read_only_fields = [
             "working_group_authentic_label",

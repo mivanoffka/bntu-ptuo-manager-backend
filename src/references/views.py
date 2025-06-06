@@ -7,6 +7,7 @@ from drf_yasg import openapi
 
 from .access_policy import ReferencesAccessPolicy
 from .models import (
+    ExemptionModel,
     GenderModel,
     PhoneNumberTypeModel,
     EducationLevelModel,
@@ -15,6 +16,7 @@ from .models import (
     RelativeTypeModel,
 )
 from .serializers import (
+    ExemptionSerializer,
     GenderSerializer,
     PhoneNumberTypeSerializer,
     EducationLevelSerializer,
@@ -30,6 +32,7 @@ TABLES = {
     "academic_degrees": (AcademicDegreeModel, AcademicDegreeSerializer),
     "working_groups": (WorkingGroupModel, WorkingGroupSerializer),
     "relative_types": (RelativeTypeModel, RelativeTypeSerializer),
+    "exemptions": (ExemptionModel, ExemptionSerializer),
 }
 
 REQUEST_BODY = openapi.Schema(
