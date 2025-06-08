@@ -4,6 +4,8 @@ from rest_framework.decorators import permission_classes
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 
+from django.db.models import OuterRef, Subquery
+
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
@@ -117,11 +119,28 @@ SEARCH_RESPONSES = {
 
 @permission_classes([IsAuthenticated, EmployeesAccessPolicy])
 class EmployeesViewSet(ModelViewSet):
-    queryset = EmployeeModel.objects.all().prefetch_related(
+    latest_version = EmployeeVersionModel.objects.filter(
+        employee_id=OuterRef("pk")
+    ).order_by("-created_at")
+
+    queryset = EmployeeModel.objects.annotate(
+        latest_is_retired=Subquery(latest_version.values("is_retired")[:1]),
+        latest_is_archived=Subquery(latest_version.values("is_archived")[:1]),
+        latest_birthdate=Subquery(latest_version.values("birthdate")[:1]),
+        latest_gender_id=Subquery(latest_version.values("gender_id")[:1]),
+        latest_education_level_id=Subquery(
+            latest_version.values("education_level_id")[:1]
+        ),
+        latest_academic_degree_id=Subquery(
+            latest_version.values("academic_degree_id")[:1]
+        ),
+        latest_working_group_id=Subquery(latest_version.values("working_group_id")[:1]),
+    ).prefetch_related(
         "employee_versions",
         "employee_versions__gender",
         "employee_versions__bntu_positions",
     )
+
     serializer_class = EmployeeSerializer
     pagination_class = EmployeesPagination
     filter_backends = (EmployeeDynamicSearchFilter, DjangoFilterBackend)
