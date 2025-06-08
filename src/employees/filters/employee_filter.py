@@ -1,15 +1,5 @@
-from operator import is_
-from django_filters.rest_framework import (
-    FilterSet,
-    CharFilter,
-    ModelChoiceFilter,
-    ModelMultipleChoiceFilter,
-    BooleanFilter,
-)
-
 from ..models.employee_model import EmployeeModel
 
-from ..models.employee_version_model import EmployeeVersionModel
 from references.models import (
     GenderModel,
     WorkingGroupModel,
@@ -17,11 +7,14 @@ from references.models import (
     AcademicDegreeModel,
 )
 
-from django.db.models import OuterRef, Subquery
-from django.db.models import Q, F
+from django.db.models import Q
 
 
 from django_filters import rest_framework as filters
+
+
+class CharInFilter(filters.BaseInFilter, filters.CharFilter):
+    pass
 
 
 class EmployeeFilter(filters.FilterSet):
@@ -50,6 +43,59 @@ class EmployeeFilter(filters.FilterSet):
     is_archived = filters.BooleanFilter(field_name="latest_is_archived")
     is_retired = filters.BooleanFilter(field_name="latest_is_retired")
 
+    trade_union_department_paths = CharInFilter(
+        field_name="trade_union_department_paths",
+        method="filter_trade_union_department_paths",
+        lookup_expr="startswith",
+    )
+
+    def filter_trade_union_department_paths(self, queryset, name, value):
+        values = self.request.query_params.getlist(name)
+
+        if not values:
+            return queryset
+
+        query = Q()
+        for val in values:
+            query |= Q(latest_trade_union_department_path__startswith=val)
+
+        return queryset.filter(query)
+
+    bntu_department_paths = CharInFilter(
+        field_name="bntu_department_paths",
+        method="filter_bntu_department_paths",
+        lookup_expr="startswith",
+    )
+
+    def filter_bntu_department_paths(self, queryset, name, value):
+        values = self.request.query_params.getlist(name)
+        if not values:
+            return queryset
+
+        query = Q()
+        for val in values:
+            query |= Q(
+                employee_versions__bntu_positions__bntu_department_path__startswith=val
+            )
+
+        return queryset.filter(query).distinct()
+
     class Meta:
         model = EmployeeModel
         fields = []
+
+    bntu_position_labels = CharInFilter(
+        field_name="bntu_position_labels", method="filter_bntu_position_labels"
+    )
+
+    def filter_bntu_position_labels(self, queryset, name, value):
+        values = self.request.query_params.getlist(name)
+
+        if not values:
+            return queryset
+
+        query = Q()
+        for val in values:
+            query |= Q(employee_versions__bntu_positions__label__iregex=rf"\m{val}")
+
+        return queryset.filter(query).distinct()

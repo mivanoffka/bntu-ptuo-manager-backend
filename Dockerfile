@@ -10,5 +10,5 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . /
 
-CMD ["sh", "-c", "python src/manage.py migrate && python src/manage.py runserver 0.0.0.0:2608"]
+CMD ["sh", "-c", "python src/manage.py migrate && python src/manage.py runserver 0.0.0.0:8000"]
 
