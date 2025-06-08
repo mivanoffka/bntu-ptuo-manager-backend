@@ -40,7 +40,7 @@ class EmployeeVersionModel(models.Model):
 
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
-    middle_name = models.CharField(max_length=64)
+    middle_name = models.CharField(max_length=64, null=True, blank=True)
 
     gender = models.ForeignKey(
         GenderModel,

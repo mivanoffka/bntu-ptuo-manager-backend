@@ -7,6 +7,9 @@ from django_filters.rest_framework import (
     BooleanFilter,
 )
 
+from ..models.employee_model import EmployeeModel
+
+from ..models.employee_version_model import EmployeeVersionModel
 from references.models import (
     GenderModel,
     WorkingGroupModel,
@@ -14,40 +17,39 @@ from references.models import (
     AcademicDegreeModel,
 )
 
+from django.db.models import OuterRef, Subquery
+from django.db.models import Q, F
 
-class EmployeeFilter(FilterSet):
-    birthdate_min = CharFilter(
-        field_name="employee_versions__birthdate", lookup_expr="gte"
-    )
-    birthdate_max = CharFilter(
-        field_name="employee_versions__birthdate", lookup_expr="lte"
-    )
-    gender_ids = ModelMultipleChoiceFilter(
+
+from django_filters import rest_framework as filters
+
+
+class EmployeeFilter(filters.FilterSet):
+    birthdate_min = filters.CharFilter(field_name="latest_birthdate", lookup_expr="gte")
+    birthdate_max = filters.CharFilter(field_name="latest_birthdate", lookup_expr="lte")
+    gender_ids = filters.ModelMultipleChoiceFilter(
+        field_name="latest_gender_id",
         queryset=GenderModel.objects.all(),
-        field_name="employee_versions__gender",
         to_field_name="id",
-        blank=True,
-        conjoined=False,
     )
-    academic_degree_ids = ModelMultipleChoiceFilter(
-        queryset=AcademicDegreeModel.objects.all(),
-        field_name="employee_versions__academic_degree",
-        to_field_name="id",
-        blank=True,
-        conjoined=False,
-    )
-    education_level_ids = ModelMultipleChoiceFilter(
+    education_level_ids = filters.ModelMultipleChoiceFilter(
+        field_name="latest_education_level_id",
         queryset=EducationLevelModel.objects.all(),
-        field_name="employee_versions__education_level",
         to_field_name="id",
-        blank=True,
-        conjoined=False,
     )
-    working_group_ids = ModelMultipleChoiceFilter(
+    academic_degree_ids = filters.ModelMultipleChoiceFilter(
+        field_name="latest_academic_degree_id",
+        queryset=AcademicDegreeModel.objects.all(),
+        to_field_name="id",
+    )
+    working_group_ids = filters.ModelMultipleChoiceFilter(
+        field_name="latest_working_group_id",
         queryset=WorkingGroupModel.objects.all(),
-        field_name="employee_versions__working_group",
         to_field_name="id",
-        blank=True,
-        conjoined=False,
     )
-    is_archived = BooleanFilter(field_name="employee_versions__is_archived")
+    is_archived = filters.BooleanFilter(field_name="latest_is_archived")
+    is_retired = filters.BooleanFilter(field_name="latest_is_retired")
+
+    class Meta:
+        model = EmployeeModel
+        fields = []
