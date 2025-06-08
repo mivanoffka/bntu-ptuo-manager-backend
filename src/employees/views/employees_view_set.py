@@ -1,3 +1,4 @@
+from ast import Sub
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
@@ -135,6 +136,10 @@ class EmployeesViewSet(ModelViewSet):
             latest_version.values("academic_degree_id")[:1]
         ),
         latest_working_group_id=Subquery(latest_version.values("working_group_id")[:1]),
+        latest_trade_union_department_path=Subquery(
+            latest_version.values("trade_union_department_path")[:1]
+        ),
+        latest_bntu_positions=Subquery(latest_version.values("bntu_positions")[:1]),
     ).prefetch_related(
         "employee_versions",
         "employee_versions__gender",
@@ -225,6 +230,30 @@ class EmployeesViewSet(ModelViewSet):
                 openapi.IN_QUERY,
                 type=openapi.TYPE_BOOLEAN,
             ),
+            openapi.Parameter(
+                "trade_union_department_paths",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_STRING),
+                collectionFormat="multi",
+                explode=True,
+            ),
+            openapi.Parameter(
+                "bntu_department_paths",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_STRING),
+                collectionFormat="multi",
+                explode=True,
+            ),
+            openapi.Parameter(
+                "bntu_position_labels",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_STRING),
+                collectionFormat="multi",
+                explode=True,
+            ),
         ]
     )
     def list(self, request, *args, **kwargs):
@@ -290,6 +319,30 @@ class EmployeesViewSet(ModelViewSet):
                 "is_archived",
                 openapi.IN_QUERY,
                 type=openapi.TYPE_BOOLEAN,
+            ),
+            openapi.Parameter(
+                "trade_union_department_paths",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_STRING),
+                collectionFormat="multi",
+                explode=True,
+            ),
+            openapi.Parameter(
+                "bntu_department_paths",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_STRING),
+                collectionFormat="multi",
+                explode=True,
+            ),
+            openapi.Parameter(
+                "bntu_position_labels",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_STRING),
+                collectionFormat="multi",
+                explode=True,
             ),
         ],
         responses={200: "Excel file with all employees"},
