@@ -140,6 +140,7 @@ class EmployeesViewSet(ModelViewSet):
             latest_version.values("trade_union_department_path")[:1]
         ),
         latest_bntu_positions=Subquery(latest_version.values("bntu_positions")[:1]),
+        latest_exemptions=Subquery(latest_version.values("exemptions")[:1]),
     ).prefetch_related(
         "employee_versions",
         "employee_versions__gender",
@@ -254,6 +255,14 @@ class EmployeesViewSet(ModelViewSet):
                 collectionFormat="multi",
                 explode=True,
             ),
+            openapi.Parameter(
+                "exemption_ids",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_INTEGER),
+                collectionFormat="multi",
+                explode=True,
+            ),
         ]
     )
     def list(self, request, *args, **kwargs):
@@ -341,6 +350,14 @@ class EmployeesViewSet(ModelViewSet):
                 openapi.IN_QUERY,
                 type=openapi.TYPE_ARRAY,
                 items=openapi.Items(type=openapi.TYPE_STRING),
+                collectionFormat="multi",
+                explode=True,
+            ),
+            openapi.Parameter(
+                "exemption_ids",
+                openapi.IN_QUERY,
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_INTEGER),
                 collectionFormat="multi",
                 explode=True,
             ),

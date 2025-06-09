@@ -1,6 +1,7 @@
 from ..models.employee_model import EmployeeModel
 
 from references.models import (
+    ExemptionModel,
     GenderModel,
     WorkingGroupModel,
     EducationLevelModel,
@@ -38,6 +39,11 @@ class EmployeeFilter(filters.FilterSet):
     working_group_ids = filters.ModelMultipleChoiceFilter(
         field_name="latest_working_group_id",
         queryset=WorkingGroupModel.objects.all(),
+        to_field_name="id",
+    )
+    exemption_ids = filters.ModelMultipleChoiceFilter(
+        field_name="latest_exemptions",
+        queryset=ExemptionModel.objects.all(),
         to_field_name="id",
     )
     is_archived = filters.BooleanFilter(field_name="latest_is_archived")
