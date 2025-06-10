@@ -1,0 +1,42 @@
+services:
+    frontend:
+        build:
+            context: ./frontend
+        env_file:
+            - ./frontend/.env
+        ports:
+            - "5173:5173"
+        volumes:
+            - ./frontend:/app
+            - /app/node_modules
+        depends_on:
+            - backend
+        restart: unless-stopped
+
+    backend:
+        build:
+            context: ./backend
+        env_file:
+            - ./backend/.env
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./backend:/app
+        depends_on:
+            - db
+        restart: unless-stopped
+
+    db:
+        image: postgres:16-alpine
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: bntu_ptuo_db
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        restart: unless-stopped
+
+volumes:
+    pgdata:
